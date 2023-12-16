@@ -1,4 +1,5 @@
 ﻿using HotelChief.Domain.Entities.Abstract;
+using HotelChief.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace HotelChief.Domain.Entities
     public class HotelServiceOrder : Booking
     {
         public int HotelServiceOrderId { get; set; }
-        public Guest Guest { get; set; }
+        public Guest? Guest { get; set; }
         public HotelService? Service { get; set; }
         public Employee? Employee { get; set; }
         public DateTime ServiceOrderDate { get; set; }

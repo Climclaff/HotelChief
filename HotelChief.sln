@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.Infrastructure",
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.API", "HotelChief.API\HotelChief.API.csproj", "{C247D60C-7632-4268-8EA6-A087FE54969A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C24417E-BF5E-4638-A7D4-4B639CB7406B} = {6C24417E-BF5E-4638-A7D4-4B639CB7406B}
+		{D0E9B3AC-5E9F-415C-B956-03A0DE41B96D} = {D0E9B3AC-5E9F-415C-B956-03A0DE41B96D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
