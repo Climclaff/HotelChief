@@ -1,4 +1,5 @@
-﻿using HotelChief.Models;
+﻿using HotelChief.Infrastructure.Data;
+using HotelChief.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelChief.Domain.Entities.Identity
+namespace HotelChief.Core.Entities.Identity
 {
     public class Guest : IdentityUser<int>
     {
