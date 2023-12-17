@@ -1,14 +1,9 @@
-﻿using HotelChief.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelChief.Infrastructure.Config
+﻿namespace HotelChief.Infrastructure.Config
 {
+    using HotelChief.Core.Entities;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
     internal class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
     {
         public void Configure(EntityTypeBuilder<Reservation> builder)
@@ -24,7 +19,6 @@ namespace HotelChief.Infrastructure.Config
             builder.HasOne(r => r.Room)
                 .WithMany()
                 .IsRequired();
-
         }
     }
 }

@@ -1,12 +1,7 @@
-﻿using HotelChief.Domain.Entities.Abstract;
-using HotelChief.Domain.Entities.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HotelChief.Core.Entities.Abstract;
+using HotelChief.Core.Entities.Identity;
 
-namespace HotelChief.Domain.Entities
+namespace HotelChief.Core.Entities
 {
     public class HotelServiceOrder : Booking
     {

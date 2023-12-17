@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelChief.Core.Entities.Identity
+﻿namespace HotelChief.Core.Entities.Identity
 {
+    using Microsoft.AspNetCore.Identity;
+
     public class Guest : IdentityUser<int>
     {
         public string? FullName { get; set; }
-
     }
 }

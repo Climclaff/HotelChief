@@ -1,17 +1,16 @@
-﻿using HotelChief.Infrastructure.Data;
-using HotelChief.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
-namespace HotelChief.Controllers
+﻿namespace HotelChief.Controllers
 {
+    using System.Diagnostics;
+    using HotelChief.ViewModels;
+    using Microsoft.AspNetCore.Mvc;
+
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
 
         public IActionResult Index()
