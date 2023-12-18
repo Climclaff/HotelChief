@@ -4,12 +4,5 @@
 
     public interface IGuestService
     {
-        Task<Guest?> GetByIdAsync(int id);
-
-        Task<IEnumerable<Guest?>> GetAllAsync();
-
-        Task UpdateAsync(Guest entity);
-
-        Task DeleteAsync(int id);
     }
 }
