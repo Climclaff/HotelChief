@@ -68,7 +68,7 @@ namespace HotelChief.Infrastructure.Repositories
         public virtual void Update(T entity)
         {
             dbSet.Attach(entity);
-            context.Entry(entity).State = EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }
