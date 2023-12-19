@@ -21,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="StyleCop" Version="6.2.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
@@ -29,7 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HotelChief.Application\HotelChief.Application.csproj" />
     <ProjectReference Include="..\HotelChief.Infrastructure\HotelChief.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Administration\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@using HotelChief.Infrastructure.EFEntities;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Guest> SignInManager
+@inject UserManager<Guest> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

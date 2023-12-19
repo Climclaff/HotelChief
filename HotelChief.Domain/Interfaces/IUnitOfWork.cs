@@ -8,6 +8,7 @@
     {
         Task Commit();
 
-        ICRUDRepository<T> GetRepository<T>();
+        IBaseCRUDRepository<T> GetRepository<T>() 
+            where T : class;
     }
 }

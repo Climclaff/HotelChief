@@ -1,6 +1,6 @@
 ﻿namespace HotelChief.Infrastructure.Config
 {
-    using HotelChief.Core.Entities.Identity;
+    using HotelChief.Infrastructure.EFEntities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

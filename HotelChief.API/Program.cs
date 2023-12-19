@@ -1,7 +1,14 @@
 namespace HotelChief
 {
-    using HotelChief.Core.Entities.Identity;
+    using HotelChief.API.Helpers;
+    using HotelChief.Application.Services;
+    using HotelChief.Core.Interfaces;
+    using HotelChief.Core.Interfaces.IRepositories;
+    using HotelChief.Core.Interfaces.IServices;
+    using HotelChief.Infrastructure.Repositories;
+    using HotelChief.Infrastructure.UoW;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
 
     public class Program
     {
@@ -11,13 +18,16 @@ namespace HotelChief
 
             var connectionString = builder.Configuration.GetConnectionString("HotelChiefdb");
             builder.Services.AddDbContext<Infrastructure.Data.ApplicationDbContext>(x => x.UseSqlServer(connectionString));
-            builder.Services.AddDbContext<Infrastructure.Data.ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<Guest>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<Infrastructure.EFEntities.Guest>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<Infrastructure.Data.ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAutoMapper();
+            builder.Services.AddScoped(typeof(IBaseCRUDRepository<>), typeof(BaseCrudRepository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
 
             var app = builder.Build();
 

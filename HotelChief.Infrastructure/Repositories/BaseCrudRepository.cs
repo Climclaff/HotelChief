@@ -6,7 +6,7 @@ namespace HotelChief.Infrastructure.Repositories
     using HotelChief.Infrastructure.Data;
     using Microsoft.EntityFrameworkCore;
 
-    public class BaseCrudRepository<T> : ICRUDRepository<T>
+    public class BaseCrudRepository<T> : IBaseCRUDRepository<T>
         where T : class
     {
         private readonly ApplicationDbContext _context;

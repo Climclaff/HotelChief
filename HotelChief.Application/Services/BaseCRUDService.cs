@@ -6,7 +6,7 @@ namespace HotelChief.Application.Services
     using HotelChief.Core.Interfaces;
     using HotelChief.Core.Interfaces.IServices;
 
-    public class BaseCRUDService<T> : ICRUDService<T>
+    public class BaseCRUDService<T> : IBaseCRUDService<T>
     where T : class
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -19,13 +19,11 @@ namespace HotelChief.Application.Services
         public async Task AddAsync(T entity)
         {
             await _unitOfWork.GetRepository<T>().AddAsync(entity);
-            await _unitOfWork.Commit();
         }
 
         public async Task DeleteAsync(int id)
         {
             await _unitOfWork.GetRepository<T>().DeleteAsync(id);
-            await _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "")
@@ -33,9 +31,13 @@ namespace HotelChief.Application.Services
             return await _unitOfWork.GetRepository<T>().Get(filter, orderBy, includeProperties);
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
             _unitOfWork.GetRepository<T>().Update(entity);
+        }
+
+        public async Task Commit()
+        {
             await _unitOfWork.Commit();
         }
     }

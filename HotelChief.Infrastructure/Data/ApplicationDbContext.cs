@@ -1,14 +1,17 @@
 ﻿namespace HotelChief.Infrastructure.Data
 {
-    using HotelChief.Core.Entities;
-    using HotelChief.Core.Entities.Identity;
     using HotelChief.Infrastructure.Config;
+    using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
     public class ApplicationDbContext : IdentityDbContext<Guest, IdentityRole<int>, int>
     {
+        public ApplicationDbContext()
+        {
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -36,6 +39,11 @@
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
             base.OnModelCreating(modelBuilder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=CLIMCLAFF\\SQLEXPRESS;Initial Catalog=HotelChiefdb;Integrated Security=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
         }
     }
 }

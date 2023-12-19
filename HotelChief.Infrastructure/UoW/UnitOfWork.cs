@@ -2,13 +2,12 @@
 #pragma warning disable CS8618
 namespace HotelChief.Infrastructure.UoW
 {
-    using HotelChief.Core.Entities;
-    using HotelChief.Core.Entities.Identity;
+    using HotelChief.Core.Interfaces;
     using HotelChief.Core.Interfaces.IRepositories;
     using HotelChief.Infrastructure.Data;
     using HotelChief.Infrastructure.Repositories;
 
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
         private ApplicationDbContext _context;
         private Dictionary<Type, object> _repositories;
@@ -20,12 +19,12 @@ namespace HotelChief.Infrastructure.UoW
             _repositories = new Dictionary<Type, object>();
         }
 
-        public ICRUDRepository<T> GetRepository<T>()
+        public IBaseCRUDRepository<T> GetRepository<T>()
             where T : class
         {
             if (_repositories.ContainsKey(typeof(T)))
             {
-                return (ICRUDRepository<T>)_repositories[typeof(T)];
+                return (IBaseCRUDRepository<T>)_repositories[typeof(T)];
             }
 
             var repository = new BaseCrudRepository<T>(_context);

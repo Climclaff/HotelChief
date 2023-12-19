@@ -1,6 +1,9 @@
-﻿namespace HotelChief.Controllers
+﻿#pragma warning disable SA1309
+namespace HotelChief.Controllers
 {
     using System.Diagnostics;
+    using HotelChief.Core.Entities;
+    using HotelChief.Core.Interfaces.IServices;
     using HotelChief.ViewModels;
     using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +11,15 @@
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IBaseCRUDService<Room> _roomService;
+
+        public HomeController(ILogger<HomeController> logger, IBaseCRUDService<Room> roomService)
         {
             _logger = logger;
+            _roomService = roomService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }

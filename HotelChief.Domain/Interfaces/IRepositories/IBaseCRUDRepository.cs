@@ -1,8 +1,8 @@
-﻿namespace HotelChief.Core.Interfaces.IServices
+﻿namespace HotelChief.Core.Interfaces.IRepositories
 {
     using System.Linq.Expressions;
 
-    public interface ICRUDService<T>
+    public interface IBaseCRUDRepository<T>
     {
         Task<IEnumerable<T>> Get(
             Expression<Func<T, bool>>? filter = null,
@@ -11,7 +11,7 @@
 
         Task AddAsync(T entity);
 
-        Task UpdateAsync(T entity);
+        void Update(T entity);
 
         Task DeleteAsync(int id);
     }
