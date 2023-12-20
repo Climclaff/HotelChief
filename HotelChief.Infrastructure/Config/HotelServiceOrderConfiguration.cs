@@ -12,9 +12,9 @@
             builder.Property(hso => hso.ServiceOrderDate).IsRequired();
             builder.Property(hso => hso.Quantity).IsRequired();
 
-            builder.HasOne(hso => hso.Guest).WithMany().IsRequired();
-            builder.HasOne(hso => hso.Service).WithMany().IsRequired();
-            builder.HasOne(hso => hso.Employee).WithMany().IsRequired();
+            builder.HasOne(hso => hso.Guest).WithMany().HasForeignKey(so => so.GuestId).IsRequired();
+            builder.HasOne(hso => hso.Service).WithMany().HasForeignKey(so => so.ServiceId).IsRequired();
+            builder.HasOne(hso => hso.Employee).WithMany().HasForeignKey(so => so.EmployeeId).IsRequired();
 
         }
     }

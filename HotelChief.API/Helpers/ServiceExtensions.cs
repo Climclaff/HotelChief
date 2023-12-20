@@ -13,6 +13,7 @@
                 mc.AddProfile(new DomainToInfrastructureMappingProfile());
                 mc.AddProfile(new InfrastructureToDomainMappingProfile());
                 mc.AddProfile(new InfrastructureToViewModelMappingProfile());
+                mc.AddProfile(new ViewModelToInfrastructureMappingProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

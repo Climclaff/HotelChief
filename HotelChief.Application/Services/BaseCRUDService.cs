@@ -33,7 +33,7 @@ namespace HotelChief.Application.Services
 
         public void Update(T entity)
         {
-            _unitOfWork.GetRepository<T>().Update(entity);
+             _unitOfWork.GetRepository<T>().Update(entity);
         }
 
         public async Task Commit()

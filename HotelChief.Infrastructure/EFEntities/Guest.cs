@@ -5,5 +5,7 @@
     public class Guest : IdentityUser<int>
     {
         public string? FullName { get; set; }
+
+        public bool? IsAdmin { get; set; }
     }
 }

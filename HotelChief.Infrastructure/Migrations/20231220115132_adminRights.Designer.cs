@@ -4,6 +4,7 @@ using HotelChief.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelChief.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231220115132_adminRights")]
+    partial class adminRights
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,6 +222,9 @@ namespace HotelChief.Infrastructure.Migrations
                     b.Property<int>("RoomNumber")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoomNumber1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
@@ -227,7 +232,7 @@ namespace HotelChief.Infrastructure.Migrations
 
                     b.HasIndex("GuestId");
 
-                    b.HasIndex("RoomNumber");
+                    b.HasIndex("RoomNumber1");
 
                     b.ToTable("Reservations");
                 });
@@ -454,7 +459,7 @@ namespace HotelChief.Infrastructure.Migrations
 
                     b.HasOne("HotelChief.Infrastructure.EFEntities.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoomNumber")
+                        .HasForeignKey("RoomNumber1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

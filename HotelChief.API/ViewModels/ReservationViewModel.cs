@@ -1,14 +1,10 @@
-﻿namespace HotelChief.Infrastructure.EFEntities
+﻿namespace HotelChief.API.ViewModels
 {
-    public class Reservation
+    public class ReservationViewModel
     {
         public int ReservationId { get; set; }
 
-        public Guest? Guest { get; set; }
-
         public int GuestId { get; set; }
-
-        public Room? Room { get; set; }
 
         public int RoomNumber { get; set; }
 

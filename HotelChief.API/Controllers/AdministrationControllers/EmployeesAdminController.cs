@@ -6,12 +6,12 @@
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Mvc;
 
-    public class EmployeesController : Controller
+    public class EmployeesAdminController : Controller
     {
         private readonly IBaseCRUDService<Employee> _crudService;
         private readonly IMapper _mapper;
 
-        public EmployeesController(IBaseCRUDService<Employee> crudService, IMapper mapper)
+        public EmployeesAdminController(IBaseCRUDService<Employee> crudService, IMapper mapper)
         {
             _crudService = crudService;
             _mapper = mapper;
@@ -35,13 +35,13 @@
                 return NotFound();
             }
 
-            var employee = await FindEmployee(id);
-            if (employee == null)
+            var entity = await FindEmployee(id);
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return View(_mapper.Map<Employee, EmployeeViewModel>(employee));
+            return View(_mapper.Map<Employee, EmployeeViewModel>(entity));
         }
 
         public IActionResult Create()
@@ -51,16 +51,16 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate")] Employee entity)
         {
             if (ModelState.IsValid)
             {
-                await _crudService.AddAsync(employee);
+                await _crudService.AddAsync(entity);
                 await _crudService.Commit();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(_mapper.Map<Employee, EmployeeViewModel>(employee));
+            return View(_mapper.Map<Employee, EmployeeViewModel>(entity));
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -70,27 +70,27 @@
                 return NotFound();
             }
 
-            var employee = await FindEmployee(id);
-            if (employee == null)
+            var entity = await FindEmployee(id);
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return View(_mapper.Map<Employee, EmployeeViewModel>(employee));
+            return View(_mapper.Map<Employee, EmployeeViewModel>(entity));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate")] Employee entity)
         {
-            if (id != employee.EmployeeId)
+            if (id != entity.EmployeeId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _crudService.Update(employee);
+                _crudService.Update(entity);
                 await _crudService.Commit();
                 if (await FindEmployee(id) == null)
                 {
@@ -100,7 +100,7 @@
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(_mapper.Map<Employee, EmployeeViewModel>(employee));
+            return View(_mapper.Map<Employee, EmployeeViewModel>(entity));
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -110,13 +110,13 @@
                 return NotFound();
             }
 
-            var employee = await FindEmployee(id);
-            if (employee == null)
+            var entity = await FindEmployee(id);
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return View(_mapper.Map<Employee, EmployeeViewModel>(employee));
+            return View(_mapper.Map<Employee, EmployeeViewModel>(entity));
         }
 
         [HttpPost]
@@ -129,10 +129,10 @@
                 return Problem("There are no employees");
             }
 
-            var employee = await FindEmployee(id);
-            if (employee != null)
+            var entity = await FindEmployee(id);
+            if (entity != null)
             {
-               await _crudService.DeleteAsync(employee.EmployeeId);
+               await _crudService.DeleteAsync(entity.EmployeeId);
                await _crudService.Commit();
             }
 

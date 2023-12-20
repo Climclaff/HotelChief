@@ -29,6 +29,13 @@ namespace HotelChief
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    "IsAdminPolicy",
+                    policy => policy.RequireAssertion(context => context.User.HasClaim(c => (c.Type == "IsAdmin" && c.Value == "true"))));
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
