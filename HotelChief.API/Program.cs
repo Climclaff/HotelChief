@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using HotelChief.Infrastructure.Data;
 namespace HotelChief
 {
     using HotelChief.API.Helpers;
@@ -5,6 +8,7 @@ namespace HotelChief
     using HotelChief.Core.Interfaces;
     using HotelChief.Core.Interfaces.IRepositories;
     using HotelChief.Core.Interfaces.IServices;
+    using HotelChief.Infrastructure.EFEntities;
     using HotelChief.Infrastructure.Repositories;
     using HotelChief.Infrastructure.UoW;
     using Microsoft.EntityFrameworkCore;
@@ -19,9 +23,8 @@ namespace HotelChief
             var connectionString = builder.Configuration.GetConnectionString("HotelChiefdb");
             builder.Services.AddDbContext<Infrastructure.Data.ApplicationDbContext>(x => x.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<Infrastructure.EFEntities.Guest>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<Infrastructure.Data.ApplicationDbContext>();
+            builder.Services.AddIdentity<Guest, IdentityRole<int>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders().AddDefaultUI();
+            builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddAutoMapper();
