@@ -4,10 +4,12 @@
     using HotelChief.API.ViewModels;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize(Policy = "IsAdminPolicy")]
     public class HotelServiceOrdersAdminController : Controller
     {
         private readonly IBaseCRUDService<HotelServiceOrder> _crudService;

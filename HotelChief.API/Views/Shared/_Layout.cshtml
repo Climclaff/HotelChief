@@ -25,6 +25,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @{
+                            if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                        if(@User.FindFirst("IsAdmin").Value == "true"){
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="EmployeesAdmin" asp-action="Index">Employees</a>
                         </li>
@@ -43,6 +47,12 @@
                          <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="HotelServiceOrdersAdmin" asp-action="Index">Service Orders</a>
                         </li>
+                        <li>
+                        @await Html.PartialAsync("_SelectLanguagePartial")
+                        </li>
+                        }
+                        }
+                        }
 
                     </ul>
                     <partial name="_LoginPartial" />
