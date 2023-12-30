@@ -2,8 +2,8 @@
 {
     using AutoMapper;
     using HotelChief.API.ViewModels;
+    using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
-    using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 

@@ -8,6 +8,7 @@
     {
         public void Configure(EntityTypeBuilder<Guest> builder)
         {
+            builder.ToTable("dbo.AspNetUsers");
             builder.Property(g => g.FullName).HasMaxLength(255);
         }
     }

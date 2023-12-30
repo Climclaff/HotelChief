@@ -1,5 +1,6 @@
 ﻿namespace HotelChief.Infrastructure.Config
 {
+    using HotelChief.Core.Entities;
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,14 +9,15 @@
     {
         public void Configure(EntityTypeBuilder<HotelServiceOrder> builder)
         {
-            builder.HasKey(hso => hso.HotelServiceOrderId);
-            builder.Property(hso => hso.ServiceOrderDate).IsRequired();
-            builder.Property(hso => hso.Quantity).IsRequired();
+            builder.HasKey(h => h.HotelServiceOrderId);
 
-            builder.HasOne(hso => hso.Guest).WithMany().HasForeignKey(so => so.GuestId).IsRequired();
-            builder.HasOne(hso => hso.Service).WithMany().HasForeignKey(so => so.ServiceId).IsRequired();
-            builder.HasOne(hso => hso.Employee).WithMany().HasForeignKey(so => so.EmployeeId).IsRequired();
+            builder.Property(h => h.ServiceOrderDate).IsRequired();
+            builder.Property(h => h.Quantity).IsRequired();
+            builder.Property(h => h.Amount).IsRequired();
+            builder.Property(h => h.PaymentStatus).IsRequired();
+            builder.Property(h => h.Timestamp).IsRequired();
 
+            builder.HasOne<Guest>().WithMany().HasForeignKey(h => h.GuestId).IsRequired();
         }
     }
 }

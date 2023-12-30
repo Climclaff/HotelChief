@@ -2,8 +2,10 @@
 {
     using AutoMapper;
     using HotelChief.API.ViewModels;
+    using HotelChief.Application.Services;
+    using HotelChief.Core.Entities;
+    using HotelChief.Core.Entities.Identity;
     using HotelChief.Core.Interfaces.IServices;
-    using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,11 +15,22 @@
     public class HotelServiceOrdersAdminController : Controller
     {
         private readonly IBaseCRUDService<HotelServiceOrder> _crudService;
+        private readonly IBaseCRUDService<HotelChief.Infrastructure.EFEntities.Guest> _guestService;
+        private readonly IBaseCRUDService<HotelService> _hotelServiceService;
+        private readonly IBaseCRUDService<Employee> _employeeService;
         private readonly IMapper _mapper;
 
-        public HotelServiceOrdersAdminController(IBaseCRUDService<HotelServiceOrder> crudService, IMapper mapper)
+        public HotelServiceOrdersAdminController(
+            IBaseCRUDService<HotelServiceOrder> crudService,
+            IBaseCRUDService<HotelChief.Infrastructure.EFEntities.Guest> guestService,
+            IBaseCRUDService<HotelService> hotelServiceService,
+            IBaseCRUDService<Employee> employeeService,
+            IMapper mapper)
         {
             _crudService = crudService;
+            _guestService = guestService;
+            _hotelServiceService = hotelServiceService;
+            _employeeService = employeeService;
             _mapper = mapper;
         }
 
@@ -48,14 +61,17 @@
             return View(_mapper.Map<HotelServiceOrder, HotelServiceOrderViewModel>(entity));
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var viewModel = new HotelServiceOrderViewModel();
+
+            viewModel = await FillTheLists(viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HotelServiceOrderId,GuestId,ServiceId,EmployeeId,ServiceOrderDate,Quantity,Amount,PaymentStatus,Timestamp")] HotelServiceOrderViewModel entity)
+        public async Task<IActionResult> Create(HotelServiceOrderViewModel entity)
         {
             if (ModelState.IsValid)
             {
@@ -65,6 +81,7 @@
                 return RedirectToAction(nameof(Index));
             }
 
+            entity = await FillTheLists(entity);
             return View(entity);
         }
 
@@ -81,12 +98,14 @@
                 return NotFound();
             }
 
-            return View(_mapper.Map<HotelServiceOrder, HotelServiceOrderViewModel>(entity));
+            var mappedEntity = _mapper.Map<HotelServiceOrder, HotelServiceOrderViewModel>(entity);
+            mappedEntity = await FillTheLists(mappedEntity);
+            return View(mappedEntity);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("HotelServiceOrderId,GuestId,ServiceId,EmployeeId,ServiceOrderDate,Quantity,Amount,PaymentStatus,Timestamp")] HotelServiceOrder entity)
+        public async Task<IActionResult> Edit(int id, HotelServiceOrderViewModel entity)
         {
             if (id != entity.HotelServiceOrderId)
             {
@@ -95,7 +114,8 @@
 
             if (ModelState.IsValid)
             {
-                _crudService.Update(entity);
+                var mappedEntity = _mapper.Map<HotelServiceOrderViewModel, HotelServiceOrder>(entity);
+                _crudService.Update(mappedEntity);
                 await _crudService.Commit();
                 if (await FindHotelServiceOrder(id) == null)
                 {
@@ -105,7 +125,8 @@
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(_mapper.Map<HotelServiceOrder, HotelServiceOrderViewModel>(entity));
+            entity = await FillTheLists(entity);
+            return View(entity);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -147,6 +168,26 @@
         private async Task<HotelServiceOrder?> FindHotelServiceOrder(int? id)
         {
             return (await _crudService.Get(m => m.HotelServiceOrderId == id)).FirstOrDefault();
+        }
+
+        private async Task<HotelServiceOrderViewModel> FillTheLists(HotelServiceOrderViewModel viewModel)
+        {
+            viewModel.Guests = (await _guestService.Get()).Select(e => new SelectListItem
+            {
+                Value = e.Id.ToString(),
+                Text = e.Id.ToString() + " " + e.FullName,
+            });
+            viewModel.Employees = (await _employeeService.Get()).Select(s => new SelectListItem
+            {
+                Value = s.EmployeeId.ToString(),
+                Text = s.EmployeeId.ToString() + " " + s.FullName,
+            });
+            viewModel.Services = (await _hotelServiceService.Get()).Select(s => new SelectListItem
+            {
+                Value = s.ServiceId.ToString(),
+                Text = s.ServiceId.ToString() + " " + s.ServiceName,
+            });
+            return viewModel;
         }
     }
 }

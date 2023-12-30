@@ -7,5 +7,7 @@
         public string? RoomType { get; set; }
 
         public bool IsAvailable { get; set; }
+
+        public double PricePerDay { get; set; }
     }
 }

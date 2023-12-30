@@ -6,7 +6,7 @@
     {
         public int ReviewId { get; set; }
 
-        public Guest? Guest { get; set; }
+        public int GuestId { get; set; }
 
         public int Rating { get; set; }
 

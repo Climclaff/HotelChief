@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -20,39 +22,39 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Main_Page"]</a>
                         </li>
                         @{
                             if (User.Identity?.IsAuthenticated ?? false)
                         {
-                        if(@User.FindFirst("IsAdmin").Value == "true"){
+                        if(@User?.FindFirst("IsAdmin")?.Value == "true"){
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EmployeesAdmin" asp-action="Index">Employees</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="EmployeesAdmin" asp-action="Index">@SharedLocalizer["Employees"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="GuestsAdmin" asp-action="Index">Guests</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="GuestsAdmin" asp-action="Index">@SharedLocalizer["Guests"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="HotelServicesAdmin" asp-action="Index">Hotel Services</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="HotelServicesAdmin" asp-action="Index">@SharedLocalizer["Hotel_Services"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="RoomsAdmin" asp-action="Index">Rooms</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="RoomsAdmin" asp-action="Index">@SharedLocalizer["Rooms"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ReservationsAdmin" asp-action="Index">Reservations</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="ReservationsAdmin" asp-action="Index">@SharedLocalizer["Reservations"]</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="HotelServiceOrdersAdmin" asp-action="Index">Service Orders</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="HotelServiceOrdersAdmin" asp-action="Index">@SharedLocalizer["Service_Orders"]</a>
                         </li>
+                        <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="RoomReservation" asp-action="Index">@SharedLocalizer["Reservations"]</a>
+                        </li>
+                        }
+                        }
+                        }
                         <li>
-                        @await Html.PartialAsync("_SelectLanguagePartial")
+                            @await Html.PartialAsync("_SelectLanguagePartial")
                         </li>
-                        }
-                        }
-                        }
 
                     </ul>
                     <partial name="_LoginPartial" />

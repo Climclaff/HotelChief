@@ -5,7 +5,13 @@
     using HotelChief.Infrastructure.Data;
     using Microsoft.EntityFrameworkCore;
 
-    public class RoomRepository
+    public class RoomRepository : IRoomRepository
     {
+        private readonly ApplicationDbContext _context;
+
+        public RoomRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
     }
 }

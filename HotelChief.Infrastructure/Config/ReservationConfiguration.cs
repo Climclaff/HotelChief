@@ -1,6 +1,6 @@
 ﻿namespace HotelChief.Infrastructure.Config
 {
-    using HotelChief.Infrastructure.EFEntities;
+    using HotelChief.Core.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,20 +9,15 @@
         public void Configure(EntityTypeBuilder<Reservation> builder)
         {
             builder.HasKey(r => r.ReservationId);
-            builder.Property(r => r.GuestId).IsRequired();
-            builder.Property(r => r.CheckInDate).IsRequired();
+            builder.Property(r => r.ReservationId).HasColumnName("ReservationId");
+
             builder.Property(r => r.CheckInDate).IsRequired();
             builder.Property(r => r.CheckOutDate).IsRequired();
+            builder.Property(r => r.Amount).IsRequired();
+            builder.Property(r => r.PaymentStatus).IsRequired();
+            builder.Property(r => r.Timestamp).IsRequired();
 
-            builder.HasOne(r => r.Guest)
-                .WithMany()
-                .HasForeignKey(r => r.GuestId)
-                .IsRequired();
-
-            builder.HasOne(r => r.Room)
-                .WithMany()
-                .HasForeignKey(r => r.RoomNumber)
-                .IsRequired();
+            builder.HasOne(h => h.Room).WithMany().HasForeignKey(h => h.RoomNumber).IsRequired();
         }
     }
 }

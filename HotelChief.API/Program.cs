@@ -37,8 +37,11 @@ namespace HotelChief
                 .AddViewLocalization();
             builder.Services.AddAutoMapper();
             builder.Services.AddScoped(typeof(IBaseCRUDRepository<>), typeof(BaseCrudRepository<>));
+            builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
+            builder.Services.AddScoped<IReservationService, ReservationService>();
+
 
             builder.Services.AddAuthorization(options =>
             {

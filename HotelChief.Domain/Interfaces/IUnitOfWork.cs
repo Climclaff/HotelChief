@@ -6,9 +6,13 @@
 
     public interface IUnitOfWork : IDisposable
     {
+        IRoomRepository RoomRepository { get; }
+
+        IReservationRepository ReservationRepository { get; }
+
         Task Commit();
 
-        IBaseCRUDRepository<T> GetRepository<T>() 
+        IBaseCRUDRepository<T> GetRepository<T>()
             where T : class;
     }
 }

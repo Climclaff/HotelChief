@@ -1,5 +1,6 @@
 ﻿namespace HotelChief.Infrastructure.Data
 {
+    using HotelChief.Core.Entities;
     using HotelChief.Infrastructure.Config;
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Identity;

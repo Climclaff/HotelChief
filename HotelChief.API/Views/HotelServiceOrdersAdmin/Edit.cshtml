@@ -15,18 +15,18 @@
             <input type="hidden" asp-for="HotelServiceOrderId" />
             <div class="form-group">
                 <label asp-for="GuestId" class="control-label"></label>
-                <input asp-for="GuestId" class="form-control" />
+                <select asp-for="GuestId" asp-items="Model.Guests" class="form-control"></select>
                 <span asp-validation-for="GuestId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
+                <select asp-for="EmployeeId" asp-items="Model.Employees" class="form-control"></select>
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ServiceId" class="control-label"></label>
-                <input asp-for="ServiceId" class="form-control" />
-                <span asp-validation-for="ServiceId" class="text-danger"></span>
+                <label asp-for="HotelServiceId" class="control-label"></label>
+                <select asp-for="HotelServiceId" asp-items="Model.Services" class="form-control"></select>
+                <span asp-validation-for="HotelServiceId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ServiceOrderDate" class="control-label"></label>

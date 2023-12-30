@@ -1,6 +1,6 @@
 ﻿namespace HotelChief.Infrastructure.Config
 {
-    using HotelChief.Infrastructure.EFEntities;
+    using HotelChief.Core.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,6 +11,10 @@
             builder.HasKey(r => r.RoomNumber);
             builder.Property(r => r.RoomType).HasMaxLength(50);
             builder.Property(r => r.IsAvailable).IsRequired();
+
+            builder.HasMany(r => r.Reservations)
+           .WithOne(res => res.Room)
+           .HasForeignKey(res => res.RoomNumber);
         }
     }
 }

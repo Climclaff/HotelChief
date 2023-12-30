@@ -17,7 +17,13 @@ namespace HotelChief.Infrastructure.UoW
         {
             _context = context;
             _repositories = new Dictionary<Type, object>();
+            RoomRepository = new RoomRepository(_context);
+            ReservationRepository = new ReservationRepository(_context);
         }
+
+        public IRoomRepository RoomRepository { get; private set; }
+
+        public IReservationRepository ReservationRepository { get; private set; }
 
         public IBaseCRUDRepository<T> GetRepository<T>()
             where T : class

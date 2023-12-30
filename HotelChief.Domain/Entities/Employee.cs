@@ -10,8 +10,10 @@
 
         public string? Role { get; set; }
 
-        public decimal Salary { get; set; }
+        public double Salary { get; set; }
 
         public DateTime HireDate { get; set; }
+
+        public ICollection<HotelServiceOrder> HotelServiceOrders { get; } = new List<HotelServiceOrder>();
     }
 }

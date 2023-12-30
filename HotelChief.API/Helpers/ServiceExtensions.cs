@@ -12,8 +12,8 @@
             {
                 mc.AddProfile(new DomainToInfrastructureMappingProfile());
                 mc.AddProfile(new InfrastructureToDomainMappingProfile());
-                mc.AddProfile(new InfrastructureToViewModelMappingProfile());
-                mc.AddProfile(new ViewModelToInfrastructureMappingProfile());
+                mc.AddProfile(new CoreToViewModelMappingProfile());
+                mc.AddProfile(new ViewModelToCoreMappingProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

@@ -2,7 +2,7 @@
 {
     public abstract class Booking
     {
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
 
         public bool PaymentStatus { get; set; }
 
