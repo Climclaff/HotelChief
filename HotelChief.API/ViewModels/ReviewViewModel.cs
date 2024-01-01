@@ -1,4 +1,5 @@
-﻿using HotelChief.Infrastructure.EFEntities;
+﻿using HotelChief.Core.Entities;
+using HotelChief.Infrastructure.EFEntities;
 
 namespace HotelChief.API.ViewModels
 {
@@ -6,12 +7,14 @@ namespace HotelChief.API.ViewModels
     {
         public int ReviewId { get; set; }
 
-        public Guest? Guest { get; set; }
+        public int GuestId { get; set; }
 
         public int Rating { get; set; }
 
         public string? Comment { get; set; }
 
         public DateTime Timestamp { get; set; }
+
+        public IEnumerable<Review>? Reviews { get; set; }
     }
 }

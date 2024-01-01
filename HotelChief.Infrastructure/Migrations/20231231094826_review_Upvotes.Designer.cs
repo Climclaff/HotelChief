@@ -4,6 +4,7 @@ using HotelChief.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelChief.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231231094826_review_Upvotes")]
+    partial class review_Upvotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,7 +170,7 @@ namespace HotelChief.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("Downvotes")
+                    b.Property<int>("DownVotes")
                         .HasColumnType("int");
 
                     b.Property<int>("GuestId")
@@ -180,7 +182,7 @@ namespace HotelChief.Infrastructure.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Upvotes")
+                    b.Property<int>("UpVotes")
                         .HasColumnType("int");
 
                     b.HasKey("ReviewId");
@@ -188,52 +190,6 @@ namespace HotelChief.Infrastructure.Migrations
                     b.HasIndex("GuestId");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("HotelChief.Core.Entities.ReviewGuestDownvote", b =>
-                {
-                    b.Property<int>("DownvoteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DownvoteId"), 1L, 1);
-
-                    b.Property<int?>("GuestId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReviewId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DownvoteId");
-
-                    b.HasIndex("GuestId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("ReviewDownvotes", (string)null);
-                });
-
-            modelBuilder.Entity("HotelChief.Core.Entities.ReviewGuestUpvote", b =>
-                {
-                    b.Property<int>("UpvoteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UpvoteId"), 1L, 1);
-
-                    b.Property<int?>("GuestId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReviewId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UpvoteId");
-
-                    b.HasIndex("GuestId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("ReviewUpvotes", (string)null);
                 });
 
             modelBuilder.Entity("HotelChief.Core.Entities.Room", b =>
@@ -509,30 +465,6 @@ namespace HotelChief.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HotelChief.Core.Entities.ReviewGuestDownvote", b =>
-                {
-                    b.HasOne("HotelChief.Infrastructure.EFEntities.Guest", null)
-                        .WithMany("DownvotedReviews")
-                        .HasForeignKey("GuestId");
-
-                    b.HasOne("HotelChief.Core.Entities.Review", null)
-                        .WithMany("Downvoters")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("HotelChief.Core.Entities.ReviewGuestUpvote", b =>
-                {
-                    b.HasOne("HotelChief.Infrastructure.EFEntities.Guest", null)
-                        .WithMany("UpvotedReviews")
-                        .HasForeignKey("GuestId");
-
-                    b.HasOne("HotelChief.Core.Entities.Review", null)
-                        .WithMany("Upvoters")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -594,23 +526,9 @@ namespace HotelChief.Infrastructure.Migrations
                     b.Navigation("HotelServiceOrders");
                 });
 
-            modelBuilder.Entity("HotelChief.Core.Entities.Review", b =>
-                {
-                    b.Navigation("Downvoters");
-
-                    b.Navigation("Upvoters");
-                });
-
             modelBuilder.Entity("HotelChief.Core.Entities.Room", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("HotelChief.Infrastructure.EFEntities.Guest", b =>
-                {
-                    b.Navigation("DownvotedReviews");
-
-                    b.Navigation("UpvotedReviews");
                 });
 #pragma warning restore 612, 618
         }

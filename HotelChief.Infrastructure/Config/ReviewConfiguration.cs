@@ -18,6 +18,16 @@
                 .WithMany()
                 .HasForeignKey(r => r.GuestId)
                 .IsRequired();
+
+            builder.HasMany(r => r.Upvoters)
+                .WithOne()
+                .HasForeignKey(ur => ur.ReviewId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(r => r.Downvoters)
+                .WithOne()
+                .HasForeignKey(dr => dr.ReviewId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

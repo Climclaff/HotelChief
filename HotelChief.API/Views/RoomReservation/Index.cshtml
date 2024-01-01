@@ -30,5 +30,15 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+        <script>
+            const roomReservationConnection = new signalR.HubConnectionBuilder().withUrl("/roomReservationHub").build();
+
+            roomReservationConnection.start().catch(err => console.error(err.toString()));
+
+            roomReservationConnection.on("UpdateAvailableRooms", function () {
+                location.reload(); 
+            });
+        </script>
     }
 }

@@ -39,6 +39,8 @@
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewGuestDownvoteConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewGuestUpvoteConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

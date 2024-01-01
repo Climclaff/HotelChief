@@ -5,7 +5,13 @@
     using HotelChief.Infrastructure.Data;
     using Microsoft.EntityFrameworkCore;
 
-    public class ReviewRepository
+    public class ReviewRepository : IReviewRepository
     {
+        private readonly ApplicationDbContext _context;
+
+        public ReviewRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
     }
 }

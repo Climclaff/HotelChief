@@ -147,6 +147,9 @@
   <data name="Reservations" xml:space="preserve">
     <value>Бронювання кімнат</value>
   </data>
+  <data name="Review_Page" xml:space="preserve">
+    <value>Сторінка відгуків</value>
+  </data>
   <data name="Rooms" xml:space="preserve">
     <value>Кімнати</value>
   </data>

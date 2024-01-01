@@ -2,6 +2,7 @@ namespace HotelChief
 {
     using HotelChief.API;
     using HotelChief.API.Helpers;
+    using HotelChief.API.Hubs;
     using HotelChief.Application.Services;
     using HotelChief.Core.Interfaces;
     using HotelChief.Core.Interfaces.IRepositories;
@@ -41,8 +42,9 @@ namespace HotelChief
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
-
+            builder.Services.AddSignalR();
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy(
@@ -87,6 +89,12 @@ namespace HotelChief
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ReviewHub>("/reviewHub");
+                endpoints.MapHub<RoomReservationHub>("/roomReservationHub");
+            });
             app.MapRazorPages();
 
             app.Run();

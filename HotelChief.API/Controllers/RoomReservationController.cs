@@ -2,26 +2,31 @@
 {
     using System.Collections.Concurrent;
     using AutoMapper;
+    using HotelChief.API.Hubs;
     using HotelChief.API.ViewModels;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
 
     public class RoomReservationController : Controller
     {
         private readonly IReservationService _reservationService;
         private readonly IMapper _mapper;
         private readonly UserManager<Guest> _userManager;
+        private readonly IHubContext<RoomReservationHub> _hubContext;
 
         public RoomReservationController(IReservationService reservationService,
             UserManager<Guest> userManager,
-            IMapper mapper)
+            IMapper mapper,
+            IHubContext<RoomReservationHub> hubContext)
         {
             _reservationService = reservationService;
             _userManager = userManager;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index()
@@ -79,7 +84,7 @@
                 Amount = price,
                 GuestId = user.Id,
             });
-
+            await _hubContext.Clients.All.SendAsync("UpdateAvailableRooms");
             return RedirectToAction("ReservationSuccess");
         }
 
