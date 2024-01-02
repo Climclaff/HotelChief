@@ -1,0 +1,33 @@
+﻿@model HotelChief.API.ViewModels.RoomCleaningViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["Cleaning_Schedule"]</h2>
+
+@if (Model.RoomCleanings != null && Model.RoomCleanings.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Localizer["Room_Number"]</th>
+                <th>@Localizer["Employee"]</th>
+                <th>@Localizer["Start_Date"]</th>
+                <th>@Localizer["End_Date"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var roomCleaning in Model.RoomCleanings)
+            {
+                <tr>
+                    <td>@roomCleaning.RoomNumber</td>
+                    <td>@($"{roomCleaning.Employee?.FullName} (ID: {roomCleaning.EmployeeId})")</td>
+                    <td>@roomCleaning.StartDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@roomCleaning.EndDate.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>@Localizer["No_Schedule"]</p>
+}

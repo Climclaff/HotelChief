@@ -1,8 +1,10 @@
 namespace HotelChief
 {
+    using Hangfire;
     using HotelChief.API;
     using HotelChief.API.Helpers;
     using HotelChief.API.Hubs;
+    using HotelChief.Application.IServices;
     using HotelChief.Application.Services;
     using HotelChief.Core.Interfaces;
     using HotelChief.Core.Interfaces.IRepositories;
@@ -43,13 +45,22 @@ namespace HotelChief
             builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
             builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
-
+            builder.Services.AddScoped<IRoomCleaningService, RoomCleaningService>();
+            builder.Services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
+            builder.Services.AddHangfireServer();
+            builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.Zero;
+            });
             builder.Services.AddSignalR();
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy(
                     "IsAdminPolicy",
                     policy => policy.RequireAssertion(context => context.User.HasClaim(c => (c.Type == "IsAdmin" && c.Value == "true"))));
+                options.AddPolicy(
+                    "IsEmployeePolicy",
+                    policy => policy.RequireAssertion(context => context.User.HasClaim(c => (c.Type == "IsEmployee" && c.Value == "true"))));
             });
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -81,6 +92,7 @@ namespace HotelChief
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseHangfireDashboard();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -96,7 +108,7 @@ namespace HotelChief
                 endpoints.MapHub<RoomReservationHub>("/roomReservationHub");
             });
             app.MapRazorPages();
-
+            RecurringJob.AddOrUpdate<IRoomCleaningService>(x => x.ScheduleRoomCleaning(), Cron.Daily);
             app.Run();
         }
     }

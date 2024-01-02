@@ -41,6 +41,7 @@
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewGuestDownvoteConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewGuestUpvoteConfiguration());
+            modelBuilder.ApplyConfiguration(new RoomCleaningConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

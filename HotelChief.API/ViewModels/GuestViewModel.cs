@@ -33,5 +33,7 @@
         public bool? LockoutEnabled { get; set; }
 
         public int? AccessFailedCount { get; set; }
+
+        public string? IsEmployee { get; set; }
     }
 }

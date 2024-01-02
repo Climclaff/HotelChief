@@ -15,5 +15,7 @@
         public DateTime HireDate { get; set; }
 
         public ICollection<HotelServiceOrder> HotelServiceOrders { get; } = new List<HotelServiceOrder>();
+
+        public ICollection<RoomCleaning> RoomCleanings { get; set; } = new List<RoomCleaning>();
     }
 }
