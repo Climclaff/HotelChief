@@ -1,5 +1,6 @@
 ﻿namespace HotelChief.Core.Interfaces.IRepositories
 {
+    using HotelChief.Core.Entities;
     using System.Linq.Expressions;
 
     public interface IBaseCRUDRepository<T>
