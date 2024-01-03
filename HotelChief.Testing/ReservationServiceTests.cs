@@ -158,6 +158,7 @@ namespace HotelChief.Testing
                                remainingHours / 24 * room.PricePerDay;
             Assert.Equal(expectedPrice, result, 1);
         }
-    } 
+    }
+}
 
     
