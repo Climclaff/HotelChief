@@ -10,13 +10,12 @@ namespace HotelChief.Infrastructure.UoW
     public class UnitOfWork : IDisposable, IUnitOfWork
     {
         private ApplicationDbContext _context;
-        private Dictionary<Type, object> _repositories;
-        private bool _disposed = false;
+        private readonly IServiceProvider _serviceProvider;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
             _context = context;
-            _repositories = new Dictionary<Type, object>();
+            _serviceProvider = serviceProvider;
             RoomRepository = new RoomRepository(_context);
             ReservationRepository = new ReservationRepository(_context);
             ReviewRepository = new ReviewRepository(_context);
@@ -31,39 +30,23 @@ namespace HotelChief.Infrastructure.UoW
         public IBaseCRUDRepository<T> GetRepository<T>()
             where T : class
         {
-            if (_repositories.ContainsKey(typeof(T)))
+            var repository = _serviceProvider.GetService(typeof(IBaseCRUDRepository<T>));
+            if (repository == null)
             {
-                return (IBaseCRUDRepository<T>)_repositories[typeof(T)];
+                repository = new BaseCrudRepository<T>(_context);
             }
 
-            var repository = new BaseCrudRepository<T>(_context);
-            _repositories.Add(typeof(T), repository);
-
-            return repository;
+            return (IBaseCRUDRepository<T>)repository;
         }
 
-        public void Dispose()
+        public async void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            await _context.DisposeAsync();
         }
 
         public async Task Commit()
         {
             await _context.SaveChangesAsync();
-        }
-
-        protected async virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    await _context.DisposeAsync();
-                }
-            }
-
-            _disposed = true;
         }
     }
 }

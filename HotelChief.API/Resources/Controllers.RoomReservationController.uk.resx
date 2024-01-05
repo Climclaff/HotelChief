@@ -117,49 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Cleaning_Schedule" xml:space="preserve">
-    <value>Cleaning schedule</value>
+  <data name="Adjacent_slots" xml:space="preserve">
+    <value>Обрані проміжки бронювання повинні бути суміжні</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="No_Rooms_To_Reserve" xml:space="preserve">
+    <value>Немає кімнат для бронювання</value>
   </data>
-  <data name="Employees" xml:space="preserve">
-    <value>Employees</value>
-  </data>
-  <data name="Guests" xml:space="preserve">
-    <value>Guests</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hello</value>
-  </data>
-  <data name="Hotel_Services" xml:space="preserve">
-    <value>Hotel Services</value>
-  </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
-  <data name="Main_Page" xml:space="preserve">
-    <value>Main Page</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
-  </data>
-  <data name="Reservations" xml:space="preserve">
-    <value>Reservations</value>
-  </data>
-  <data name="Review_Page" xml:space="preserve">
-    <value>Review Page</value>
-  </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Rooms</value>
-  </data>
-  <data name="Service_Orders" xml:space="preserve">
-    <value>Service Orders</value>
+  <data name="Select_Timeslot" xml:space="preserve">
+    <value>Будь ласка, оберіть хоча б один період бронювання</value>
   </data>
 </root>

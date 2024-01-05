@@ -150,8 +150,6 @@
 
             review = await _reviewService.GetReviewByIdAsync(reviewId);
             await NotifyClientsOfVotes(reviewId, updatedUpvotes, review.Downvotes);
-
-
         }
 
         [HttpPost]
@@ -163,8 +161,6 @@
 
             review = await _reviewService.GetReviewByIdAsync(reviewId);
             await NotifyClientsOfVotes(reviewId, review.Upvotes, updatedDownvotes);
-
-
         }
 
         private bool IsCommentOwner(Infrastructure.EFEntities.Guest user, Review review)

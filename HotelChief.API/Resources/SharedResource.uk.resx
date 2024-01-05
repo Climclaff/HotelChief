@@ -120,6 +120,9 @@
   <data name="Cleaning_Schedule" xml:space="preserve">
     <value>Розклад прибирання</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
   <data name="Employees" xml:space="preserve">
     <value>Співробітники</value>
   </data>

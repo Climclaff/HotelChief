@@ -1,13 +1,14 @@
 ﻿@model HotelChief.API.ViewModels.GuestReservationViewModel
-
-<h2>Available Rooms</h2>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["Available_Rooms"]</h2>
 
 @foreach (var room in Model.AvailableRooms)
 {
-    <h3>Room @room.RoomNumber</h3>
-    <p>Type: @room.RoomType</p>
+    <h3>@Localizer["Room"] @room.RoomNumber</h3>
+    <p>@Localizer["Type"] @room.RoomType</p>
 
-    <h4>Available Time Slots:</h4>
+    <h4>@Localizer["Available_Timeslots"]</h4>
     <form method="post" asp-controller="RoomReservation" asp-action="ReserveRoom">
         <input type="hidden" name="roomNumber" value="@room.RoomNumber" />
 
@@ -23,7 +24,7 @@
             }
         </ul>
 
-        <button type="submit">Reserve Selected Time Slots</button>
+        <button type="submit">@Localizer["Reserve_Selected"]</button>
         @Html.ValidationSummary()
     </form>
 }

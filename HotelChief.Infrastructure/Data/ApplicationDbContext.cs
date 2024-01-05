@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
 
     public class ApplicationDbContext : IdentityDbContext<Guest, IdentityRole<int>, int>
     {
@@ -47,7 +48,11 @@
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=CLIMCLAFF\\SQLEXPRESS;Initial Catalog=HotelChiefdb;Integrated Security=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("HotelChiefdb"));
         }
     }
 }

@@ -19,7 +19,6 @@
         public async Task<IEnumerable<Room>> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate)
         {
             var allRooms = await _context.Rooms.ToListAsync();
-
             var reservedRoomNumbers = await _context.Reservations
                 .Where(res => res.CheckOutDate >= checkInDate && res.CheckInDate <= checkOutDate)
                 .Select(res => res.RoomNumber)
@@ -27,7 +26,6 @@
                 .ToListAsync();
 
             var availableRooms = new List<Room>();
-
             foreach (var roomNumber in allRooms.Select(r => r.RoomNumber))
             {
                 var existingReservations = await _context.Reservations.Where(

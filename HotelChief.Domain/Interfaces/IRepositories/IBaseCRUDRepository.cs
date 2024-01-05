@@ -5,7 +5,7 @@
 
     public interface IBaseCRUDRepository<T>
     {
-        Task<IEnumerable<T>> Get(
+        Task<IReadOnlyList<T>> Get(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "");
