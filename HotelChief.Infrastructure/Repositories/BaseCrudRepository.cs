@@ -63,6 +63,14 @@ namespace HotelChief.Infrastructure.Repositories
             return await dbSet.FindAsync(id);
         }
 
+        public virtual void DeleteAll()
+        {
+            foreach (var entity in dbSet)
+            {
+                dbSet.Remove(entity);
+            }
+        }
+
         public virtual void Update(T entity)
         {
             dbSet.Attach(entity);

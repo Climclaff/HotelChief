@@ -22,6 +22,9 @@
 
         public async Task ScheduleRoomCleaning()
         {
+            _unitOfWork.GetRepository<RoomCleaning>().DeleteAll(); // Clear the previous schedule before generating a new one
+            await _unitOfWork.Commit();
+
             var janitors = (await _unitOfWork.GetRepository<Employee>().Get(e => e.Role == "Janitor", includeProperties: "RoomCleanings"))
                 .OrderBy(e => e.RoomCleanings.Count)
                 .ToList();

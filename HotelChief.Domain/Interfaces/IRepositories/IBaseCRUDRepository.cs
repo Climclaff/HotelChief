@@ -15,5 +15,7 @@
         void Update(T entity);
 
         Task DeleteAsync(int id);
+
+        void DeleteAll();
     }
 }
