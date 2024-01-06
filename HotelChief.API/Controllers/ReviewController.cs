@@ -4,12 +4,14 @@
     using AutoMapper;
     using HotelChief.API.Hubs;
     using HotelChief.API.ViewModels;
+    using HotelChief.API.ViewModels.DTO;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Entities.Identity;
     using HotelChief.Core.Interfaces.IServices;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Localization;
 
     public class ReviewController : Controller
@@ -37,17 +39,25 @@
         public async Task<ActionResult> Index()
         {
             var reviews = await _reviewService.GetReviewsAsync();
+            var uniqueGuestIds = reviews.Select(r => r.GuestId).Distinct().ToList();
+            var users = await _userManager.Users.Where(u => uniqueGuestIds.Contains(u.Id)).ToListAsync();
+            var reviewsWithUsers = MapUsersToDTO(reviews, users);
             ReviewViewModel model = new ReviewViewModel();
-            model.Reviews = reviews;
+            model.Reviews = reviewsWithUsers;
 
             if (model.Reviews != null)
             {
                 int i = 0;
                 bool[] commentOwnership = new bool[reviews.Count()];
-                var user = await _userManager.GetUserAsync(HttpContext.User);
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
                 foreach (var review in model.Reviews)
                 {
-                    bool isCommentOwner = IsCommentOwner(user, review);
+                    bool isCommentOwner = IsCommentOwner(Convert.ToInt32(userId), review.GuestId);
                     if (isCommentOwner)
                     {
                         commentOwnership[i] = true;
@@ -78,15 +88,24 @@
                 return RedirectToAction(nameof(Index));
             }
 
-            review.Timestamp = DateTime.UtcNow;
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            review.GuestId = user.Id;
-            if (ModelState.IsValid)
+            if (review.Rating < 0 || review.Rating > 5)
             {
-                await _reviewService.AddReviewAsync(_mapper.Map<ReviewViewModel, Review>(review));
-                await _reviewService.Commit();
-                TempData["SuccessMessage"] = _localizer["Review shared"].ToString();
+                TempData["ErrorMessage"] = _localizer["Select Rating"].ToString();
                 return RedirectToAction(nameof(Index));
+            }
+
+            review.Timestamp = DateTime.UtcNow;
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                review.GuestId = Convert.ToInt32(userId);
+                if (ModelState.IsValid)
+                {
+                    await _reviewService.AddReviewAsync(_mapper.Map<ReviewViewModel, Review>(review));
+                    await _reviewService.Commit();
+                    TempData["SuccessMessage"] = _localizer["Review shared"].ToString();
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
             TempData["ErrorMessage"] = _localizer["Something went wrong"].ToString();
@@ -109,24 +128,23 @@
                         IList<Claim> claims = await _userManager.GetClaimsAsync(user);
                         Review review = await _reviewService.GetReviewByIdAsync(id);
 
-                        bool isCommentOwner = IsCommentOwner(user, review);
-                        if (isCommentOwner)
-                        {
-                            await _reviewService.DeleteReviewAsync(review);
-                            await _reviewService.Commit();
-                            TempData["SuccessMessage"] = _localizer["Review deleted"].ToString();
-                            return RedirectToAction(nameof(Index));
-                        }
+                        bool isCommentOwner = IsCommentOwner(user.Id, review.GuestId);
+                        bool isAdmin = false;
 
                         for (int i = 0; i < claims.Count; i++)
                         {
                             if (claims[i].Type.ToString() == "IsAdmin" && claims[i].Value.ToString() == "true")
                             {
-                                await _reviewService.DeleteReviewAsync(review);
-                                await _reviewService.Commit();
-                                TempData["SuccessMessage"] = _localizer["Review deleted"].ToString();
-                                return RedirectToAction(nameof(Index));
+                                isAdmin = true;
                             }
+                        }
+
+                        if (isCommentOwner || isAdmin)
+                        {
+                            await _reviewService.DeleteReviewAsync(review);
+                            await _reviewService.Commit();
+                            TempData["SuccessMessage"] = _localizer["Review deleted"].ToString();
+                            return RedirectToAction(nameof(Index));
                         }
                     }
                 }
@@ -145,32 +163,35 @@
         public async Task Upvote(int reviewId)
         {
             var review = await _reviewService.GetReviewByIdAsync(reviewId);
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            var updatedUpvotes = await _reviewService.UpvoteReviewAsync(reviewId, user.Id);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var updatedUpvotes = await _reviewService.UpvoteReviewAsync(reviewId, Convert.ToInt32(userId));
 
-            review = await _reviewService.GetReviewByIdAsync(reviewId);
-            await NotifyClientsOfVotes(reviewId, updatedUpvotes, review.Downvotes);
+                review = await _reviewService.GetReviewByIdAsync(reviewId);
+                await NotifyClientsOfVotes(reviewId, updatedUpvotes, review.Downvotes);
+            }
         }
 
         [HttpPost]
         public async Task Downvote(int reviewId)
         {
             var review = await _reviewService.GetReviewByIdAsync(reviewId);
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            var updatedDownvotes = await _reviewService.DownvoteReviewAsync(reviewId, user.Id);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var updatedDownvotes = await _reviewService.DownvoteReviewAsync(reviewId, Convert.ToInt32(userId));
 
-            review = await _reviewService.GetReviewByIdAsync(reviewId);
-            await NotifyClientsOfVotes(reviewId, review.Upvotes, updatedDownvotes);
+                review = await _reviewService.GetReviewByIdAsync(reviewId);
+                await NotifyClientsOfVotes(reviewId, review.Upvotes, updatedDownvotes);
+            }
         }
 
-        private bool IsCommentOwner(Infrastructure.EFEntities.Guest user, Review review)
+        private bool IsCommentOwner(int id, int reviewGuestId)
         {
-            if (review != null)
+            if (id == reviewGuestId)
             {
-                if (user.Id == review.GuestId)
-                {
-                    return true;
-                }
+                return true;
             }
 
             return false;
@@ -179,6 +200,28 @@
         private async Task NotifyClientsOfVotes(int reviewId, int upvotes, int downvotes)
         {
             await _hubContext.Clients.All.SendAsync("UpdateVotes", reviewId, upvotes, downvotes);
+        }
+
+        private List<ReviewDTO> MapUsersToDTO(IEnumerable<Review> reviews, List<Infrastructure.EFEntities.Guest> users)
+        {
+            return reviews
+                .Select(review => new
+                {
+                    Review = review,
+                    User = users.FirstOrDefault(u => u.Id == review.GuestId),
+                })
+                .Select(pair => new ReviewDTO
+                {
+                    ReviewId = pair.Review.ReviewId,
+                    GuestId = pair.Review.GuestId,
+                    GuestEmail = pair.User?.Email,
+                    Rating = pair.Review.Rating,
+                    Comment = pair.Review.Comment,
+                    Upvotes = pair.Review.Upvotes,
+                    Downvotes = pair.Review.Downvotes,
+                    Timestamp = pair.Review.Timestamp,
+                })
+                .ToList();
         }
     }
 }

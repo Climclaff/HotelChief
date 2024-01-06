@@ -1,10 +1,8 @@
-﻿namespace HotelChief.API.ViewModels
+﻿namespace HotelChief.API.ViewModels.DTO
 {
     using System.ComponentModel.DataAnnotations;
-    using HotelChief.API.ViewModels.DTO;
-    using HotelChief.Core.Entities;
 
-    public class ReviewViewModel
+    public class ReviewDTO
     {
         public int ReviewId { get; set; }
 
@@ -22,7 +20,5 @@
         public int Upvotes { get; set; }
 
         public int Downvotes { get; set; }
-
-        public IEnumerable<ReviewDTO>? Reviews { get; set; }
     }
 }

@@ -132,6 +132,9 @@
   <data name="Review shared" xml:space="preserve">
     <value>Review shared.</value>
   </data>
+  <data name="Select Rating" xml:space="preserve">
+    <value>A rating value must be provided (0-5)</value>
+  </data>
   <data name="Something went wrong" xml:space="preserve">
     <value>Something went wrong, try to authorize again.</value>
   </data>

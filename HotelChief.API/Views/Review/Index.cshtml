@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
-
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-hvvZLlzM5yBhTBSH86xjw56Zmk7IlAy9S4CiEoM87qroJEqUOVfrtiGn4F5sD4Vb" crossorigin="anonymous">
+</head>
 @{
     ViewData["Title"] = @Localizer["Review page"];
 }
@@ -23,6 +25,16 @@
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">@Localizer["Rating"]</label>
+                <div class="rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="star" data-rating="@i">&#9733;</span>
+                    }
+                    @Html.HiddenFor(m => m.Rating, new { @class = "rating-value" })
+                </div>
+             </div>
+            <div class="form-group">
                 <input type="submit" value="@Localizer["Share review"]" class="btn btn-primary" />
             </div>
         </form>
@@ -41,7 +53,7 @@
             <div class="card">
                 <div class="row d-flex">
                     <div class="d-flex flex-column">
-                        <h6 class="mt-2 mb-0"> @Html.DisplayFor(modelItem => item.GuestId)    </h6>
+                        <h6 class="mt-2 mb-0"> @Html.DisplayFor(modelItem => item.GuestEmail)    </h6>
                     </div>
                     <div class="ml-auto">
                         <p class="text-muted pt-5 pt-sm-3"> @Html.DisplayFor(modelItem => item.Timestamp)    </p>
@@ -49,6 +61,13 @@
                 </div>
                 <div class="boxSize">
                     <p class="content"> @Html.DisplayFor(modelItem => item.Comment)    </p>
+                </div>
+                <div class="rating read-only" id="rating-@item.ReviewId">
+                    @for (int n = 1; n <= 5; n++)
+                    {
+                        <span class="star @(n <= item.Rating ? "active" : "")" data-value="@n">&#9733;</span>
+                    }
+                    @Html.HiddenFor(modelItem => item.Rating, new { @class = "rating-value" })
                 </div>
                  <p id="upvotes-@item.ReviewId">Upvotes: @item.Upvotes</p>
                  <p id="downvotes-@item.ReviewId">Downvotes: @item.Downvotes</p>
@@ -71,6 +90,8 @@
         }
     }
 }
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
 <script>
 
@@ -155,6 +176,71 @@
         color: #4F8A10;
         background-color: #DFF2BF;
     }
+
+    .rating {
+        font-size: 24px;
+    }
+
+    .star {
+        cursor: pointer;
+    }
+
+        .star:hover,
+        .star.active {
+            color: gold;
+        }
 </style>
+<script>
+    $(document).ready(function () {
+        $('.rating').each(function () {
+            var containerId = $(this).attr('id');
+
+            if (!$(this).hasClass('read-only')) {
+                // Attach events only for non-read-only stars
+                $('#' + containerId + ' .star').on('mouseenter', function () {
+                    var value = $(this).data('value');
+                    highlightStars(value, containerId);
+                });
+
+                $('#' + containerId + ' .star').on('mouseleave', function () {
+                    var value = $('#' + containerId + ' .rating-value').val();
+                    highlightStars(value, containerId);
+                });
+
+                $('#' + containerId + ' .star').on('click', function () {
+                    var value = $(this).data('value');
+                    $('#' + containerId + ' .rating-value').val(value);
+                    highlightStars(value, containerId);
+                });
+            }
+        });
+
+        function highlightStars(value, containerId) {
+            $('#' + containerId + ' .star').removeClass('active');
+            $('#' + containerId + ' .star').each(function () {
+                if ($(this).data('value') <= value) {
+                    $(this).addClass('active');
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.col-md-4 .star').click(function () {
+            var rating = $(this).data('rating');
+            $(this).closest('.col-md-4').find('.rating-value').val(rating);
+            highlightStars($(this).closest('.rating'), rating);
+        });
+
+        function highlightStars(container, rating) {
+            container.find('.star').removeClass('active');
+            container.find('.star:lt(' + rating + ')').addClass('active');
+        }
+    });
+</script>
+
+
 
 

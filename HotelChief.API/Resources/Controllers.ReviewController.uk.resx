@@ -132,6 +132,9 @@
   <data name="Review shared" xml:space="preserve">
     <value>Відгук розміщено</value>
   </data>
+  <data name="Select Rating" xml:space="preserve">
+    <value>Необхідно обрати оцінку (0-5)</value>
+  </data>
   <data name="Something went wrong" xml:space="preserve">
     <value>Щось пішло не так, спробуйте авторизуватися знову</value>
   </data>

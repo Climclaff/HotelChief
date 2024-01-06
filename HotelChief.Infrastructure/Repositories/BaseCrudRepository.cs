@@ -52,12 +52,10 @@ namespace HotelChief.Infrastructure.Repositories
 
             if (orderBy != null)
             {
-                return (await orderBy(query).ToListAsync()).AsReadOnly();
+                query = orderBy(query);
             }
-            else
-            {
-                return (await query.ToListAsync()).AsReadOnly();
-            }
+
+            return await query.ToListAsync();
         }
 
         public async virtual Task<T?> GetByIdAsync(int id)
