@@ -4,6 +4,7 @@
 @inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-hvvZLlzM5yBhTBSH86xjw56Zmk7IlAy9S4CiEoM87qroJEqUOVfrtiGn4F5sD4Vb" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 </head>
 @{
     ViewData["Title"] = @Localizer["Review page"];
@@ -69,10 +70,16 @@
                     }
                     @Html.HiddenFor(modelItem => item.Rating, new { @class = "rating-value" })
                 </div>
-                 <p id="upvotes-@item.ReviewId">Upvotes: @item.Upvotes</p>
-                 <p id="downvotes-@item.ReviewId">Downvotes: @item.Downvotes</p>
-                <button onclick="upvote(@item.ReviewId, @item.Upvotes, @item.Downvotes)">Upvote</button>
-                <button onclick="downvote(@item.ReviewId, @item.Upvotes, @item.Downvotes)">Downvote</button>
+
+                <div class="thumbs-up" onclick="upvote(@item.ReviewId, @item.Upvotes, @item.Downvotes)">
+                    <i class="fa fa-thumbs-up" id="upvotes-@item.ReviewId"> @item.Upvotes</i>
+                    <span>Upvote</span>
+                </div>
+
+                <div class="thumbs-down" onclick="downvote(@item.ReviewId, @item.Upvotes, @item.Downvotes)">
+                    <i class="fa fa-thumbs-down" id="downvotes-@item.ReviewId">@item.Downvotes</i>
+                    <span>Downvote</span>
+                </div>
                 @if (commentOwnership[i] == true || User.FindFirst("IsAdmin").Value == "true")
                 {
                     <form asp-action="Delete">
@@ -104,8 +111,8 @@
         const downvotesElement = document.getElementById(`downvotes-${reviewId}`);
 
         if (upvotesElement && downvotesElement) {
-            upvotesElement.textContent = `Upvotes: ${upvotes}`;
-            downvotesElement.textContent = `Downvotes: ${downvotes}`;
+            upvotesElement.textContent = `${upvotes}`;
+            downvotesElement.textContent = `${downvotes}`;
         }
     });
 
@@ -189,6 +196,16 @@
         .star.active {
             color: gold;
         }
+
+    .thumbs-up.hovered {
+        cursor: pointer;
+        color: green; 
+    }
+
+    .thumbs-down.hovered{
+        cursor: pointer;
+        color: red;
+    }
 </style>
 <script>
     $(document).ready(function () {
@@ -239,6 +256,16 @@
             container.find('.star:lt(' + rating + ')').addClass('active');
         }
     });
+</script>
+<script>
+$('.thumbs-up, .thumbs-down').hover(
+        function () {
+            $(this).addClass('hovered');
+        },
+        function () {
+            $(this).removeClass('hovered');
+        }
+    );
 </script>
 
 
