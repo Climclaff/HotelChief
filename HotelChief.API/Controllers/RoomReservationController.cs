@@ -81,7 +81,11 @@ namespace HotelChief.API.Controllers
                 Amount = price,
                 GuestId = Convert.ToInt32(userId),
             });
-            await _hubContext.Clients.All.SendAsync("UpdateAvailableRooms");
+            var connId = RoomReservationHub.ConnectedUsers.TryGetValue(userId, out var conn);
+            if (conn != null)
+            {
+                await _hubContext.Clients.AllExcept(conn).SendAsync("UpdateAvailableRooms");
+            }
             return RedirectToAction("ReservationSuccess");
         }
 
