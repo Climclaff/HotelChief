@@ -12,6 +12,8 @@
 
         public double Salary { get; set; }
 
+        public bool OnVacation { get; set; }
+
         public DateTime HireDate { get; set; }
 
         public ICollection<HotelServiceOrder> HotelServiceOrders { get; } = new List<HotelServiceOrder>();

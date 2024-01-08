@@ -1,10 +1,9 @@
 ﻿namespace HotelChief.Application.Services
 {
-    using Hangfire;
+    using System.Collections.Immutable;
     using HotelChief.Application.IServices;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces;
-    using System.Collections.Immutable;
 
     public class RoomCleaningService : IRoomCleaningService
     {
@@ -25,7 +24,7 @@
             _unitOfWork.GetRepository<RoomCleaning>().DeleteAll(); // Clear the previous schedule before generating a new one
             await _unitOfWork.Commit();
 
-            var janitors = (await _unitOfWork.GetRepository<Employee>().Get(e => e.Role == "Janitor", includeProperties: "RoomCleanings"))
+            var janitors = (await _unitOfWork.GetRepository<Employee>().Get(e => e.Role == "Janitor" && e.OnVacation == false, includeProperties: "RoomCleanings"))
                 .OrderBy(e => e.RoomCleanings.Count)
                 .ToList();
 
