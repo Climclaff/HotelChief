@@ -7,7 +7,7 @@ namespace HotelChief.Infrastructure.UoW
     using HotelChief.Infrastructure.Data;
     using HotelChief.Infrastructure.Repositories;
 
-    public class UnitOfWork : IDisposable, IUnitOfWork
+    public class UnitOfWork : IDisposable, IAsyncDisposable, IUnitOfWork
     {
         private ApplicationDbContext _context;
         private readonly IServiceProvider _serviceProvider;
@@ -39,14 +39,19 @@ namespace HotelChief.Infrastructure.UoW
             return (IBaseCRUDRepository<T>)repository;
         }
 
-        public async void Dispose()
+        public void Dispose()
         {
-            await _context.DisposeAsync();
+             _context.Dispose();
         }
 
         public async Task Commit()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await _context.DisposeAsync().ConfigureAwait(false);
         }
     }
 }

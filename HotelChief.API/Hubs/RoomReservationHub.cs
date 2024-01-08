@@ -7,6 +7,7 @@
 
     public class RoomReservationHub : Hub
     {
+        private static readonly object _lockObject = new object();
         public static Dictionary<string, List<string>> ConnectedUsers = new ();
 
         public override Task OnConnectedAsync()
@@ -15,7 +16,7 @@
             var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId != null)
             {
-                lock (ConnectedUsers)
+                lock (_lockObject)
                 {
                     if (!ConnectedUsers.ContainsKey(userId))
                     {
@@ -35,7 +36,7 @@
             var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId != null)
             {
-                lock (ConnectedUsers)
+                lock (_lockObject)
                 {
                     if (ConnectedUsers.ContainsKey(userId))
                     {

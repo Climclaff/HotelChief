@@ -22,7 +22,6 @@ namespace HotelChief.API.Controllers
         private readonly IHubContext<RoomReservationHub> _hubContext;
         private readonly IStringLocalizer<RoomReservationController> _localizer;
 
-
         public RoomReservationController(
             IReservationService reservationService,
             UserManager<Guest> userManager,
@@ -86,6 +85,7 @@ namespace HotelChief.API.Controllers
             {
                 await _hubContext.Clients.AllExcept(conn).SendAsync("UpdateAvailableRooms");
             }
+
             return RedirectToAction("ReservationSuccess");
         }
 
