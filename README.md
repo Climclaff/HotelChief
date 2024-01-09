@@ -12,7 +12,7 @@ In this project we consider the feasibility of implementation of the next functi
 - Reports and analytics.  
 - Integration with payment systems.  
 - Management of the restaurant department of the hotel.  
-- Subsystem to manage events/conference halls.  
+- Telegram bot integration to notify janitors about upcoming cleanings.  
 - Loyalty program for guests.  
 - Management of stocks and warehouse logistics.  
 - Maintaining guest reviews and ratings.  
