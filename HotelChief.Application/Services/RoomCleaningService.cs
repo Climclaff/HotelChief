@@ -1,17 +1,26 @@
 ﻿namespace HotelChief.Application.Services
 {
     using System.Collections.Immutable;
+    using System.Data.Common;
+    using System.Threading;
+    using Hangfire;
     using HotelChief.Application.IServices;
+    using HotelChief.Application.Services.Helpers;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces;
+    using Microsoft.AspNetCore.Components;
+    using Microsoft.Extensions.DependencyInjection;
+    using static HotelChief.Application.Services.RoomCleaningService;
 
     public class RoomCleaningService : IRoomCleaningService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITelegramBotService _botService;
 
-        public RoomCleaningService(IUnitOfWork unitOfWork)
+        public RoomCleaningService(IUnitOfWork unitOfWork, ITelegramBotService botService)
         {
             _unitOfWork = unitOfWork;
+            _botService = botService;
         }
 
         public async Task<IEnumerable<RoomCleaning>> GetSchedule()
@@ -36,7 +45,7 @@
             }
 
             var janitorIndex = 0;
-
+            List<JobParameter> jobParametersList = new List<JobParameter>();
             foreach (var room in roomsToClean)
             {
                 if (!IsCleaningTimeAllowed())
@@ -66,27 +75,46 @@
                 {
                     if (lastCleaning.EndDate.Date == DateTime.UtcNow.Date)
                     {
-                         startDate = lastCleaning.EndDate + breakTime;
-                         endDate = lastCleaning.EndDate + breakTime + cleaningTime;
+                        startDate = lastCleaning.EndDate + breakTime;
+                        endDate = lastCleaning.EndDate + breakTime + cleaningTime;
                     }
                 }
                 else
                 {
-                     breakTime = TimeSpan.Zero;
-                     startDate = DateTime.UtcNow.Date.AddHours(7);
-                     endDate = startDate + cleaningTime;
+                    breakTime = TimeSpan.Zero;
+                    startDate = DateTime.UtcNow.Date.AddHours(7);
+                    endDate = startDate + cleaningTime;
                 }
 
+                jobParametersList.Add(new JobParameter(
+                    room.RoomNumber,
+                    janitor.FullName,
+                    janitor.EmployeeId,
+                    startDate,
+                    endDate));
                 await CleanRoom(room.RoomNumber, janitor.EmployeeId, startDate, endDate);
             }
 
             await _unitOfWork.Commit();
+            foreach (var jobParameter in jobParametersList)
+            {
+                BackgroundJob.Schedule(() => SendCleaningNotification(jobParameter), jobParameter.StartDate.Subtract(TimeSpan.FromMinutes(5)));
+            }
         }
 
         public async Task CleanRoom(int roomNumber, int employeeId, DateTime startDate, DateTime endDate)
         {
             RoomCleaning roomCleaning = new RoomCleaning() { EmployeeId = employeeId, RoomNumber = roomNumber, StartDate = startDate, EndDate = endDate };
             await _unitOfWork.GetRepository<RoomCleaning>().AddAsync(roomCleaning);
+        }
+
+        public void SendCleaningNotification(JobParameter jobParameter)
+        {
+            _botService.SendTextMessageAsync(
+                $"Upcoming cleaning: \r\n" +
+                $"Room number: {jobParameter.RoomNumber} \r\n" +
+                $"Janitor: {jobParameter.FullName}({jobParameter.EmployeeId}) \r\n" +
+                $"{jobParameter.StartDate} - {jobParameter.EndDate}").GetAwaiter().GetResult();
         }
 
         private bool IsCleaningTimeAllowed()

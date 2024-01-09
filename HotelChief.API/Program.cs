@@ -16,7 +16,9 @@ namespace HotelChief
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using System.Globalization;
+    using Telegram.Bot;
 
     public class Program
     {
@@ -39,6 +41,15 @@ namespace HotelChief
             })
                 .AddViewLocalization();
             builder.Services.AddAutoMapper();
+
+            string telegramBotApiKey = builder.Configuration["TelegramBotApiKey"];
+            long telegramBotRoomId = Convert.ToInt64(builder.Configuration["TelegramRoomId"]);
+            builder.Services.AddSingleton<ITelegramBotService>(provider =>
+            {
+                var telegramBotClient = new TelegramBotClient(telegramBotApiKey);
+                return new TelegramBotService(telegramBotClient, telegramBotRoomId);
+            });
+
             builder.Services.AddScoped(typeof(IBaseCRUDRepository<>), typeof(BaseCrudRepository<>));
             builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
