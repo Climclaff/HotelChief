@@ -8,12 +8,14 @@
     using HotelChief.Core.Entities;
     using HotelChief.Core.Entities.Identity;
     using HotelChief.Core.Interfaces.IServices;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Localization;
 
+    [Authorize]
     public class ReviewController : Controller
     {
         private readonly UserManager<Infrastructure.EFEntities.Guest> _userManager;

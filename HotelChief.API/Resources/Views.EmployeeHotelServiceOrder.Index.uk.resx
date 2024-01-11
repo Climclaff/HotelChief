@@ -117,55 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Admin_Service_Orders" xml:space="preserve">
-    <value>Замовлення послуг(А)</value>
+  <data name="Accept_Order" xml:space="preserve">
+    <value>Прийняти замовлення</value>
   </data>
-  <data name="Cleaning_Schedule" xml:space="preserve">
-    <value>Розклад прибирання</value>
+  <data name="Action" xml:space="preserve">
+    <value>Дія</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Видалити</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Сума</value>
   </data>
-  <data name="Employees" xml:space="preserve">
-    <value>Співробітники</value>
+  <data name="Guest" xml:space="preserve">
+    <value>Гість</value>
   </data>
-  <data name="Employee_Service_Orders" xml:space="preserve">
-    <value>Обробка замовлених послуг</value>
+  <data name="Order_ID" xml:space="preserve">
+    <value>ID замовлення</value>
   </data>
-  <data name="Guests" xml:space="preserve">
-    <value>Користувачі</value>
+  <data name="Pending_Orders" xml:space="preserve">
+    <value>Замовлення, що знаходяться в черзі</value>
   </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Привіт</value>
+  <data name="Quantity" xml:space="preserve">
+    <value>Кількість</value>
   </data>
-  <data name="Hotel_Services" xml:space="preserve">
-    <value>Готельні послуги</value>
-  </data>
-  <data name="Language" xml:space="preserve">
-    <value>Мова</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Вхід</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Вихід</value>
-  </data>
-  <data name="Main_Page" xml:space="preserve">
-    <value>Головна Сторінка</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Реєстрація</value>
-  </data>
-  <data name="Reservations" xml:space="preserve">
-    <value>Бронювання кімнат</value>
-  </data>
-  <data name="Review_Page" xml:space="preserve">
-    <value>Сторінка відгуків</value>
-  </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Кімнати</value>
-  </data>
-  <data name="Service_Orders" xml:space="preserve">
-    <value>Замовлення послуг</value>
+  <data name="Service" xml:space="preserve">
+    <value>Послуга</value>
   </data>
 </root>

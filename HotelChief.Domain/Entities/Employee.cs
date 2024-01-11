@@ -4,6 +4,8 @@
     {
         public int EmployeeId { get; set; }
 
+        public int GuestId { get; set; }
+
         public string? FullName { get; set; }
 
         public DateTime DateOfBirth { get; set; }

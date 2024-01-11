@@ -4,6 +4,7 @@ using HotelChief.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelChief.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110113409_serviceOrder_Nullable_EmployeeId")]
+    partial class serviceOrder_Nullable_EmployeeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace HotelChief.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GuestId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
 
@@ -54,9 +53,6 @@ namespace HotelChief.Infrastructure.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("EmployeeId");
-
-                    b.HasIndex("GuestId")
-                        .IsUnique();
 
                     b.ToTable("Employees");
                 });
@@ -104,9 +100,6 @@ namespace HotelChief.Infrastructure.Migrations
 
                     b.Property<int>("HotelServiceId")
                         .HasColumnType("int");
-
-                    b.Property<string>("OrderStatus")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PaymentStatus")
                         .HasColumnType("bit");
@@ -503,15 +496,6 @@ namespace HotelChief.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("HotelChief.Core.Entities.Employee", b =>
-                {
-                    b.HasOne("HotelChief.Infrastructure.EFEntities.Guest", null)
-                        .WithOne()
-                        .HasForeignKey("HotelChief.Core.Entities.Employee", "GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("HotelChief.Core.Entities.HotelServiceOrder", b =>

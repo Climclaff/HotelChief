@@ -44,7 +44,7 @@
                                         <a class="nav-link text-dark" asp-area="" asp-controller="ReservationsAdmin" asp-action="Index">@SharedLocalizer["Reservations"]</a>
                         </li>
                          <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="HotelServiceOrdersAdmin" asp-action="Index">@SharedLocalizer["Service_Orders"]</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="HotelServiceOrdersAdmin" asp-action="Index">@SharedLocalizer["Admin_Service_Orders"]</a>
                         </li>
                         <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="RoomReservation" asp-action="Index">@SharedLocalizer["Reservations"]</a>
@@ -56,9 +56,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="RoomCleaning" asp-action="Index">@SharedLocalizer["Cleaning_Schedule"]</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="EmployeeHotelServiceOrder" asp-action="Index">@SharedLocalizer["Service_Orders"]</a>
+                                </li>
                         }
                          <li class="nav-item">
                                        <a class="nav-link text-dark" asp-area="" asp-controller="Review" asp-action="Index">@SharedLocalizer["Review_Page"]</a>
+                        </li> 
+                         <li class="nav-item">
+                                       <a class="nav-link text-dark" asp-area="" asp-controller="GuestHotelServiceOrder" asp-action="Index">@SharedLocalizer["Service_Orders"]</a>
                         </li> 
                         }
                         

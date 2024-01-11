@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-
     [Authorize(Policy = "IsAdminPolicy")]
     public class EmployeesAdminController : Controller
     {
@@ -54,7 +53,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate")] Employee entity)
+        public async Task<IActionResult> Create([Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate,OnVacation,GuestId")] Employee entity)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +83,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate")] Employee entity)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FullName,DateOfBirth,Role,Salary,HireDate,OnVacation,GuestId")] Employee entity)
         {
             if (id != entity.EmployeeId)
             {

@@ -1,10 +1,9 @@
-﻿using HotelChief.Core.Entities;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace HotelChief.API.ViewModels
+﻿namespace HotelChief.API.ViewModels
 {
+    using System.ComponentModel.DataAnnotations;
+    using HotelChief.Core.Entities;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+
     public class HotelServiceOrderViewModel
     {
         public int HotelServiceOrderId { get; set; }
@@ -23,6 +22,8 @@ namespace HotelChief.API.ViewModels
 
         public int HotelServiceId { get; set; }
 
+        public string? OrderStatus { get; set; }
+
         public IEnumerable<SelectListItem>? Services { get; set; }
 
         public DateTime ServiceOrderDate { get; set; }
@@ -34,5 +35,9 @@ namespace HotelChief.API.ViewModels
         public bool PaymentStatus { get; set; }
 
         public DateTime Timestamp { get; set; }
+
+        public IEnumerable<HotelServiceOrder>? UserOrders { get; set; }
+
+        public IEnumerable<HotelService>? HotelServices { get; set; }
     }
 }

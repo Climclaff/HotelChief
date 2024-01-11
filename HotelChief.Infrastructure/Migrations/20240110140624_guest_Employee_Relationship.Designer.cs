@@ -4,6 +4,7 @@ using HotelChief.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelChief.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110140624_guest_Employee_Relationship")]
+    partial class guest_Employee_Relationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,9 +106,6 @@ namespace HotelChief.Infrastructure.Migrations
 
                     b.Property<int>("HotelServiceId")
                         .HasColumnType("int");
-
-                    b.Property<string>("OrderStatus")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PaymentStatus")
                         .HasColumnType("bit");

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Admin_Service_Orders" xml:space="preserve">
+    <value>Service Orders(A)</value>
+  </data>
   <data name="Cleaning_Schedule" xml:space="preserve">
     <value>Cleaning schedule</value>
   </data>
@@ -125,6 +128,9 @@
   </data>
   <data name="Employees" xml:space="preserve">
     <value>Employees</value>
+  </data>
+  <data name="Employee_Service_Orders" xml:space="preserve">
+    <value>Service Orders(Employee)</value>
   </data>
   <data name="Guests" xml:space="preserve">
     <value>Guests</value>

@@ -1,5 +1,6 @@
 ﻿namespace HotelChief.API.Controllers.AdministrationControllers
 {
+    using System.Security.Claims;
     using AutoMapper;
     using HotelChief.API.ViewModels;
     using HotelChief.Core.Interfaces.IServices;
@@ -7,7 +8,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
 
     [Authorize(Policy = "IsAdminPolicy")]
     public class GuestsAdminController : Controller
@@ -112,6 +112,8 @@
                     await _userManager.ReplaceClaimAsync(guest, claim, new Claim("IsEmployee", entity.IsEmployee));
                 }
 
+                guest.FullName = entity.FullName;
+                guest.PhoneNumber = entity.PhoneNumber;
                 _crudService.Update(guest);
                 await _crudService.Commit();
                 if (await FindGuest(id) == null)

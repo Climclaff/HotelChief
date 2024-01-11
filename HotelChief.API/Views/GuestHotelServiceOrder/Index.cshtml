@@ -1,0 +1,66 @@
+﻿@model HotelChief.API.ViewModels.HotelServiceOrderViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
+
+<h2>@Localizer["Available_Hotel_Services"]</h2>
+
+@foreach (var service in Model.HotelServices)
+{
+    <div>
+        <strong>@service.ServiceName</strong>
+        <p>@service.Description</p>
+        <p>@Localizer["Price"]: $@service.Price</p>
+        <form method="post" asp-action="PlaceOrder">
+            <input type="hidden" name="serviceId" value="@service.ServiceId" />
+            <label for="quantity">@Localizer["Quantity"]:</label>
+            <input type="number" name="quantity" value="1" min="1" />
+            <input type="hidden" name="orderStatus" id="orderStatus-@service.ServiceId" value="In queue" />
+            <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Order"]</button>
+        </form>
+        <hr />
+    </div>
+}
+
+<h2>@Localizer["Your_Orders"]</h2>
+
+@if (Model.UserOrders.Any())
+{
+    foreach (var order in Model.UserOrders)
+    {
+        <div>
+            <strong>@order.HotelService?.ServiceName</strong>
+            <p>@Localizer["Quantity"]: @order.Quantity</p>
+            <p>@Localizer["Sum"]: $@order.Amount</p>
+            <p>@Localizer["Order_Date"]: @order.ServiceOrderDate</p>
+            <p>@Localizer["Payment_Status"]: @order.PaymentStatus</p>
+            Order Status: <span id="orderStatus-@order.HotelServiceOrderId" style="color: @(order.EmployeeId.HasValue ? "green" : "gold"); display: inline-block; text-align: left; width: 100%;">
+                @(order.EmployeeId.HasValue ? Localizer["Order_Status_Accepted"] : Localizer["Order_Status_Enqueued"])
+            </span>
+            <hr />
+        </div>
+    }
+}
+else
+{
+    <p>@Localizer["No_Orders"]</p>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+<script>
+
+    const connection = new signalR.HubConnectionBuilder().withUrl("/guestHotelServiceOrderHub").build();
+
+    connection.start().catch(err => console.error(err.toString()));
+
+    connection.on("UpdateOrderStatus", function (orderId, employeeId) {
+        const orderStatusElement = document.getElementById(`orderStatus-${orderId}`);
+
+        const isAccepted = employeeId !== null && employeeId !== undefined;
+
+        orderStatusElement.style.color = isAccepted ? "green" : "gold";
+        orderStatusElement.innerText = isAccepted ? "@Localizer["Order_Status_Accepted"]" : "@Localizer["Order_Status_Enqueued"]";
+    });
+</script>

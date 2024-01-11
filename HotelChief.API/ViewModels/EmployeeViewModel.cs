@@ -6,6 +6,8 @@
     {
         public int EmployeeId { get; set; }
 
+        public int GuestId { get; set; }
+
         public string? FullName { get; set; }
 
         [Required]
@@ -14,6 +16,8 @@
         public string? Role { get; set; }
 
         public decimal Salary { get; set; }
+
+        public bool OnVacation { get; set; }
 
         public DateTime HireDate { get; set; }
 

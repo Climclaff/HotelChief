@@ -56,6 +56,7 @@ namespace HotelChief
             builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
             builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
+            builder.Services.AddScoped<IHotelServiceOrderService, HotelServiceOrderService>();
             builder.Services.AddScoped<IRoomCleaningService, RoomCleaningService>();
             builder.Services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
@@ -117,6 +118,8 @@ namespace HotelChief
             {
                 endpoints.MapHub<ReviewHub>("/reviewHub");
                 endpoints.MapHub<RoomReservationHub>("/roomReservationHub");
+                endpoints.MapHub<GuestHotelServiceOrderHub>("/guestHotelServiceOrderHub");
+                endpoints.MapHub<EmployeeHotelServiceOrderHub>("/employeeHotelServiceOrderHub");
             });
             app.MapRazorPages();
             RecurringJob.AddOrUpdate<IRoomCleaningService>(x => x.ScheduleRoomCleaning(), Cron.Daily);

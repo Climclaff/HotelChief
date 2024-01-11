@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS8603, SA1309
 namespace HotelChief.API.Controllers
 {
-    using System.Collections.Concurrent;
     using System.Security.Claims;
     using AutoMapper;
     using HotelChief.API.Hubs;
@@ -9,12 +8,13 @@ namespace HotelChief.API.Controllers
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Localization;
 
+    [Authorize]
     public class RoomReservationController : Controller
     {
         private readonly IReservationService _reservationService;

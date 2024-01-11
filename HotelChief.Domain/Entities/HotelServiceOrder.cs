@@ -9,13 +9,15 @@
 
         public int GuestId { get; set; }
 
+        public string? OrderStatus { get; set; }
+
         public HotelService? HotelService { get; set; }
 
         public int HotelServiceId { get; set; }
 
         public Employee? Employee { get; set; }
 
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
 
         public DateTime ServiceOrderDate { get; set; }
 
