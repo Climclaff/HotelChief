@@ -117,31 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Accept_Order" xml:space="preserve">
-    <value>Accept Order</value>
-  </data>
   <data name="Action" xml:space="preserve">
-    <value>Action</value>
+    <value>Дія</value>
   </data>
   <data name="Amount" xml:space="preserve">
-    <value>Amount</value>
+    <value>Сума</value>
+  </data>
+  <data name="Employee_Orders" xml:space="preserve">
+    <value>Ваші прийняті замовлення послуг</value>
   </data>
   <data name="Guest" xml:space="preserve">
-    <value>Guest</value>
+    <value>Гість</value>
+  </data>
+  <data name="Order_Fulfilled" xml:space="preserve">
+    <value>Замовлення виконано</value>
   </data>
   <data name="Order_ID" xml:space="preserve">
-    <value>Order ID</value>
-  </data>
-  <data name="Pending_Orders" xml:space="preserve">
-    <value>Pending Orders</value>
+    <value>ID замовлення</value>
   </data>
   <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+    <value>Кількість</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
-  </data>
-  <data name="Your_Accepted_Orders" xml:space="preserve">
-    <value>Your accepted orders</value>
+    <value>Послуга</value>
   </data>
 </root>

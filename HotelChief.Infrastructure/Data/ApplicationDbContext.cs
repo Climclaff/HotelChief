@@ -37,6 +37,7 @@
             modelBuilder.ApplyConfiguration(new GuestConfiguration());
             modelBuilder.ApplyConfiguration(new HotelServiceConfiguration());
             modelBuilder.ApplyConfiguration(new HotelServiceOrderConfiguration());
+            modelBuilder.ApplyConfiguration(new HotelServiceOrderHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());

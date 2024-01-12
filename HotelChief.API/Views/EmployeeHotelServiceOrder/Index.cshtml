@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<HotelChief.Core.Entities.HotelServiceOrder>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<h2>@Localizer["Pending_Orders"]</h2>
+<link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 
+<h2>@Localizer["Pending_Orders"]</h2>
+<a class="nav-link custom-link" asp-area="" asp-controller="EmployeeHotelServiceOrder" asp-action="EmployeeOrders"><i class="fa fa-list-alt"></i> @Localizer["Your_Accepted_Orders"]</a>
 <table class="table">
     <thead>
         <tr>
@@ -45,3 +47,22 @@
         location.reload();
     });
 </script>
+<style>
+
+    .custom-link {
+        display: inline-block;
+        padding: 10px;
+        background-color: #f8f9fa; 
+        color: #343a40; 
+        border: 1px solid #ced4da; 
+        border-radius: 5px; 
+        text-decoration: none; 
+        transition: background-color 0.3s ease; 
+    }
+
+    /* Hover effect */
+    .custom-link:hover {
+        background-color: #007bff; 
+        color: #fff;
+    }
+</style>

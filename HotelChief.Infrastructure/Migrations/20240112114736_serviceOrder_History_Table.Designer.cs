@@ -4,6 +4,7 @@ using HotelChief.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelChief.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240112114736_serviceOrder_History_Table")]
+    partial class serviceOrder_History_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -575,6 +577,23 @@ namespace HotelChief.Infrastructure.Migrations
 
                     b.HasOne("HotelChief.Core.Entities.HotelService", "HotelService")
                         .WithMany("HotelServiceOrders")
+                        .HasForeignKey("HotelServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("HotelService");
+                });
+
+            modelBuilder.Entity("HotelChief.Core.Entities.HotelServiceOrderHistory", b =>
+                {
+                    b.HasOne("HotelChief.Core.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("HotelChief.Core.Entities.HotelService", "HotelService")
+                        .WithMany()
                         .HasForeignKey("HotelServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

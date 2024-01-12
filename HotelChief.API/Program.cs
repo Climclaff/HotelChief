@@ -55,6 +55,7 @@ namespace HotelChief
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IBaseCRUDService<>), typeof(BaseCRUDService<>));
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IHotelServiceOrderHistoryService, HotelServiceOrderHistoryService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddScoped<IHotelServiceOrderService, HotelServiceOrderService>();
             builder.Services.AddScoped<IRoomCleaningService, RoomCleaningService>();

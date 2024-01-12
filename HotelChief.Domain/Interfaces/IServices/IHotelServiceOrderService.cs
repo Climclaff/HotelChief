@@ -6,5 +6,6 @@
     {
         Task<IEnumerable<HotelServiceOrder>> GetUserOrders(int guestId);
 
+        Task<IEnumerable<HotelServiceOrder>> GetEmployeeOrders(int employeeId);
     }
 }

@@ -20,5 +20,12 @@
             return await _unitOfWork.GetRepository<HotelServiceOrder>().Get(
                 order => order.GuestId == guestId, includeProperties: "HotelService");
         }
+
+        public async Task<IEnumerable<HotelServiceOrder>> GetEmployeeOrders(int guestId)
+        {
+            return await _unitOfWork.GetRepository<HotelServiceOrder>().Get(
+                    order => order.Employee.GuestId == guestId && order.OrderStatus != "Fulfilled",
+                    includeProperties: "HotelService");
+        }
     }
 }
