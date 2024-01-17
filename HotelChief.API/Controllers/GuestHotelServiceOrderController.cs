@@ -6,40 +6,44 @@
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "oidc")]
     public class GuestHotelServiceOrderController : Controller
     {
         private readonly IHotelServiceOrderService _orderService;
         private readonly IBaseCRUDService<HotelServiceOrder> _orderCrudService;
         private readonly IBaseCRUDService<HotelService> _hotelServicesService;
         private readonly IHubContext<EmployeeHotelServiceOrderHub> _employeeHubContext;
+        private readonly UserManager<Infrastructure.EFEntities.Guest> _userManager;
 
         public GuestHotelServiceOrderController(
             IHotelServiceOrderService orderService,
             IBaseCRUDService<HotelServiceOrder> orderCrudSerice,
             IBaseCRUDService<HotelService> hotelServicesService,
-            IHubContext<EmployeeHotelServiceOrderHub> employeeHubContext)
+            IHubContext<EmployeeHotelServiceOrderHub> employeeHubContext,
+            UserManager<Infrastructure.EFEntities.Guest> userManager)
         {
             _orderService = orderService;
             _orderCrudService = orderCrudSerice;
             _hotelServicesService = hotelServicesService;
             _employeeHubContext = employeeHubContext;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var hotelServices = await _hotelServicesService.Get();
-            var guestId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (guestId == null)
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
             {
                 return RedirectToAction("Index");
             }
 
-            var userOrders = await _orderService.GetUserOrders(Convert.ToInt32(guestId));
+            var userOrders = await _orderService.GetUserOrders(Convert.ToInt32(businessUser.Id));
 
             var model = new HotelServiceOrderViewModel
             {
@@ -53,7 +57,13 @@
         [HttpPost]
         public async Task<IActionResult> PlaceOrder(int serviceId, int quantity)
         {
-            var guestId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             var hotelService = (await _hotelServicesService.Get(s => s.ServiceId == serviceId)).FirstOrDefault();
 
             if (hotelService == null)
@@ -63,7 +73,7 @@
 
             var order = new HotelServiceOrder
             {
-                GuestId = Convert.ToInt32(guestId),
+                GuestId = businessUser.Id,
                 HotelServiceId = serviceId,
                 Quantity = quantity,
                 Amount = quantity * hotelService.Price,

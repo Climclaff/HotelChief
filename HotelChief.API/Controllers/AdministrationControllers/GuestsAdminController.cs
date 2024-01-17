@@ -9,7 +9,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize(Policy = "IsAdminPolicy")]
+    [Authorize(AuthenticationSchemes = "oidc", Policy = "IsAdminPolicy")]
     public class GuestsAdminController : Controller
     {
         private readonly IBaseCRUDService<Guest> _crudService;

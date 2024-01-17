@@ -2,11 +2,14 @@
 namespace HotelChief.Controllers
 {
     using System.Diagnostics;
+    using System.Security.Claims;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.ViewModels;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
 
     public class HomeController : Controller
     {
@@ -27,7 +30,15 @@ namespace HotelChief.Controllers
 
         public IActionResult Privacy()
         {
+
             return View();
+        }
+
+        [Authorize(AuthenticationSchemes = "oidc")]
+        [HttpGet("/call-api")]
+        public async Task<IActionResult> CallApi()
+        {
+            return SignOut("Cookies", "oidc");
         }
 
         [HttpPost]
@@ -47,5 +58,6 @@ namespace HotelChief.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

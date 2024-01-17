@@ -1,5 +1,7 @@
 namespace HotelChief
 {
+    using System.Globalization;
+    using System.IdentityModel.Tokens.Jwt;
     using Hangfire;
     using HotelChief.API;
     using HotelChief.API.Helpers;
@@ -13,11 +15,15 @@ namespace HotelChief
     using HotelChief.Infrastructure.EFEntities;
     using HotelChief.Infrastructure.Repositories;
     using HotelChief.Infrastructure.UoW;
+    using IdentityModel;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+    using Microsoft.AspNetCore.Authentication.OpenIdConnect;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using System.Globalization;
+    using Microsoft.IdentityModel.Tokens;
     using Telegram.Bot;
 
     public class Program
@@ -30,7 +36,44 @@ namespace HotelChief
             builder.Services.AddDbContext<Infrastructure.Data.ApplicationDbContext>(x => x.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-            builder.Services.AddIdentity<Guest, IdentityRole<int>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders().AddDefaultUI();
+            builder.Services.AddIdentity<Guest, IdentityRole<int>>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://localhost:5000";
+                    options.ClientId = "oidcClient";
+                    options.ClientSecret = "SuperSecretPassword";
+                    options.SignInScheme = "Cookies";
+                    options.SignOutScheme = "Cookies";
+                    //options.CallbackPath = "/signin-oidc";
+                    options.ResponseType = "code";
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.UsePkce = true;
+                    options.ResponseMode = "query";
+
+                    // options.Scope.Add("profile");
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("offline_access");
+                    options.Scope.Add("api1.read");
+
+                    options.SaveTokens = true;
+
+                    options.ClaimActions.MapAll();
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = JwtClaimTypes.Name,
+                        RoleClaimType = JwtClaimTypes.Role,
+                    };
+
+                });
+            
             builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews().AddDataAnnotationsLocalization(options =>
             {
@@ -49,7 +92,6 @@ namespace HotelChief
                 var telegramBotClient = new TelegramBotClient(telegramBotApiKey);
                 return new TelegramBotService(telegramBotClient, telegramBotRoomId);
             });
-
             builder.Services.AddScoped(typeof(IBaseCRUDRepository<>), typeof(BaseCrudRepository<>));
             builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

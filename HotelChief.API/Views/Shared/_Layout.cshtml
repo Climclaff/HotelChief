@@ -25,9 +25,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Main_Page"]</a>
                         </li>
                         @{
-                            if (User.Identity?.IsAuthenticated ?? false)
+                            if (this.Context.User.Identity?.IsAuthenticated ?? false)
                         {
-                        if(@User?.FindFirst("IsAdmin")?.Value == "true"){
+                                if (this.Context.User?.FindFirst("IsAdmin")?.Value == "true")
+                                {
                         <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="EmployeesAdmin" asp-action="Index">@SharedLocalizer["Employees"]</a>
                         </li>
@@ -51,7 +52,7 @@
                         </li>
                         }
                         }
-                            if (@User?.FindFirst("IsEmployee")?.Value == "true")
+                            if (this.Context.User?.FindFirst("IsEmployee")?.Value == "true")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="RoomCleaning" asp-action="Index">@SharedLocalizer["Cleaning_Schedule"]</a>
@@ -69,7 +70,7 @@
                         }
                         
                         <li>
-                            @await Html.PartialAsync("_SelectLanguagePartial")
+                             @await Html.PartialAsync("_SelectLanguagePartial")
                         </li>
 
                     </ul>

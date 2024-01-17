@@ -14,7 +14,7 @@ namespace HotelChief.API.Controllers
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Localization;
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "oidc")]
     public class RoomReservationController : Controller
     {
         private readonly IReservationService _reservationService;

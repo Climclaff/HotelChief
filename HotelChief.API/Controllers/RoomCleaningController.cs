@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize(Policy = "IsEmployeePolicy")]
+    [Authorize(AuthenticationSchemes = "oidc", Policy = "IsEmployeePolicy")]
     public class RoomCleaningController : Controller
     {
         private readonly IRoomCleaningService _roomCleaningService;

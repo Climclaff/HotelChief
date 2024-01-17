@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize(Policy = "IsAdminPolicy")]
+    [Authorize(AuthenticationSchemes = "oidc", Policy = "IsAdminPolicy")]
     public class HotelServicesAdminController : Controller
     {
         private readonly IBaseCRUDService<HotelService> _crudService;

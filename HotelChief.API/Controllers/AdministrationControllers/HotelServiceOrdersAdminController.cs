@@ -11,7 +11,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
-    [Authorize(Policy = "IsAdminPolicy")]
+    [Authorize(AuthenticationSchemes = "oidc", Policy = "IsAdminPolicy")]
     public class HotelServiceOrdersAdminController : Controller
     {
         private readonly IBaseCRUDService<HotelServiceOrder> _crudService;

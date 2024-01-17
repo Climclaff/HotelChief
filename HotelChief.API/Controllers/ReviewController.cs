@@ -8,12 +8,16 @@
     using HotelChief.Core.Entities;
     using HotelChief.Core.Entities.Identity;
     using HotelChief.Core.Interfaces.IServices;
+    using IdentityModel.Client;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Localization;
+    using Telegram.Bot.Types;
 
     [Authorize]
     public class ReviewController : Controller
@@ -51,12 +55,15 @@
             {
                 int i = 0;
                 bool[] commentOwnership = new bool[reviews.Count()];
-                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (userId == null)
+                var test = HttpContext.User.FindFirst("IsAdmin");
+                var userEmail = HttpContext.User.FindFirst("email")?.Value;
+                var businessUser = await _userManager.FindByEmailAsync(userEmail);
+                if (businessUser == null)
                 {
                     return RedirectToAction(nameof(Index));
                 }
 
+                var userId = businessUser.Id;
                 foreach (var review in model.Reviews)
                 {
                     bool isCommentOwner = IsCommentOwner(Convert.ToInt32(userId), review.GuestId);
@@ -97,10 +104,11 @@
             }
 
             review.Timestamp = DateTime.UtcNow;
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null)
+            var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser != null)
             {
-                review.GuestId = Convert.ToInt32(userId);
+                review.GuestId = businessUser.Id;
                 if (ModelState.IsValid)
                 {
                     await _reviewService.AddReviewAsync(_mapper.Map<ReviewViewModel, Review>(review));
@@ -124,21 +132,18 @@
                 if (val != null)
                 {
                     int id = Convert.ToInt32(val);
-                    var user = await _userManager.GetUserAsync(HttpContext.User);
-                    if (user != null)
+                    var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                    var businessUser = await _userManager.FindByEmailAsync(userEmail);
+                    if (businessUser != null)
                     {
-                        IList<Claim> claims = await _userManager.GetClaimsAsync(user);
                         Review review = await _reviewService.GetReviewByIdAsync(id);
 
-                        bool isCommentOwner = IsCommentOwner(user.Id, review.GuestId);
+                        bool isCommentOwner = IsCommentOwner(businessUser.Id, review.GuestId);
                         bool isAdmin = false;
 
-                        for (int i = 0; i < claims.Count; i++)
+                        if (HttpContext.User.FindFirstValue("IsAdmin") == "true")
                         {
-                            if (claims[i].Type.ToString() == "IsAdmin" && claims[i].Value.ToString() == "true")
-                            {
-                                isAdmin = true;
-                            }
+                            isAdmin = true;
                         }
 
                         if (isCommentOwner || isAdmin)
@@ -165,10 +170,11 @@
         public async Task Upvote(int reviewId)
         {
             var review = await _reviewService.GetReviewByIdAsync(reviewId);
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null)
+            var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser != null)
             {
-                var updatedUpvotes = await _reviewService.UpvoteReviewAsync(reviewId, Convert.ToInt32(userId));
+                var updatedUpvotes = await _reviewService.UpvoteReviewAsync(reviewId, Convert.ToInt32(businessUser.Id));
 
                 review = await _reviewService.GetReviewByIdAsync(reviewId);
                 await NotifyClientsOfVotes(reviewId, updatedUpvotes, review.Downvotes);
@@ -179,10 +185,11 @@
         public async Task Downvote(int reviewId)
         {
             var review = await _reviewService.GetReviewByIdAsync(reviewId);
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null)
+            var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser != null)
             {
-                var updatedDownvotes = await _reviewService.DownvoteReviewAsync(reviewId, Convert.ToInt32(userId));
+                var updatedDownvotes = await _reviewService.DownvoteReviewAsync(reviewId, Convert.ToInt32(businessUser.Id));
 
                 review = await _reviewService.GetReviewByIdAsync(reviewId);
                 await NotifyClientsOfVotes(reviewId, review.Upvotes, updatedDownvotes);
