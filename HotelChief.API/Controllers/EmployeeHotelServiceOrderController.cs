@@ -85,7 +85,8 @@
             order.OrderStatus = "Accepted";
             _orderCrudService.Update(order);
             await _orderCrudService.Commit();
-            await _guestHubContext.Clients.User(Convert.ToString(businessUser.Id)).SendAsync("UpdateOrderStatus", orderId, employee.EmployeeId);
+            var clients = _guestHubContext.Clients;
+            await _guestHubContext.Clients.User(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value).SendAsync("UpdateOrderStatus", orderId, employee.EmployeeId);
             return RedirectToAction("Index");
         }
 

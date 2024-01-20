@@ -2,19 +2,16 @@
 namespace HotelChief.Controllers
 {
     using System.Diagnostics;
-    using System.Security.Claims;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json;
 
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         private readonly IBaseCRUDService<Room> _roomService;
 
         public HomeController(ILogger<HomeController> logger, IBaseCRUDService<Room> roomService)
@@ -34,7 +31,7 @@ namespace HotelChief.Controllers
             return View();
         }
 
-        [Authorize(AuthenticationSchemes = "oidc")]
+        [Authorize(AuthenticationSchemes = "oidc")] // FOR TESTING PURPOSES
         [HttpGet("/call-api")]
         public async Task<IActionResult> CallApi()
         {

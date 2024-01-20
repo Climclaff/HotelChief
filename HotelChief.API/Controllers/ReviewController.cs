@@ -19,7 +19,7 @@
     using Microsoft.Extensions.Localization;
     using Telegram.Bot.Types;
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "oidc")]
     public class ReviewController : Controller
     {
         private readonly UserManager<Infrastructure.EFEntities.Guest> _userManager;
@@ -55,7 +55,6 @@
             {
                 int i = 0;
                 bool[] commentOwnership = new bool[reviews.Count()];
-                var test = HttpContext.User.FindFirst("IsAdmin");
                 var userEmail = HttpContext.User.FindFirst("email")?.Value;
                 var businessUser = await _userManager.FindByEmailAsync(userEmail);
                 if (businessUser == null)

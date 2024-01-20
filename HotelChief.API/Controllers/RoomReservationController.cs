@@ -21,6 +21,7 @@ namespace HotelChief.API.Controllers
         private readonly IMapper _mapper;
         private readonly IHubContext<RoomReservationHub> _hubContext;
         private readonly IStringLocalizer<RoomReservationController> _localizer;
+        private readonly UserManager<Guest> _userManager;
 
         public RoomReservationController(
             IReservationService reservationService,
@@ -33,6 +34,7 @@ namespace HotelChief.API.Controllers
             _mapper = mapper;
             _hubContext = hubContext;
             _localizer = localizer;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -65,22 +67,31 @@ namespace HotelChief.API.Controllers
 
             var minStartDate = selectedSlots.Min(slot => slot.Item1);
             var maxEndDate = selectedSlots.Max(slot => slot.Item2);
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
             {
                 return View("Index", await GetGuestReservationViewModel());
             }
 
             var price = await _reservationService.CalculateReservationPrice(roomNumber, minStartDate, maxEndDate);
-            await _reservationService.ReserveRoom(new Reservation
+            var reservation = new Reservation
             {
                 RoomNumber = roomNumber,
                 CheckInDate = minStartDate,
                 CheckOutDate = maxEndDate,
                 Amount = price,
-                GuestId = Convert.ToInt32(userId),
-            });
-            var connId = RoomReservationHub.ConnectedUsers.TryGetValue(userId, out var conn);
+                GuestId = businessUser.Id,
+            };
+
+            bool duplicateFound = await _reservationService.ContainsDuplicateReservation(reservation);
+            if (duplicateFound == true)
+            {
+                return BadRequest();
+            }
+
+            await _reservationService.ReserveRoom(reservation);
+            var connId = RoomReservationHub.ConnectedUsers.TryGetValue(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value, out var conn);
             if (conn != null)
             {
                 await _hubContext.Clients.AllExcept(conn).SendAsync("UpdateAvailableRooms");

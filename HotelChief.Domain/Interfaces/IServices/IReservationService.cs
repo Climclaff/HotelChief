@@ -12,6 +12,8 @@
 
         Task<IEnumerable<Tuple<DateTime, DateTime>>> GetAvailableTimeSlots(int roomNumber, DateTime startDate, DateTime endDate);
 
+        Task<bool> ContainsDuplicateReservation(Reservation reservation);
+
         Task Commit();
     }
 }

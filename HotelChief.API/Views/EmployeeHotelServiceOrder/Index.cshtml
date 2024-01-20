@@ -26,7 +26,7 @@
                 <td>@order.Quantity</td>
                 <td>@order.Amount</td>
                 <td>
-                    <form method="post" asp-action="AcceptOrder">
+                    <form method="post" asp-controller="EmployeeHotelServiceOrder" asp-action="AcceptOrder">
                         <input type="hidden" name="orderId" value="@order.HotelServiceOrderId" />
                         <button type="submit">@Localizer["Accept Order"]</button>
                     </form>

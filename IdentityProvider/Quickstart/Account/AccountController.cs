@@ -18,6 +18,14 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Identity;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using IdentityProvider.ViewModels;
+using System.Net.Http;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text;
+using System.Text.Json;
+using System.Security.Claims;
+using System.Collections.Generic;
+using Duende.IdentityServer.Test;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -36,6 +44,8 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IIdentityProviderStore _identityProviderStore;
         private readonly IEventService _events;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -43,15 +53,18 @@ namespace IdentityServerHost.Quickstart.UI
             IAuthenticationSchemeProvider schemeProvider,
             IIdentityProviderStore identityProviderStore,
             IEventService events,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            IHttpClientFactory httpClientFactory)
         {
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _identityProviderStore = identityProviderStore;
             _events = events;
-
             _signInManager = signInManager;
+            _userManager = userManager;
+            _httpClientFactory = httpClientFactory;
         }
 
         /// <summary>
@@ -236,6 +249,54 @@ namespace IdentityServerHost.Quickstart.UI
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            returnUrl ??= Url.Content("~/");
+
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim("email", user.Email),
+                        new Claim("IsEmployee", "false"),
+                        new Claim("IsAdmin", "false"),
+                    };
+                    await _userManager.AddClaimsAsync(user, claims);
+                    var serializedRegisterData = new StringContent(
+                        JsonSerializer.Serialize(model),
+                        Encoding.UTF8,
+                        Application.Json);
+                    var httpClient = _httpClientFactory.CreateClient("RegistrationClient");
+                    using var httpResponseMessage = await httpClient.PostAsync("api/Registration/CreateAccount", serializedRegisterData);
+                    httpResponseMessage.EnsureSuccessStatusCode();
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
         }
 
 

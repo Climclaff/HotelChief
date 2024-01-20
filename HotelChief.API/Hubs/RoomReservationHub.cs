@@ -3,8 +3,10 @@
     using System.Collections.Concurrent;
     using System.Security.Claims;
     using HotelChief.Infrastructure.EFEntities;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
 
+    [Authorize(AuthenticationSchemes = "oidc")]
     public class RoomReservationHub : Hub
     {
         private static readonly object _lockObject = new object();

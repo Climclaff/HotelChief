@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +8,9 @@ using Duende.IdentityServer.Services;
 using IdentityModel;
 using IdentityProvider.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +35,12 @@ namespace IdentityProvider
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddHttpClient("RegistrationClient", httpClient =>
+            {
+                httpClient.BaseAddress = new Uri("https://localhost:7049/");
+            }
+            );
+            services.AddRazorPages();
             var identityServerBuilder = services.AddIdentityServer(options => options.KeyManagement.Enabled = true);
             
             /*identityServerBuilder.AddInMemoryClients(Clients.Get())
@@ -56,13 +64,12 @@ namespace IdentityProvider
             app.UseDeveloperExceptionPage();
 
             InitializeDbTestData(app);
-            
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
         

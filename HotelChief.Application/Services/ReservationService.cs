@@ -80,5 +80,18 @@
 
             return totalPrice + firstDayPrice;
         }
+
+        public async Task<bool> ContainsDuplicateReservation(Reservation reservation)
+        {
+            var duplicate = (await _unitOfWork.GetRepository<Reservation>().Get(res => res.CheckInDate == reservation.CheckInDate ||
+            res.CheckOutDate == reservation.CheckOutDate)).FirstOrDefault();
+
+            if (duplicate != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
