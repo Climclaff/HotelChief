@@ -1,0 +1,27 @@
+﻿@model IEnumerable<HotelChief.Core.Entities.Reservation>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["My_Reservations"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["Room_Id"]</th>
+            <th>@Localizer["Check_In_Date"]</th>
+            <th>@Localizer["Check_Out_Date"]</th>
+            <th>@Localizer["Amount"]</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.RoomNumber</td>
+                <td>@order.CheckInDate</td>
+                <td>@order.CheckOutDate</td>
+                <td>@order.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>

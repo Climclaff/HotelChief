@@ -6,18 +6,13 @@
     using HotelChief.API.ViewModels;
     using HotelChief.API.ViewModels.DTO;
     using HotelChief.Core.Entities;
-    using HotelChief.Core.Entities.Identity;
     using HotelChief.Core.Interfaces.IServices;
-    using IdentityModel.Client;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Localization;
-    using Telegram.Bot.Types;
 
     [Authorize(AuthenticationSchemes = "oidc")]
     public class ReviewController : Controller

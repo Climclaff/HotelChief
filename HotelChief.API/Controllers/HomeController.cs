@@ -9,6 +9,7 @@ namespace HotelChief.Controllers
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
 
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

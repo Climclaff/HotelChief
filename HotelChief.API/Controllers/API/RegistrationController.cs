@@ -1,5 +1,6 @@
 ﻿namespace HotelChief.API.Controllers.API
 {
+    using HotelChief.API.Attributes;
     using HotelChief.API.ViewModels.IdentityServer;
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@
         }
 
         [HttpPost]
+        [IdentityServerOnly] // Attrubute to secure calls (for development)
         [Route("CreateAccount")]
         public async Task<IActionResult> CreateAccount([FromBody] RegisterViewModel model)
         {

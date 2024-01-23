@@ -135,6 +135,9 @@
   <data name="Order_Status_Enqueued" xml:space="preserve">
     <value>В черзі</value>
   </data>
+  <data name="Pay" xml:space="preserve">
+    <value>Сплатити</value>
+  </data>
   <data name="Payment_Status" xml:space="preserve">
     <value>Статус оплати</value>
   </data>

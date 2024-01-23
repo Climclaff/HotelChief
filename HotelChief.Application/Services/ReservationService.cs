@@ -93,5 +93,11 @@
 
             return false;
         }
+
+        public async Task<IEnumerable<Reservation>> GetUserReservations(int guestId)
+        {
+            return await _unitOfWork.GetRepository<Reservation>().Get(
+                res => res.GuestId == guestId, includeProperties: "Room");
+        }
     }
 }

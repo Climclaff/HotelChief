@@ -14,6 +14,8 @@
 
         Task<bool> ContainsDuplicateReservation(Reservation reservation);
 
+        Task<IEnumerable<Reservation>> GetUserReservations(int userId);
+
         Task Commit();
     }
 }

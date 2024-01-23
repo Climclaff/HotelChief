@@ -58,7 +58,7 @@ namespace HotelChief
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.UsePkce = true;
                     options.ResponseMode = "query";
-
+                    options.RequireHttpsMetadata = false;  // ONLY FOR DEVELOPMENT
                     // options.Scope.Add("profile");
                     options.Scope.Clear();
                     options.Scope.Add("openid");
@@ -74,9 +74,8 @@ namespace HotelChief
                         NameClaimType = JwtClaimTypes.Name,
                         RoleClaimType = JwtClaimTypes.Role,
                     };
-
                 });
-            
+
             builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews().AddDataAnnotationsLocalization(options =>
             {
@@ -104,6 +103,7 @@ namespace HotelChief
             builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddScoped<IHotelServiceOrderService, HotelServiceOrderService>();
             builder.Services.AddScoped<IRoomCleaningService, RoomCleaningService>();
+            builder.Services.AddScoped<ILiqPayService, LiqPayService>();
             builder.Services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
             builder.Services.Configure<SecurityStampValidatorOptions>(options =>
@@ -150,6 +150,8 @@ namespace HotelChief
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseHangfireDashboard();
+
+            app.UseCookiePolicy();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

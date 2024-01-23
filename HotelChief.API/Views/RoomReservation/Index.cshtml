@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <h2>@Localizer["Available_Rooms"]</h2>
+<link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 
+<a class="nav-link custom-link" asp-area="" asp-controller="RoomReservation" asp-action="MyReservations"><i class="fa fa-list-alt"></i> @Localizer["My_Reservations"]</a>
 @foreach (var room in Model.AvailableRooms)
 {
     <h3>@Localizer["Room"] @room.RoomNumber</h3>

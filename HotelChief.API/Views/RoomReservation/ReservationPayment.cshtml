@@ -1,0 +1,24 @@
+﻿@model HotelChief.API.ViewModels.ReservationViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["Reservation_Confirmation"]</h2>
+
+
+<div class="text-center">
+    <h2>@Localizer["Reservation_Details"]</h2>
+    <p>@Localizer["Room_Number"] @Model.RoomNumber</p>
+    <p>@Localizer["Check_In_Date"] @Model.CheckInDate</p>
+    <p>@Localizer["Check_Out_Date"] @Model.CheckOutDate</p>
+    <p>@Localizer["Amount"] @Model.Amount</p>
+
+<form method="POST" accept-charset="utf-8" target="_blank" action="https://www.liqpay.ua/api/3/checkout">
+                <input type="hidden" name="data" value=@Html.Raw(Json.Serialize(ViewBag.Data))/>
+            <input type="hidden" name="signature" value=@Html.Raw(Json.Serialize(ViewBag.Signature))/>
+            <button style="border: none !important; display:inline-block !important;text-align: center !important;padding: 5px 24px !important;
+    color: #fff !important; box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.12); font-size:16px !important; line-height: 1.75 !important; font-weight: 600 !important; font-family: 'Open Sans', sans-serif; cursor: pointer !important; border-radius: 8px !important;
+    background: #77CC5D !important;" onmouseover="this.style.opacity='0.5';" onmouseout="this.style.opacity='1';">
+                <img src="https://static.liqpay.ua/buttons/logo-white.svg" name="btn_text"
+             style="vertical-align: middle !important;" />
+                <span style="vertical-align:middle; !important; margin-left: 8px !important; ">@Localizer["Pay"]</span>
+            </button>
+        </form>

@@ -103,6 +103,7 @@ namespace IdentityServerHost.Quickstart.UI
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
                 user = await AutoProvisionUser(provider, providerUserId, claims);
+
             }
 
             // this allows us to collect any additional claims or properties

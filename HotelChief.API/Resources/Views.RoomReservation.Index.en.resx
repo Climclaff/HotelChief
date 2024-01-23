@@ -123,6 +123,12 @@
   <data name="Available_Timeslots" xml:space="preserve">
     <value>Available Time Slots:</value>
   </data>
+  <data name="My_Reservations" xml:space="preserve">
+    <value>My reservations</value>
+  </data>
+  <data name="Pay" xml:space="preserve">
+    <value>Pay</value>
+  </data>
   <data name="Reserve_Selected" xml:space="preserve">
     <value>Reserve Selected Time Slots</value>
   </data>

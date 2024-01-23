@@ -2,17 +2,21 @@
 namespace HotelChief.API.Controllers
 {
     using System.Security.Claims;
+    using System.Security.Cryptography;
+    using System.Text;
     using AutoMapper;
     using HotelChief.API.Hubs;
     using HotelChief.API.ViewModels;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
+    using IdentityModel;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Localization;
+    using Newtonsoft.Json;
 
     [Authorize(AuthenticationSchemes = "oidc")]
     public class RoomReservationController : Controller
@@ -22,19 +26,25 @@ namespace HotelChief.API.Controllers
         private readonly IHubContext<RoomReservationHub> _hubContext;
         private readonly IStringLocalizer<RoomReservationController> _localizer;
         private readonly UserManager<Guest> _userManager;
+        private readonly IConfiguration _config;
+        private readonly IBaseCRUDService<Reservation> _baseCRUDService;
 
         public RoomReservationController(
             IReservationService reservationService,
             UserManager<Guest> userManager,
             IMapper mapper,
             IHubContext<RoomReservationHub> hubContext,
-            IStringLocalizer<RoomReservationController> localizer)
+            IStringLocalizer<RoomReservationController> localizer,
+            IConfiguration config,
+            IBaseCRUDService<Reservation> baseCRUDService)
         {
             _reservationService = reservationService;
             _mapper = mapper;
             _hubContext = hubContext;
             _localizer = localizer;
             _userManager = userManager;
+            _config = config;
+            _baseCRUDService = baseCRUDService;
         }
 
         public async Task<IActionResult> Index()
@@ -46,6 +56,20 @@ namespace HotelChief.API.Controllers
             }
 
             return Problem(_localizer["No_Rooms_To_Reserve"].ToString());
+        }
+
+        public async Task<IActionResult> MyReservations()
+        {
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var userReservations = (await _reservationService.GetUserReservations(businessUser.Id)).ToList();
+
+            return View(userReservations);
         }
 
         [HttpPost]
@@ -97,7 +121,38 @@ namespace HotelChief.API.Controllers
                 await _hubContext.Clients.AllExcept(conn).SendAsync("UpdateAvailableRooms");
             }
 
-            return RedirectToAction("ReservationSuccess");
+            var dbReservation = (await _baseCRUDService.Get((x => x.GuestId == businessUser.Id && x.RoomNumber == roomNumber && x.CheckInDate == minStartDate && x.CheckOutDate == maxEndDate && x.Amount == price))).FirstOrDefault();
+            var jsonSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            var reservationJson = JsonConvert.SerializeObject(dbReservation, jsonSettings);
+            TempData["ReservationInfo"] = reservationJson;
+
+            return RedirectToAction("ReservationPayment");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReservationPayment()
+        {
+            var reservationJson = TempData["ReservationInfo"] as string;
+            if (reservationJson == null)
+            {
+                return BadRequest();
+            }
+
+            var reservation = JsonConvert.DeserializeObject<Reservation>(reservationJson);
+            if (reservation == null)
+            {
+                return BadRequest();
+            }
+
+            var dataAndSignature = GenerateDataAndSignature(reservation);
+            ViewBag.Data = dataAndSignature.Item1;
+            ViewBag.Signature = dataAndSignature.Item2;
+
+            return View(_mapper.Map<Reservation, ReservationViewModel>(reservation));
         }
 
         private async Task<GuestReservationViewModel> GetGuestReservationViewModel()
@@ -162,6 +217,32 @@ namespace HotelChief.API.Controllers
             .Where(slot => slot != null)
             .ToList();
             return selectedSlots;
+        }
+
+        private Tuple<string, string> GenerateDataAndSignature(Reservation reservation)
+        {
+            var jsonString = JsonConvert.SerializeObject(new
+            {
+                public_key = _config["LiqPay:ApiPublicKey"],
+                version = "3",
+                action = "pay",
+                amount = reservation.Amount.ToString(),
+                currency = "UAH",
+                description = "Test payment",
+                order_id = reservation.ReservationId.ToString(),
+                server_url = _config["LiqPay:RoomReservationServerCallbackUrl"],
+                result_url = _config["LiqPay:RoomReservationResultUrl"],
+            });
+
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+            var data = Convert.ToBase64String(plainTextBytes);
+            var signString = _config["LiqPay:ApiSecret"] + data + _config["LiqPay:ApiSecret"];
+
+            var shaEncodedSignStringBytes = System.Text.Encoding.UTF8.GetBytes(signString);
+            var encodedBytes = SHA1.Create().ComputeHash(shaEncodedSignStringBytes);
+
+            var signature = Convert.ToBase64String(encodedBytes);
+            return Tuple.Create(data, signature);
         }
     }
 }

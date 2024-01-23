@@ -36,7 +36,7 @@ namespace IdentityProvider
                         IdentityServerConstants.StandardScopes.Email,
                         "api1.read",
                     },
-                    PostLogoutRedirectUris = { "https://localhost:7049/com/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:7049/signout-callback-oidc" },
                     FrontChannelLogoutUri = "https://localhost:7049/signout-oidc",
                     RequirePkce = true,
                     AllowPlainTextPkce = false,

@@ -117,25 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Available_Rooms" xml:space="preserve">
-    <value>Доступні кімнати</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount:</value>
   </data>
-  <data name="Available_Timeslots" xml:space="preserve">
-    <value>Доступні дні</value>
+  <data name="Check_In_Date" xml:space="preserve">
+    <value>Check-In Date:</value>
   </data>
-  <data name="My_Reservations" xml:space="preserve">
-    <value>Мої бронювання</value>
+  <data name="Check_Out_Date" xml:space="preserve">
+    <value>Check-Out Date:</value>
   </data>
   <data name="Pay" xml:space="preserve">
-    <value>Сплатити</value>
+    <value>Pay</value>
   </data>
-  <data name="Reserve_Selected" xml:space="preserve">
-    <value>Бронювати</value>
+  <data name="Reservation_Confirmation" xml:space="preserve">
+    <value>Reservation сonfirmation</value>
   </data>
-  <data name="Room" xml:space="preserve">
-    <value>Кімната</value>
+  <data name="Reservation_Details" xml:space="preserve">
+    <value>Reservation Details</value>
   </data>
-  <data name="Type" xml:space="preserve">
-    <value>Тип:</value>
+  <data name="Room_Number" xml:space="preserve">
+    <value>Room Number:</value>
   </data>
 </root>
