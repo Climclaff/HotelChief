@@ -47,8 +47,11 @@
             var reservation = (await _unitOfWork.GetRepository<Reservation>().Get(x => x.ReservationId == roomReservationId)).FirstOrDefault();
             if (reservation != null)
             {
-                await _unitOfWork.GetRepository<Reservation>().DeleteAsync(reservation.ReservationId);
-                await _unitOfWork.Commit();
+                if (reservation.PaymentStatus == false)
+                {
+                    await _unitOfWork.GetRepository<Reservation>().DeleteAsync(reservation.ReservationId);
+                    await _unitOfWork.Commit();
+                }
             }
         }
 

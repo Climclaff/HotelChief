@@ -5,8 +5,11 @@ namespace HotelChief.API.Controllers
     using System.Security.Cryptography;
     using System.Text;
     using AutoMapper;
+    using Hangfire;
     using HotelChief.API.Hubs;
     using HotelChief.API.ViewModels;
+    using HotelChief.Application.IServices;
+    using HotelChief.Application.Services.Helpers;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
@@ -28,6 +31,7 @@ namespace HotelChief.API.Controllers
         private readonly UserManager<Guest> _userManager;
         private readonly IConfiguration _config;
         private readonly IBaseCRUDService<Reservation> _baseCRUDService;
+        private readonly ILiqPayService _payService;
 
         public RoomReservationController(
             IReservationService reservationService,
@@ -36,7 +40,8 @@ namespace HotelChief.API.Controllers
             IHubContext<RoomReservationHub> hubContext,
             IStringLocalizer<RoomReservationController> localizer,
             IConfiguration config,
-            IBaseCRUDService<Reservation> baseCRUDService)
+            IBaseCRUDService<Reservation> baseCRUDService,
+            ILiqPayService payService)
         {
             _reservationService = reservationService;
             _mapper = mapper;
@@ -45,6 +50,7 @@ namespace HotelChief.API.Controllers
             _userManager = userManager;
             _config = config;
             _baseCRUDService = baseCRUDService;
+            _payService = payService;
         }
 
         public async Task<IActionResult> Index()
@@ -126,7 +132,7 @@ namespace HotelChief.API.Controllers
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-
+            BackgroundJob.Schedule(() => _payService.CancelUnpaidReservation(reservation.ReservationId.ToString()), DateTime.UtcNow + TimeSpan.FromMinutes(10));
             var reservationJson = JsonConvert.SerializeObject(dbReservation, jsonSettings);
             TempData["ReservationInfo"] = reservationJson;
 
