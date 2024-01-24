@@ -20,6 +20,7 @@ namespace HotelChief
     using Microsoft.AspNetCore.Authentication.OAuth.Claims;
     using Microsoft.AspNetCore.Authentication.OpenIdConnect;
     using Microsoft.AspNetCore.CookiePolicy;
+    using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.HttpOverrides;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Localization;
@@ -39,7 +40,6 @@ namespace HotelChief
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
             builder.Services.AddIdentity<Guest, IdentityRole<int>>().AddEntityFrameworkStores<ApplicationDbContext>();
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";

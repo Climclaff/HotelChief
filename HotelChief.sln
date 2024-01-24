@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.Testing", "HotelChief.Testing\HotelChief.Testing.csproj", "{5F5DA19F-B227-44C6-8F45-CAD461132F40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityProvider", "IdentityProvider\IdentityProvider.csproj", "{BC138C76-62F8-4BE1-B2D7-CCAB5100ADB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.IdentityProvider", "IdentityProvider\HotelChief.IdentityProvider.csproj", "{BC138C76-62F8-4BE1-B2D7-CCAB5100ADB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
