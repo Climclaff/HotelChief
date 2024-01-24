@@ -22,7 +22,6 @@
         [Route("CreateAccount")]
         public async Task<IActionResult> CreateAccount([FromBody] RegisterViewModel model)
         {
-            var test = HttpContext;
             var user = new Guest()
             {
                 Email = model.Email,
@@ -38,5 +37,27 @@
 
             return StatusCode(500);
         }
+
+        [HttpPost]
+        [IdentityServerOnly] // Attrubute to secure calls (for development)
+        [Route("CreateGoogleAccount")]
+        public async Task<IActionResult> CreateGoogleAccount([FromBody] string email)
+        {
+            var user = new Guest()
+            {
+                Email = email,
+                UserName = email,
+            };
+
+            var result = await _userManager.CreateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return StatusCode(500);
+        }
+
     }
 }

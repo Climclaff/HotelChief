@@ -19,6 +19,13 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text;
+using IdentityProvider.ViewModels;
+using IdentityProvider;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -31,13 +38,16 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly ILogger<ExternalController> _logger;
         private readonly IEventService _events;
         private readonly UserManager<IdentityUser> _userManager;
-
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly SignInManager<IdentityUser> _signInManager;
         public ExternalController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService events,
             ILogger<ExternalController> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IHttpClientFactory httpClientFactory,
+            SignInManager<IdentityUser> signInManager)
         {
             _interaction = interaction;
             _clientStore = clientStore;
@@ -45,6 +55,8 @@ namespace IdentityServerHost.Quickstart.UI
             _events = events;
 
             _userManager = userManager;
+            _httpClientFactory = httpClientFactory;
+            _signInManager = signInManager;
         }
 
         /// <summary>
@@ -95,7 +107,7 @@ namespace IdentityServerHost.Quickstart.UI
                 _logger.LogDebug("External claims: {@claims}", externalClaims);
             }
 
-            // lookup our user and external provider info
+           
             var (user, provider, providerUserId, claims) = await FindUserFromExternalProvider(result);
             if (user == null)
             {
@@ -103,13 +115,29 @@ namespace IdentityServerHost.Quickstart.UI
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
                 user = await AutoProvisionUser(provider, providerUserId, claims);
-
+                var email = claims.Where(x => x.Type == ClaimTypes.Email).FirstOrDefault().Value;
+                var registerClaims = new List<Claim>
+                    {
+                        new Claim("email", email),
+                        new Claim("IsEmployee", "false"),
+                        new Claim("IsAdmin", "false"),
+                    };
+                await _userManager.AddClaimsAsync(user, registerClaims);
+                var httpClient = _httpClientFactory.CreateClient("RegistrationClient");
+                
+                var serializedRegisterData = new StringContent(
+                        JsonSerializer.Serialize(email),
+                        Encoding.UTF8,
+                        Application.Json);
+                using var httpResponseMessage = await httpClient.PostAsync("api/Registration/CreateGoogleAccount", serializedRegisterData);
+                httpResponseMessage.EnsureSuccessStatusCode();
             }
 
             // this allows us to collect any additional claims or properties
             // for the specific protocols used and store them in the local auth cookie.
             // this is typically used to store data needed for signout from those protocols.
-            var additionalLocalClaims = new List<Claim>();
+            List<Claim> additionalLocalClaims = new List<Claim>();
+
             var localSignInProps = new AuthenticationProperties();
             ProcessLoginCallback(result, additionalLocalClaims, localSignInProps);
             
@@ -120,6 +148,7 @@ namespace IdentityServerHost.Quickstart.UI
                 IdentityProvider = provider,
                 AdditionalClaims = additionalLocalClaims
             };
+
 
             await HttpContext.SignInAsync(isuser, localSignInProps);
 
@@ -141,6 +170,7 @@ namespace IdentityServerHost.Quickstart.UI
                     // return the response is for better UX for the end user.
                     return this.LoadingPage("Redirect", returnUrl);
                 }
+               // await _signInManager.SignInAsync(user, isPersistent: false);
             }
 
             return Redirect(returnUrl);
