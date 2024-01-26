@@ -135,6 +135,9 @@
   <data name="Order_ID" xml:space="preserve">
     <value>ID замовлення</value>
   </data>
+  <data name="Payment_Status" xml:space="preserve">
+    <value>Статус оплати</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>Кількість</value>
   </data>

@@ -9,7 +9,6 @@ namespace HotelChief.Controllers
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
 
-
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -23,18 +22,17 @@ namespace HotelChief.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var user = HttpContext.User;
             return View();
         }
 
         public IActionResult Privacy()
         {
-
             return View();
         }
 
-        [Authorize(AuthenticationSchemes = "oidc")] // FOR TESTING PURPOSES
-        [HttpGet("/call-api")]
-        public async Task<IActionResult> CallApi()
+        [Authorize(AuthenticationSchemes = "oidc")]
+        public async Task<IActionResult> SignOut()
         {
             return SignOut("Cookies", "oidc");
         }
@@ -56,6 +54,5 @@ namespace HotelChief.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
     }
 }

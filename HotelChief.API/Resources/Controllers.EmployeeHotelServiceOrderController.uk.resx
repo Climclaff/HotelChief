@@ -117,31 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
-  </data>
-  <data name="Amount" xml:space="preserve">
-    <value>Amount</value>
-  </data>
-  <data name="Employee_Orders" xml:space="preserve">
-    <value>Your accepted orders</value>
-  </data>
-  <data name="Guest" xml:space="preserve">
-    <value>Guest</value>
-  </data>
-  <data name="Order_Fulfilled" xml:space="preserve">
-    <value>Order fulfilled</value>
-  </data>
-  <data name="Order_ID" xml:space="preserve">
-    <value>Order ID</value>
-  </data>
-  <data name="Payment_Status" xml:space="preserve">
-    <value>Payment status</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
-  </data>
-  <data name="Service" xml:space="preserve">
-    <value>Service</value>
+  <data name="Unable_Accept_Unpaid" xml:space="preserve">
+    <value>Неможливо прийняти неоплачене замовлення.</value>
   </data>
 </root>

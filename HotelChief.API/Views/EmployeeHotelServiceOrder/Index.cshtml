@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 
 <h2>@Localizer["Pending_Orders"]</h2>
+<p>@TempData["Unable_Accept_Unpaid"]</p>
 <a class="nav-link custom-link" asp-area="" asp-controller="EmployeeHotelServiceOrder" asp-action="EmployeeOrders"><i class="fa fa-list-alt"></i> @Localizer["Your_Accepted_Orders"]</a>
 <table class="table">
     <thead>
@@ -13,6 +14,7 @@
             <th>@Localizer["Service"]</th>
             <th>@Localizer["Quantity"]</th>
             <th>@Localizer["Amount"]</th>
+            <th>@Localizer["Payment_Status"]</th>
             <th>@Localizer["Action"]</th>
         </tr>
     </thead>
@@ -25,6 +27,7 @@
                 <td>@order.HotelService.ServiceName</td>
                 <td>@order.Quantity</td>
                 <td>@order.Amount</td>
+                <td>@order.PaymentStatus</td>
                 <td>
                     <form method="post" asp-controller="EmployeeHotelServiceOrder" asp-action="AcceptOrder">
                         <input type="hidden" name="orderId" value="@order.HotelServiceOrderId" />

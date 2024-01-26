@@ -27,5 +27,15 @@
                     order => order.Employee.GuestId == guestId && order.OrderStatus != "Fulfilled",
                     includeProperties: "HotelService");
         }
+
+        public async Task CancelUnpaidOrder(int hotelServiceOrderId)
+        {
+            await _unitOfWork.GetRepository<HotelServiceOrder>().DeleteAsync(hotelServiceOrderId);
+        }
+
+        public async Task Commit()
+        {
+            await _unitOfWork.Commit();
+        }
     }
 }

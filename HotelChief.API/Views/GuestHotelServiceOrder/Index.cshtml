@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 
 <h2>@Localizer["Available_Hotel_Services"]</h2>
-
+@TempData["Orders_Amount_Exceeded"]
 @foreach (var service in Model.HotelServices)
 {
     <div>
@@ -27,9 +27,19 @@
 
 @if (Model.UserOrders.Any())
 {
+    <p>@Localizer["Unpaid_Orders"]: @Model.OrdersCount / 20</p>
     foreach (var order in Model.UserOrders)
     {
+
         <div>
+            @if (order.PaymentStatus == false)
+            {
+                <form method="post" asp-action="CancelUnpaidOrder">
+                    <input type="hidden" name="hotelServiceOrderId" value="@order.HotelServiceOrderId" />
+                    <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Cancel_Order"]</button>
+                </form>
+            }
+
             <strong>@order.HotelService?.ServiceName</strong>
             <p>@Localizer["Quantity"]: @order.Quantity</p>
             <p>@Localizer["Sum"]: $@order.Amount</p>
@@ -43,11 +53,11 @@
             <hr />
         </div>
     }
-    if (ViewBag.HidePayment != "true")
+    if (@ViewBag.HidePayment != "true")
     {
             <form method="POST" accept-charset="utf-8" target="_blank" action="https://www.liqpay.ua/api/3/checkout">
-                <input type="hidden" name="data" value=@Html.Raw(Json.Serialize(ViewBag.Data))/>
-            <input type="hidden" name="signature" value=@Html.Raw(Json.Serialize(ViewBag.Signature))/>
+                <input type="hidden" name="data" value=@Html.Raw(Json.Serialize(@ViewBag.Data))/>
+            <input type="hidden" name="signature" value=@Html.Raw(Json.Serialize(@ViewBag.Signature))/>
             <button style="border: none !important; display:inline-block !important;text-align: center !important;padding: 5px 24px !important;
     color: #fff !important; box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.12); font-size:16px !important; line-height: 1.75 !important; font-weight: 600 !important; font-family: 'Open Sans', sans-serif; cursor: pointer !important; border-radius: 8px !important;
     background: #77CC5D !important;" onmouseover="this.style.opacity='0.5';" onmouseout="this.style.opacity='1';">
@@ -78,6 +88,9 @@ else
 
         orderStatusElement.style.color = isAccepted ? "green" : "gold";
         orderStatusElement.innerText = isAccepted ? "@Localizer["Order_Status_Accepted"]" : "@Localizer["Order_Status_Enqueued"]";
+    });
+    connection.on("RefreshOrders", function () {
+        location.reload();
     });
 </script>
 

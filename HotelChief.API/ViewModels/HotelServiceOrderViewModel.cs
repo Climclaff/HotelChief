@@ -39,5 +39,7 @@
         public IEnumerable<HotelServiceOrder>? UserOrders { get; set; }
 
         public IEnumerable<HotelService>? HotelServices { get; set; }
+
+        public int OrdersCount { get; set; }
     }
 }

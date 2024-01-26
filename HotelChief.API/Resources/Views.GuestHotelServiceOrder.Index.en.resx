@@ -120,6 +120,9 @@
   <data name="Available_Hotel_Services" xml:space="preserve">
     <value>Available Hotel Services</value>
   </data>
+  <data name="Cancel_Order" xml:space="preserve">
+    <value>Cancel order</value>
+  </data>
   <data name="No_Orders" xml:space="preserve">
     <value>No orders yet.</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="Sum" xml:space="preserve">
     <value>Sum</value>
+  </data>
+  <data name="Unpaid_Orders" xml:space="preserve">
+    <value>Unpaid orders</value>
   </data>
   <data name="Your_Orders" xml:space="preserve">
     <value>Your orders</value>

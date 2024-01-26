@@ -12,6 +12,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.Localization;
     using Newtonsoft.Json;
 
     [Authorize(AuthenticationSchemes = "oidc")]
@@ -23,6 +24,7 @@
         private readonly IHubContext<EmployeeHotelServiceOrderHub> _employeeHubContext;
         private readonly UserManager<Infrastructure.EFEntities.Guest> _userManager;
         private readonly IConfiguration _config;
+        private readonly IStringLocalizer<GuestHotelServiceOrderController> _localizer;
 
         public GuestHotelServiceOrderController(
             IHotelServiceOrderService orderService,
@@ -30,6 +32,7 @@
             IBaseCRUDService<HotelService> hotelServicesService,
             IHubContext<EmployeeHotelServiceOrderHub> employeeHubContext,
             UserManager<Infrastructure.EFEntities.Guest> userManager,
+            IStringLocalizer<GuestHotelServiceOrderController> localizer,
             IConfiguration config)
         {
             _orderService = orderService;
@@ -38,6 +41,7 @@
             _employeeHubContext = employeeHubContext;
             _userManager = userManager;
             _config = config;
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Index()
@@ -70,6 +74,7 @@
                 UserOrders = userOrders,
             };
 
+            model.OrdersCount = userOrders.Where(x => x.PaymentStatus == false).Count();
             return View(model);
         }
 
@@ -81,6 +86,12 @@
             if (businessUser == null)
             {
                 return RedirectToAction("Index");
+            }
+
+            var userOrders = await _orderService.GetUserOrders(Convert.ToInt32(businessUser.Id));
+            if (userOrders.Where(x => x.PaymentStatus == false).Count() >= 20)
+            {
+                TempData["Orders_Amount_Exceeded"] = _localizer["Orders_Amount_Exceeded"].ToString();
             }
 
             var hotelService = (await _hotelServicesService.Get(s => s.ServiceId == serviceId)).FirstOrDefault();
@@ -104,6 +115,30 @@
 
             await _orderCrudService.AddAsync(order);
             await _orderCrudService.Commit();
+            await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelUnpaidOrder(int hotelServiceOrderId)
+        {
+            var order = (await _orderCrudService.Get(x => x.HotelServiceOrderId == hotelServiceOrderId)).FirstOrDefault();
+
+            if (order == null || order.PaymentStatus == true)
+            {
+                return BadRequest();
+            }
+
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            await _orderService.CancelUnpaidOrder(order.HotelServiceOrderId);
+            await _orderService.Commit();
+
             await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
             return RedirectToAction("Index");
         }

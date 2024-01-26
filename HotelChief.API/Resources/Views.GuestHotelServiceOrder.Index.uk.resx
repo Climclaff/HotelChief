@@ -120,6 +120,9 @@
   <data name="Available_Hotel_Services" xml:space="preserve">
     <value>Доступні готельні послуги</value>
   </data>
+  <data name="Cancel_Order" xml:space="preserve">
+    <value>Відмінити замовлення</value>
+  </data>
   <data name="No_Orders" xml:space="preserve">
     <value>Поки немає замовлень.</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="Sum" xml:space="preserve">
     <value>Сума</value>
+  </data>
+  <data name="Unpaid_Orders" xml:space="preserve">
+    <value>Неоплачені замовлення</value>
   </data>
   <data name="Your_Orders" xml:space="preserve">
     <value>Ваші замовлення</value>

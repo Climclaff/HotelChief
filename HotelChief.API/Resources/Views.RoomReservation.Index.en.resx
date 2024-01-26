@@ -129,6 +129,9 @@
   <data name="Pay" xml:space="preserve">
     <value>Pay</value>
   </data>
+  <data name="Payment_Warning" xml:space="preserve">
+    <value>Caution: the payment must be conducted within 10-minute timespan after creating a reservation or it will be automatically deleted.</value>
+  </data>
   <data name="Reserve_Selected" xml:space="preserve">
     <value>Reserve Selected Time Slots</value>
   </data>

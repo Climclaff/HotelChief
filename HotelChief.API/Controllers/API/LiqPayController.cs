@@ -1,10 +1,15 @@
-﻿using HotelChief.Application.IServices;
+﻿using HotelChief.API.Hubs;
+using HotelChief.Application.IServices;
+using HotelChief.Core.Entities;
+using HotelChief.Core.Interfaces.IServices;
 using HotelChief.Infrastructure.EFEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Text;
+using Telegram.Bot.Types;
 
 namespace HotelChief.API.Controllers.API
 {
@@ -14,13 +19,25 @@ namespace HotelChief.API.Controllers.API
     {
         private readonly UserManager<Guest> _userManager;
         private readonly ILiqPayService _iLiqPayService;
+        private readonly IHubContext<EmployeeHotelServiceOrderHub> _employeeHubContext;
+        private readonly IHubContext<GuestHotelServiceOrderHub> _guestHubContext;
         private readonly IConfiguration _config;
+        private readonly IBaseCRUDService<HotelServiceOrder> _orderCRUDService;
 
-        public LiqPayController(UserManager<Guest> userManager, ILiqPayService iLiqPayService, IConfiguration config)
+        public LiqPayController(
+            UserManager<Guest> userManager,
+            ILiqPayService iLiqPayService,
+            IConfiguration config,
+            IHubContext<EmployeeHotelServiceOrderHub> employeeHubContext,
+            IHubContext<GuestHotelServiceOrderHub> guestHubContext,
+            IBaseCRUDService<HotelServiceOrder> orderCRUDService)
         {
             _userManager = userManager;
             _iLiqPayService = iLiqPayService;
             _config = config;
+            _employeeHubContext = employeeHubContext;
+            _guestHubContext = guestHubContext;
+            _orderCRUDService = orderCRUDService;
         }
 
         [HttpPost]
@@ -42,6 +59,23 @@ namespace HotelChief.API.Controllers.API
             {
                 var orderId = request_data_dictionary["order_id"];
                 await _iLiqPayService.ChangePaidOrderStatus(orderId);
+                await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
+
+                var order = (await _orderCRUDService.Get(x => x.HotelServiceOrderId == Convert.ToInt32(orderId), includeProperties: "Employee")).FirstOrDefault();
+                if (order != null)
+                {
+                    var guestEmail = (await _userManager.FindByIdAsync(order.GuestId.ToString())).Email;
+                    var user = GuestHotelServiceOrderHub.ConnectedUsers.Where(x => x.Key == guestEmail).FirstOrDefault();
+                    if (!user.Equals(default(KeyValuePair<string, List<string>>)))
+                    {
+                        for (int i = 0; i < user.Value.Count; i++)
+                        {
+                            await _guestHubContext.Clients.Client(user.Value[i]).SendAsync("RefreshOrders");
+                        }
+                    }
+
+                    await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
+                }
             }
 
             return StatusCode(500, "An error occured during payment process");
