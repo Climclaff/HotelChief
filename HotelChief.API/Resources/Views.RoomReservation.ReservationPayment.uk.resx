@@ -120,6 +120,9 @@
   <data name="Amount" xml:space="preserve">
     <value>Сума</value>
   </data>
+  <data name="Apply_Discount" xml:space="preserve">
+    <value>Отримати знижку</value>
+  </data>
   <data name="Check_In_Date" xml:space="preserve">
     <value>Дата початку бронювання:</value>
   </data>

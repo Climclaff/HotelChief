@@ -6,6 +6,8 @@
 
         public bool PaymentStatus { get; set; }
 
+        public bool IsDiscounted { get; set; }
+
         public DateTime Timestamp { get; set; }
     }
 }

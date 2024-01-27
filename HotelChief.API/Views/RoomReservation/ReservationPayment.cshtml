@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <h2>@Localizer["Reservation_Confirmation"]</h2>
-
+@TempData["Discount_Status"]
 
 <div class="text-center">
     <h2>@Localizer["Reservation_Details"]</h2>
@@ -10,6 +10,16 @@
     <p>@Localizer["Check_In_Date"] @Model.CheckInDate</p>
     <p>@Localizer["Check_Out_Date"] @Model.CheckOutDate</p>
     <p>@Localizer["Amount"] @Model.Amount</p>
+
+    @if (@Model.LoyaltyPoints > 0)
+    {
+        @if(!@Model.IsDiscounted){
+            <form method="post" asp-controller="RoomReservation" asp-action="ApplyDiscount">
+                <input type="hidden" name="reservationId" value="@Model.ReservationId" />
+                <button type="submit"><i class="fa fa-tag fa-lg"></i> @Localizer["Apply_Discount"]</button>
+            </form>
+        }
+    }
 
 <form method="POST" accept-charset="utf-8" target="_blank" action="https://www.liqpay.ua/api/3/checkout">
                 <input type="hidden" name="data" value=@Html.Raw(Json.Serialize(ViewBag.Data))/>

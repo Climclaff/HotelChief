@@ -41,5 +41,7 @@
         public IEnumerable<HotelService>? HotelServices { get; set; }
 
         public int OrdersCount { get; set; }
+
+        public double? LoyaltyPoints { get; set; }
     }
 }

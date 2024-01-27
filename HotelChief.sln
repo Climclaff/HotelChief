@@ -7,6 +7,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.Application", "HotelChief.Application\HotelChief.Application.csproj", "{D0E9B3AC-5E9F-415C-B956-03A0DE41B96D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6C24417E-BF5E-4638-A7D4-4B639CB7406B} = {6C24417E-BF5E-4638-A7D4-4B639CB7406B}
+		{7A8317AA-D79E-4D22-AAF3-CF26690A15E8} = {7A8317AA-D79E-4D22-AAF3-CF26690A15E8}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.Infrastructure", "HotelChief.Infrastructure\HotelChief.Infrastructure.csproj", "{7A8317AA-D79E-4D22-AAF3-CF26690A15E8}"

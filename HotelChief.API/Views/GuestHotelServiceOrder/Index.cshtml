@@ -6,6 +6,7 @@
 
 <h2>@Localizer["Available_Hotel_Services"]</h2>
 @TempData["Orders_Amount_Exceeded"]
+@TempData["Discount_Status"]
 @foreach (var service in Model.HotelServices)
 {
     <div>
@@ -38,6 +39,13 @@
                     <input type="hidden" name="hotelServiceOrderId" value="@order.HotelServiceOrderId" />
                     <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Cancel_Order"]</button>
                 </form>
+                @if (!order.IsDiscounted && Model.LoyaltyPoints > 0)
+                {
+                    <form method="post" asp-action="ApplyDiscount">
+                        <input type="hidden" name="orderId" value="@order.HotelServiceOrderId" />
+                    <button type="submit"><i class="fa fa-tag fa-lg"></i> @Localizer["Apply_Discount"]</button>
+                </form>
+                }
             }
 
             <strong>@order.HotelService?.ServiceName</strong>

@@ -120,6 +120,9 @@
   <data name="Amount" xml:space="preserve">
     <value>Amount:</value>
   </data>
+  <data name="Apply_Discount" xml:space="preserve">
+    <value>Apply discount</value>
+  </data>
   <data name="Check_In_Date" xml:space="preserve">
     <value>Check-In Date:</value>
   </data>

@@ -120,10 +120,19 @@
   <data name="Adjacent_slots" xml:space="preserve">
     <value>Selected time slots must be adjacent.</value>
   </data>
+  <data name="Discount_Success" xml:space="preserve">
+    <value>Discount was successfully applied to the pending reservation.</value>
+  </data>
   <data name="No_Rooms_To_Reserve" xml:space="preserve">
     <value>There are no available rooms to reserve</value>
   </data>
+  <data name="Reservation_Not_Found" xml:space="preserve">
+    <value>Reservation not found</value>
+  </data>
   <data name="Select_Timeslot" xml:space="preserve">
     <value>Please select at least one time slot.</value>
+  </data>
+  <data name="Unable_To_Apply_Discount" xml:space="preserve">
+    <value>Unable to apply discount to selected reservation.</value>
   </data>
 </root>

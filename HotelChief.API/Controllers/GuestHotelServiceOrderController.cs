@@ -25,6 +25,7 @@
         private readonly UserManager<Infrastructure.EFEntities.Guest> _userManager;
         private readonly IConfiguration _config;
         private readonly IStringLocalizer<GuestHotelServiceOrderController> _localizer;
+        private readonly ILoyaltyService<HotelServiceOrder> _loyaltyService;
 
         public GuestHotelServiceOrderController(
             IHotelServiceOrderService orderService,
@@ -33,7 +34,8 @@
             IHubContext<EmployeeHotelServiceOrderHub> employeeHubContext,
             UserManager<Infrastructure.EFEntities.Guest> userManager,
             IStringLocalizer<GuestHotelServiceOrderController> localizer,
-            IConfiguration config)
+            IConfiguration config,
+            ILoyaltyService<HotelServiceOrder> loyaltyService)
         {
             _orderService = orderService;
             _orderCrudService = orderCrudSerice;
@@ -42,6 +44,7 @@
             _userManager = userManager;
             _config = config;
             _localizer = localizer;
+            _loyaltyService = loyaltyService;
         }
 
         public async Task<IActionResult> Index()
@@ -75,6 +78,8 @@
             };
 
             model.OrdersCount = userOrders.Where(x => x.PaymentStatus == false).Count();
+            model.LoyaltyPoints = businessUser.LoyaltyPoints;
+
             return View(model);
         }
 
@@ -140,6 +145,36 @@
             await _orderService.Commit();
 
             await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyDiscount(int orderId)
+        {
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var order = (await _orderCrudService.Get(x => x.HotelServiceOrderId == orderId)).FirstOrDefault();
+            if (order == null)
+            {
+                TempData["Discount_Status"] = _localizer["Order_Not_Found"].ToString();
+                return RedirectToAction("Index");
+            }
+
+            var discountedOrder = await _loyaltyService.ApplyDiscount(order, businessUser.Id);
+            if (discountedOrder == null)
+            {
+                TempData["Discount_Status"] = _localizer["Unable_To_Apply_Discount"].ToString();
+                return RedirectToAction("Index");
+            }
+
+            _orderCrudService.Update(discountedOrder);
+            await _orderCrudService.Commit();
+            TempData["Discount_Status"] = _localizer["Discount_Success"].ToString();
             return RedirectToAction("Index");
         }
 

@@ -29,5 +29,9 @@
         public bool PaymentStatus { get; set; }
 
         public DateTime Timestamp { get; set; }
+
+        public double? LoyaltyPoints { get; set; }
+
+        public bool IsDiscounted { get; set; }
     }
 }

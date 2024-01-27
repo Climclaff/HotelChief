@@ -104,6 +104,7 @@ namespace HotelChief
             builder.Services.AddScoped<IHotelServiceOrderService, HotelServiceOrderService>();
             builder.Services.AddScoped<IRoomCleaningService, RoomCleaningService>();
             builder.Services.AddScoped<ILiqPayService, LiqPayService>();
+            builder.Services.AddScoped(typeof(ILoyaltyService<>), typeof(LoyaltyService<>));
             builder.Services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
             builder.Services.Configure<SecurityStampValidatorOptions>(options =>

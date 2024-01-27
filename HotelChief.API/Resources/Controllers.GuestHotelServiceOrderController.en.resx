@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Discount_Success" xml:space="preserve">
+    <value>Discount was successfully applied to selected order.</value>
+  </data>
   <data name="Orders_Amount_Exceeded" xml:space="preserve">
     <value>You have exceeded the maximum amount of orders. You need to pay for existing orders first.</value>
+  </data>
+  <data name="Order_Not_Found" xml:space="preserve">
+    <value>Order for discount not found</value>
+  </data>
+  <data name="Unable_To_Apply_Discount" xml:space="preserve">
+    <value>Unable to apply discount to selected order.</value>
   </data>
 </root>

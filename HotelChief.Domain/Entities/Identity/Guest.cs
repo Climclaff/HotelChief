@@ -37,5 +37,7 @@
         public ICollection<ReviewGuestUpvote>? UpvotedReviews { get; set; }
 
         public ICollection<ReviewGuestDownvote>? DownvotedReviews { get; set; }
+
+        public double? LoyaltyPoints { get; set; }
     }
 }

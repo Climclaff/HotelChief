@@ -9,6 +9,7 @@ namespace HotelChief.API.Controllers
     using HotelChief.API.Hubs;
     using HotelChief.API.ViewModels;
     using HotelChief.Application.IServices;
+    using HotelChief.Application.Services;
     using HotelChief.Application.Services.Helpers;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
@@ -32,6 +33,7 @@ namespace HotelChief.API.Controllers
         private readonly IConfiguration _config;
         private readonly IBaseCRUDService<Reservation> _baseCRUDService;
         private readonly ILiqPayService _payService;
+        private readonly ILoyaltyService<Reservation> _loyaltyService;
 
         public RoomReservationController(
             IReservationService reservationService,
@@ -41,7 +43,8 @@ namespace HotelChief.API.Controllers
             IStringLocalizer<RoomReservationController> localizer,
             IConfiguration config,
             IBaseCRUDService<Reservation> baseCRUDService,
-            ILiqPayService payService)
+            ILiqPayService payService,
+            ILoyaltyService<Reservation> loyaltyService)
         {
             _reservationService = reservationService;
             _mapper = mapper;
@@ -51,6 +54,7 @@ namespace HotelChief.API.Controllers
             _config = config;
             _baseCRUDService = baseCRUDService;
             _payService = payService;
+            _loyaltyService = loyaltyService;
         }
 
         public async Task<IActionResult> Index()
@@ -142,7 +146,7 @@ namespace HotelChief.API.Controllers
         [HttpGet]
         public async Task<IActionResult> ReservationPayment()
         {
-            var reservationJson = TempData["ReservationInfo"] as string;
+            var reservationJson = TempData.Peek("ReservationInfo") as string;
             if (reservationJson == null)
             {
                 return BadRequest();
@@ -158,7 +162,52 @@ namespace HotelChief.API.Controllers
             ViewBag.Data = dataAndSignature.Item1;
             ViewBag.Signature = dataAndSignature.Item2;
 
-            return View(_mapper.Map<Reservation, ReservationViewModel>(reservation));
+            var model = _mapper.Map<Reservation, ReservationViewModel>(reservation);
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.LoyaltyPoints = businessUser.LoyaltyPoints;
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyDiscount(int reservationId)
+        {
+            var userEmail = HttpContext.User.FindFirst("email")?.Value;
+            var businessUser = await _userManager.FindByEmailAsync(userEmail);
+            if (businessUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var reservation = (await _baseCRUDService.Get(x => x.ReservationId == reservationId)).FirstOrDefault();
+            if (reservation == null)
+            {
+                TempData["Discount_Status"] = _localizer["Reservation_Not_Found"].ToString();
+                return RedirectToAction("Index");
+            }
+
+            var discountedOrder = await _loyaltyService.ApplyDiscount(reservation, businessUser.Id);
+            if (discountedOrder == null)
+            {
+                TempData["Discount_Status"] = _localizer["Unable_To_Apply_Discount"].ToString();
+                return RedirectToAction("Index");
+            }
+
+            _baseCRUDService.Update(discountedOrder);
+            await _baseCRUDService.Commit();
+            TempData["Discount_Status"] = _localizer["Discount_Success"].ToString();
+            var jsonSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+            var reservationJson = JsonConvert.SerializeObject(discountedOrder, jsonSettings);
+            TempData["ReservationInfo"] = reservationJson;
+            return RedirectToAction("ReservationPayment");
         }
 
         private async Task<GuestReservationViewModel> GetGuestReservationViewModel()
