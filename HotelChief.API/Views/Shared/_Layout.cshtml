@@ -47,6 +47,9 @@
                          <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-controller="HotelServiceOrdersAdmin" asp-action="Index">@SharedLocalizer["Admin_Service_Orders"]</a>
                         </li>
+                        <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Index">@SharedLocalizer["Reports"]</a>
+                        </li>
                         }
                         }
                             if (this.Context.User?.FindFirst("IsEmployee")?.Value == "true")

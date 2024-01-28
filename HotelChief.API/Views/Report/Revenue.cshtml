@@ -1,0 +1,16 @@
+﻿@model HotelChief.Core.DTO.RevenueReportDto
+<h2>Revenue Report</h2>
+<form asp-action="GenerateRevenueReport" method="post">
+    <label for="startDate">Start Date:</label>
+    <input type="date" name="startDate" required />
+    <label for="endDate">End Date:</label>
+    <input type="date" name="endDate" required />
+    <button type="submit">Generate Report</button>
+</form>
+
+@if (@Model != null)
+{
+            <p>Total revenue: @Model.TotalRevenue</p>
+            <p>Hotel service orders count: @Model.HotelServiceOrdersCount</p>
+            <p>Reservations count: @Model.ReservationsCount</p>
+}

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<HotelChief.Core.DTO.PopularRoomReportDto>
+<h2>Popular Rooms Report</h2>
+<form asp-action="GeneratePopularRoomsReport" method="post">
+    <label for="startDate">Start Date:</label>
+    <input type="date" name="startDate" required />
+    <label for="endDate">End Date:</label>
+    <input type="date" name="endDate" required />
+    <label for="topN">Top N:</label>
+    <input type="number" name="topN" required />
+    <button type="submit">Generate Report</button>
+</form>
+
+@if (@Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoomNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReservationsCount)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReservationsCount)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

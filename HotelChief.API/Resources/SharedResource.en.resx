@@ -156,6 +156,9 @@
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
   <data name="Reservations" xml:space="preserve">
     <value>Reservations</value>
   </data>

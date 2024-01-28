@@ -156,6 +156,9 @@
   <data name="Register" xml:space="preserve">
     <value>Реєстрація</value>
   </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Звіти</value>
+  </data>
   <data name="Reservations" xml:space="preserve">
     <value>Бронювання кімнат</value>
   </data>
