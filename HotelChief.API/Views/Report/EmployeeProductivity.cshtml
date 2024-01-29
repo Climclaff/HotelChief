@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<HotelChief.Core.DTO.EmployeeProductivityReportDto>
-
-<h2>Employee Productivity Report</h2>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
+<h2>@SharedLocalizer["Employee_Productivity_Report"]</h2>
 <form asp-action="GenerateEmployeeProductivityReport" method="post">
-    <label for="startDate">Start Date:</label>
+    <label for="startDate">@SharedLocalizer["Start_Date"]</label>
     <input type="date" name="startDate" required />
-    <label for="endDate">End Date:</label>
+    <label for="endDate">@SharedLocalizer["End_Date"]</label>
     <input type="date" name="endDate" required />
-    <button type="submit">Generate Report</button>
+    <button type="submit">@SharedLocalizer["Generate_Report"]</button>
 </form>
 
 @if (@Model != null)

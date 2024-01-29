@@ -1,8 +1,10 @@
 ﻿namespace HotelChief.API.Controllers
 {
     using HotelChief.Core.Interfaces.IServices;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize(AuthenticationSchemes = "oidc", Policy = "IsAdminPolicy")]
     public class ReportController : Controller
     {
         private readonly IReportService _reportService;

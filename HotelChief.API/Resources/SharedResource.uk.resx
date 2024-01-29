@@ -129,8 +129,17 @@
   <data name="Employees" xml:space="preserve">
     <value>Співробітники</value>
   </data>
+  <data name="Employee_Productivity_Report" xml:space="preserve">
+    <value>Звіт з продуктивності співробітників</value>
+  </data>
   <data name="Employee_Service_Orders" xml:space="preserve">
     <value>Обробка замовлених послуг</value>
+  </data>
+  <data name="End_Date" xml:space="preserve">
+    <value>Кінцева дата:</value>
+  </data>
+  <data name="Generate_Report" xml:space="preserve">
+    <value>Згенерувати звіт</value>
   </data>
   <data name="Guests" xml:space="preserve">
     <value>Користувачі</value>
@@ -153,6 +162,9 @@
   <data name="Main_Page" xml:space="preserve">
     <value>Головна Сторінка</value>
   </data>
+  <data name="Popular_Rooms_Report" xml:space="preserve">
+    <value>Звіт - Популярні кімнати</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Реєстрація</value>
   </data>
@@ -162,6 +174,9 @@
   <data name="Reservations" xml:space="preserve">
     <value>Бронювання кімнат</value>
   </data>
+  <data name="Revenue_Report" xml:space="preserve">
+    <value>Звіт з прибутку</value>
+  </data>
   <data name="Review_Page" xml:space="preserve">
     <value>Сторінка відгуків</value>
   </data>
@@ -170,5 +185,17 @@
   </data>
   <data name="Service_Orders" xml:space="preserve">
     <value>Замовлення послуг</value>
+  </data>
+  <data name="Start_Date" xml:space="preserve">
+    <value>Початкова дата:</value>
+  </data>
+  <data name="Top_Hotel_Service_Report" xml:space="preserve">
+    <value>Звіт - Найбільш прибуткові готельні послуги</value>
+  </data>
+  <data name="Top_N" xml:space="preserve">
+    <value>N найкращих</value>
+  </data>
+  <data name="Top_Room_Revenue_Report" xml:space="preserve">
+    <value>Звіт - Найбільш прибуткові кімнати </value>
   </data>
 </root>

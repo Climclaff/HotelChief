@@ -129,8 +129,17 @@
   <data name="Employees" xml:space="preserve">
     <value>Employees</value>
   </data>
+  <data name="Employee_Productivity_Report" xml:space="preserve">
+    <value>Employee Productivity Report</value>
+  </data>
   <data name="Employee_Service_Orders" xml:space="preserve">
     <value>Service Orders(Employee)</value>
+  </data>
+  <data name="End_Date" xml:space="preserve">
+    <value>End Date:</value>
+  </data>
+  <data name="Generate_Report" xml:space="preserve">
+    <value>Generate Report</value>
   </data>
   <data name="Guests" xml:space="preserve">
     <value>Guests</value>
@@ -153,6 +162,9 @@
   <data name="Main_Page" xml:space="preserve">
     <value>Main Page</value>
   </data>
+  <data name="Popular_Rooms_Report" xml:space="preserve">
+    <value>Popular Rooms Report</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
@@ -162,6 +174,9 @@
   <data name="Reservations" xml:space="preserve">
     <value>Reservations</value>
   </data>
+  <data name="Revenue_Report" xml:space="preserve">
+    <value>Revenue Report</value>
+  </data>
   <data name="Review_Page" xml:space="preserve">
     <value>Review Page</value>
   </data>
@@ -170,5 +185,17 @@
   </data>
   <data name="Service_Orders" xml:space="preserve">
     <value>Service Orders</value>
+  </data>
+  <data name="Start_Date" xml:space="preserve">
+    <value>Start Date:</value>
+  </data>
+  <data name="Top_Hotel_Service_Report" xml:space="preserve">
+    <value>Top Hotel Service Revenue Report</value>
+  </data>
+  <data name="Top_N" xml:space="preserve">
+    <value>Top N:</value>
+  </data>
+  <data name="Top_Room_Revenue_Report" xml:space="preserve">
+    <value>Top Room Revenue Report</value>
   </data>
 </root>

@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<HotelChief.Core.DTO.PopularRoomReportDto>
-<h2>Popular Rooms Report</h2>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
+<h2>@SharedLocalizer["Popular_Rooms_Report"]</h2>
 <form asp-action="GeneratePopularRoomsReport" method="post">
-    <label for="startDate">Start Date:</label>
+    <label for="startDate">@SharedLocalizer["Start_Date"]</label>
     <input type="date" name="startDate" required />
-    <label for="endDate">End Date:</label>
+    <label for="endDate">@SharedLocalizer["End_Date"]</label>
     <input type="date" name="endDate" required />
-    <label for="topN">Top N:</label>
+    <label for="topN">@SharedLocalizer["Top_N"]</label>
     <input type="number" name="topN" required />
-    <button type="submit">Generate Report</button>
+    <button type="submit">@SharedLocalizer["Generate_Report"]</button>
 </form>
 
 @if (@Model != null)

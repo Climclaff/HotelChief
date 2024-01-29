@@ -1,14 +1,16 @@
-﻿<h2>Employee Productivity Report</h2>
-<a asp-action="GenerateEmployeeProductivityReport">Generate Employee Productivity Report</a>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
+<h2>@SharedLocalizer["Employee_Productivity_Report"]</h2>
+<a asp-action="GenerateEmployeeProductivityReport">@SharedLocalizer["Employee_Productivity_Report"]</a>
 
-<h2>Popular Rooms Report</h2>
-<a asp-action="GeneratePopularRoomsReport">Generate Popular Rooms Report</a>
+<h2>@SharedLocalizer["Popular_Rooms_Report"]</h2>
+<a asp-action="GeneratePopularRoomsReport">@SharedLocalizer["Popular_Rooms_Report"]t</a>
 
-<h2>Revenue Report</h2>
-<a asp-action="GenerateRevenueReport">Generate Revenue Report</a>
+<h2>@SharedLocalizer["Revenue_Report"]</h2>
+<a asp-action="GenerateRevenueReport">@SharedLocalizer["Revenue_Report"]</a>
 
-<h2>Top Hotel Service Revenue Report</h2>
-<a asp-action="GenerateTopHotelServiceRevenueReport">Generate Top Hotel Service Revenue Report</a>
+<h2>@SharedLocalizer["Top_Hotel_Service_Report"]</h2>
+<a asp-action="GenerateTopHotelServiceRevenueReport">@SharedLocalizer["Top_Hotel_Service_Report"]</a>
 
-<h2>Top Room Revenue Report</h2>
-<a asp-action="GenerateTopRoomRevenueReport">Generate Top Room Revenue Report</a>
+<h2>@SharedLocalizer["Top_Room_Revenue_Report"]</h2>
+<a asp-action="GenerateTopRoomRevenueReport">@SharedLocalizer["Top_Room_Revenue_Report"]</a>

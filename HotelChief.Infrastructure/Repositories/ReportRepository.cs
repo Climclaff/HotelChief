@@ -17,7 +17,7 @@
 
         public async Task<IEnumerable<EmployeeProductivityReportDto>?> GenerateEmployeeProductivityReport(DateTime startDate, DateTime endDate)
         {
-            if (!_context.Employees!.Any())
+            if (!await _context.Employees!.AnyAsync())
             {
                 return null;
             }
@@ -37,7 +37,7 @@
 
         public async Task<IEnumerable<PopularRoomReportDto>?> GeneratePopularRoomsReport(int topN, DateTime startDate, DateTime endDate)
         {
-            if (!_context.Reservations!.Any())
+            if (!await _context.Reservations!.AnyAsync())
             {
                 return null;
             }
@@ -59,7 +59,7 @@
 
         public async Task<RevenueReportDto?> GenerateRevenueReport(DateTime startDate, DateTime endDate)
         {
-            if (!_context.Reservations!.Any() && !_context.HotelServiceOrders!.Any())
+            if (!await _context.Reservations!.AnyAsync() && !await _context.HotelServiceOrders!.AnyAsync())
             {
                 return null;
             }
@@ -92,7 +92,7 @@
 
         public async Task<IEnumerable<ProfitableHotelServiceReportDto>?> GenerateTopHotelServiceRevenueReport(int topN, DateTime startDate, DateTime endDate)
         {
-            if (!_context.HotelServiceOrders!.Any())
+            if (!await _context.HotelServiceOrders!.AnyAsync())
             {
                 return null;
             }
@@ -115,7 +115,7 @@
 
         public async Task<IEnumerable<ProfitableRoomReportDto>?> GenerateTopRoomRevenueReport(int topN, DateTime startDate, DateTime endDate)
         {
-            if (!_context.Reservations!.Any())
+            if (!await _context.Reservations!.AnyAsync())
             {
                 return null;
             }
