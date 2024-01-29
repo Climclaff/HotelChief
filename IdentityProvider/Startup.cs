@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using AutoMapper;
 using Duende.IdentityServer;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using Duende.IdentityServer.Services;
+using HotelChief.IdentityProvider.Mapping;
 using IdentityModel;
 using IdentityProvider.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -52,10 +54,18 @@ namespace IdentityProvider
             }
             );
             services.AddRazorPages();
-            
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                
             })
                 .AddGoogle(options =>
             {

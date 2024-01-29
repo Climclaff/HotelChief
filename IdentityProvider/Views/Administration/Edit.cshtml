@@ -1,4 +1,4 @@
-﻿@model HotelChief.API.ViewModels.GuestViewModel
+﻿@model HotelChief.IdentityProvider.ViewModels.IdentityUserViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,11 +12,6 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
-            </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
@@ -89,9 +84,9 @@
                 <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LoyaltyPoints" class="control-label"></label>
-                <input asp-for="LoyaltyPoints" class="form-control" />
-                <span asp-validation-for="LoyaltyPoints" class="text-danger"></span>
+                <label asp-for="IsEmployee" class="control-label"></label>
+                <input asp-for="IsEmployee" class="form-control" />
+                <span asp-validation-for="IsEmployee" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -105,5 +100,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

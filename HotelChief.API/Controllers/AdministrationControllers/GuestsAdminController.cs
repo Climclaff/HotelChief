@@ -29,14 +29,6 @@
             if (result != null)
             {
                 var viewModel = _mapper.Map<IEnumerable<Guest>, IEnumerable<GuestViewModel>>(result);
-                foreach (var user in viewModel)
-                {
-                    var guest = await _userManager.FindByIdAsync(user.Id.ToString());
-                    var claims = await _userManager.GetClaimsAsync(guest);
-                    var claim = claims.Where(x => x.Type == "IsEmployee").FirstOrDefault();
-                    user.IsEmployee = claim?.Value;
-                }
-
                 return View(viewModel);
             }
 
@@ -57,11 +49,6 @@
             }
 
             var viewModel = _mapper.Map<Guest, GuestViewModel>(entity);
-            var guest = await _userManager.FindByIdAsync(id.ToString());
-            var claims = await _userManager.GetClaimsAsync(guest);
-            var claim = claims.Where(x => x.Type == "IsEmployee").FirstOrDefault();
-
-            viewModel.IsEmployee = claim?.Value;
             return View(viewModel);
         }
 
@@ -79,17 +66,12 @@
             }
 
             var viewModel = _mapper.Map<Guest, GuestViewModel>(entity);
-            var guest = await _userManager.FindByIdAsync(id.ToString());
-            var claims = await _userManager.GetClaimsAsync(guest);
-            var claim = claims.Where(x => x.Type == "IsEmployee").FirstOrDefault();
-
-            viewModel.IsEmployee = claim?.Value;
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Email,PhoneNumber,UserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumberConfirmed,TwoFactorEnabled,NormalizedUserName,LockoutEnd,LockoutEnabled,AccessFailedCount,IsEmployee")] GuestViewModel entity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Email,PhoneNumber,UserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumberConfirmed,TwoFactorEnabled,NormalizedUserName,LockoutEnd,LockoutEnabled,AccessFailedCount,LoyaltyPoints")] GuestViewModel entity)
         {
             if (id != entity.Id)
             {
@@ -104,16 +86,9 @@
                     return View(entity);
                 }
 
-                var claims = await _userManager.GetClaimsAsync(guest);
-                var claim = claims.Where(x => x.Type == "IsEmployee").FirstOrDefault();
-
-                if (claim?.Value != entity.IsEmployee)
-                {
-                    await _userManager.ReplaceClaimAsync(guest, claim, new Claim("IsEmployee", entity.IsEmployee));
-                }
-
                 guest.FullName = entity.FullName;
                 guest.PhoneNumber = entity.PhoneNumber;
+                guest.LoyaltyPoints = entity.LoyaltyPoints;
                 _crudService.Update(guest);
                 await _crudService.Commit();
                 if (await FindGuest(id) == null)
@@ -142,11 +117,6 @@
             }
 
             var viewModel = _mapper.Map<Guest, GuestViewModel>(entity);
-            var guest = await _userManager.FindByIdAsync(id.ToString());
-            var claims = await _userManager.GetClaimsAsync(guest);
-            var claim = claims.Where(x => x.Type == "IsEmployee").FirstOrDefault();
-
-            viewModel.IsEmployee = claim?.Value;
             return View(viewModel);
         }
 
