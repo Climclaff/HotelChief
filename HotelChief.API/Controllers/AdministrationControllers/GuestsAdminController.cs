@@ -1,8 +1,8 @@
 ﻿namespace HotelChief.API.Controllers.AdministrationControllers
 {
-    using System.Security.Claims;
     using AutoMapper;
     using HotelChief.API.ViewModels;
+    using HotelChief.Core.Interfaces.IRepositories;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Authorization;
@@ -15,12 +15,18 @@
         private readonly IBaseCRUDService<Guest> _crudService;
         private readonly IMapper _mapper;
         private readonly UserManager<Guest> _userManager;
+        private readonly IGuestRepository _guestRepository;
 
-        public GuestsAdminController(IBaseCRUDService<Guest> crudService, UserManager<Guest> userManager, IMapper mapper)
+        public GuestsAdminController(
+            IBaseCRUDService<Guest> crudService,
+            UserManager<Guest> userManager,
+            IMapper mapper,
+            IGuestRepository guestRepository)
         {
             _crudService = crudService;
             _userManager = userManager;
             _mapper = mapper;
+            _guestRepository = guestRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -131,6 +137,8 @@
             }
 
             var entity = await FindGuest(id);
+            await _guestRepository.RemoveGuestReviewVotes(id);
+            await _guestRepository.RemoveEmployeeInfo(id);
             if (entity != null)
             {
                 await _crudService.DeleteAsync(entity.Id);

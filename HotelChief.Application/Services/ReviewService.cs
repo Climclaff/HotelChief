@@ -64,7 +64,7 @@
             ReviewGuestDownvote downvoter = (await _unitOfWork.GetRepository<ReviewGuestDownvote>().Get(r => r.ReviewId == reviewId && r.GuestId == userId)).FirstOrDefault();
             if (downvoter != null)
             {
-                await _unitOfWork.GetRepository<ReviewGuestDownvote>().DeleteAsync(downvoter.DownvoteId);
+                await _unitOfWork.GetRepository<ReviewGuestDownvote>().DeleteAsync((int)downvoter.DownvoteId);
                 review.Downvotes--;
             }
 
@@ -94,7 +94,7 @@
             ReviewGuestUpvote upvoter = (await _unitOfWork.GetRepository<ReviewGuestUpvote>().Get(r => r.ReviewId == reviewId && r.GuestId == userId)).FirstOrDefault();
             if (upvoter != null)
             {
-                await _unitOfWork.GetRepository<ReviewGuestUpvote>().DeleteAsync(upvoter.UpvoteId);
+                await _unitOfWork.GetRepository<ReviewGuestUpvote>().DeleteAsync((int)upvoter.UpvoteId);
                 review.Upvotes--;
             }
 

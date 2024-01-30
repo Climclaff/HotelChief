@@ -2,7 +2,7 @@
 {
     public class ReviewGuestDownvote
     {
-        public int DownvoteId { get; set; }
+        public int? DownvoteId { get; set; }
 
         public int? ReviewId { get; set; }
 

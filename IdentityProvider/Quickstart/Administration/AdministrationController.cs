@@ -9,8 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace HotelChief.IdentityProvider.Quickstart.Administration
 {
@@ -20,11 +25,17 @@ namespace HotelChief.IdentityProvider.Quickstart.Administration
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
-        public AdministrationController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IMapper mapper)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public AdministrationController(
+            ApplicationDbContext context,
+            UserManager<IdentityUser> userManager,
+            IMapper mapper,
+            IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _userManager = userManager;
             _mapper = mapper;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<IActionResult> Index()
@@ -164,9 +175,16 @@ namespace HotelChief.IdentityProvider.Quickstart.Administration
             }
 
             var entity = await FindGuest(id);
+            var httpClient = _httpClientFactory.CreateClient("RegistrationClient");
+
+            var serializedRegisterData = new StringContent(
+                    JsonSerializer.Serialize(entity.Email),
+                    Encoding.UTF8,
+                    Application.Json);
+            using var httpResponseMessage = await httpClient.PostAsync("api/Registration/RemoveAccount", serializedRegisterData);
             if (entity != null)
             {
-                _context.Remove(entity.Id);
+                _context.Remove(entity);
                 await _context.SaveChangesAsync();
             }
 

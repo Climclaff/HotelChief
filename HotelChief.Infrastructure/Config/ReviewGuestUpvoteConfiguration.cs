@@ -11,10 +11,6 @@
         {
             builder.HasKey(pt => pt.UpvoteId);
 
-           // builder.HasOne<Guest>().WithMany().HasForeignKey(h => h.GuestId).IsRequired();
-
-           // builder.HasOne<Review>().WithMany().HasForeignKey(h => h.ReviewId).IsRequired();
-
             builder.ToTable("ReviewUpvotes");
         }
     }

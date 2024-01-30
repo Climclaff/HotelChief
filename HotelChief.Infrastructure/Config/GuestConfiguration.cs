@@ -10,6 +10,16 @@
         {
             builder.ToTable("dbo.AspNetUsers");
             builder.Property(g => g.FullName).HasMaxLength(255);
+
+            builder.HasMany(r => r.UpvotedReviews)
+                .WithOne()
+                .HasForeignKey(ur => ur.GuestId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(r => r.DownvotedReviews)
+                .WithOne()
+                .HasForeignKey(dr => dr.GuestId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

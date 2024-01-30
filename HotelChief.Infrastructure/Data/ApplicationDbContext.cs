@@ -31,6 +31,10 @@
 
         public DbSet<Review>? Reviews { get; set; }
 
+        public DbSet<ReviewGuestDownvote>? ReviewDownvotes { get; set; }
+
+        public DbSet<ReviewGuestUpvote>? ReviewUpvotes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());

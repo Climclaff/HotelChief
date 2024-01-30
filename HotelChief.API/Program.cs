@@ -107,6 +107,7 @@ namespace HotelChief
             builder.Services.AddScoped(typeof(ILoyaltyService<>), typeof(LoyaltyService<>));
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
             builder.Services.AddScoped<IReportService, ReportService>();
+            builder.Services.AddScoped<IGuestRepository, GuestRepository>();
             builder.Services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
             builder.Services.Configure<SecurityStampValidatorOptions>(options =>

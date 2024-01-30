@@ -9,7 +9,9 @@
     <input type="date" name="endDate" required />
     <button type="submit">@SharedLocalizer["Generate_Report"]</button>
 </form>
-
+<div class="warning">
+    @TempData["Error_Message"]
+</div>
 @if (@Model != null)
 {
             <p>Total revenue: @Model.TotalRevenue</p>

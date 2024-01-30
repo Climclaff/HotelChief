@@ -8,10 +8,12 @@
     <label for="endDate">@SharedLocalizer["End_Date"]</label>
     <input type="date" name="endDate" required />
     <label for="topN">@SharedLocalizer["Top_N"]</label>
-    <input type="number" name="topN" required />
+    <input type="number" name="topN" required min="1" />
     <button type="submit">@SharedLocalizer["Generate_Report"]</button>
 </form>
-
+<div class="warning">
+    @TempData["Error_Message"]
+</div>
 @if (@Model != null)
 {
     <table class="table">

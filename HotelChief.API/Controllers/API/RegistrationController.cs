@@ -1,7 +1,10 @@
 ﻿namespace HotelChief.API.Controllers.API
 {
+    using AutoMapper;
     using HotelChief.API.Attributes;
     using HotelChief.API.ViewModels.IdentityServer;
+    using HotelChief.Core.Interfaces.IRepositories;
+    using HotelChief.Core.Interfaces.IServices;
     using HotelChief.Infrastructure.EFEntities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -11,10 +14,17 @@
     public class RegistrationController : ControllerBase
     {
         private readonly UserManager<Guest> _userManager;
+        private readonly IBaseCRUDService<Guest> _crudService;
+        private readonly IGuestRepository _guestRepository;
 
-        public RegistrationController(UserManager<Guest> userManager)
+        public RegistrationController(
+            UserManager<Guest> userManager,
+            IBaseCRUDService<Guest> crudService,
+            IGuestRepository guestRepository)
         {
             _userManager = userManager;
+            _crudService = crudService;
+            _guestRepository = guestRepository;
         }
 
         [HttpPost]
@@ -53,6 +63,25 @@
 
             if (result.Succeeded)
             {
+                return Ok();
+            }
+
+            return StatusCode(500);
+        }
+
+        [HttpPost]
+        [IdentityServerOnly] // Attrubute to secure calls (for development)
+        [Route("RemoveAccount")]
+        public async Task<IActionResult> RemoveAccount([FromBody] string email)
+        {
+            var entity = (await _crudService.Get(m => m.Email == email)).FirstOrDefault();
+            if (entity != null)
+            {
+                await _guestRepository.RemoveGuestReviewVotes(entity.Id);
+                await _guestRepository.RemoveEmployeeInfo(entity.Id);
+
+                await _crudService.DeleteAsync(entity.Id);
+                await _crudService.Commit();
                 return Ok();
             }
 
