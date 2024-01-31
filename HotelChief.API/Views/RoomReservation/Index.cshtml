@@ -4,33 +4,71 @@
 <h2>@Localizer["Available_Rooms"]</h2>
 <link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 
-<a class="nav-link custom-link" asp-area="" asp-controller="RoomReservation" asp-action="MyReservations"><i class="fa fa-list-alt"></i> @Localizer["My_Reservations"]</a>
+<a class="nav-link custom-link" asp-area="" asp-controller="RoomReservation" asp-action="MyReservations">
+    <i class="fa fa-list-alt"></i> @Localizer["My_Reservations"]
+</a>
 @Localizer["Payment_Warning"]
 @foreach (var room in Model.AvailableRooms)
 {
-    <h3>@Localizer["Room"] @room.RoomNumber</h3>
-    <p>@Localizer["Type"] @room.RoomType</p>
+    <div class="room-card">
+        <h3>@Localizer["Room"] @room.RoomNumber</h3>
+        <p>@Localizer["Type"] @room.RoomType</p>
 
-    <h4>@Localizer["Available_Timeslots"]</h4>
-    <form method="post" asp-controller="RoomReservation" asp-action="ReserveRoom">
-        <input type="hidden" name="roomNumber" value="@room.RoomNumber" />
+        <h4>@Localizer["Available_Timeslots"]</h4>
+        <form method="post" asp-controller="RoomReservation" asp-action="ReserveRoom" id="form_@room.RoomNumber">
+            <input type="hidden" name="roomNumber" value="@room.RoomNumber" />
 
-        <ul>
-            @foreach (var timeSlot in Model.AvailableTimeSlots[room.RoomNumber])
-            {
-                <li>
-                    <label>
-                        <input type="checkbox" name="selectedTimeSlots" value="@timeSlot.Item1.ToString("yyyy-MM-dd HH:mm") - @timeSlot.Item2.ToString("yyyy-MM-dd HH:mm")" />
-                        @timeSlot.Item1.ToString("yyyy-MM-dd HH:mm") - @timeSlot.Item2.ToString("yyyy-MM-dd HH:mm")
-                    </label>
-                </li>
-            }
-        </ul>
+            <ul class="time-slots">
+                @foreach (var timeSlot in Model.AvailableTimeSlots[room.RoomNumber])
+                {
+                    <li>
+                        <label>
+                            <input type="checkbox" name="selectedTimeSlots" value="@timeSlot.Item1.ToString("yyyy-MM-dd HH:mm") - @timeSlot.Item2.ToString("yyyy-MM-dd HH:mm")" />
+                            @timeSlot.Item1.ToString("yyyy-MM-dd HH:mm") - @timeSlot.Item2.ToString("yyyy-MM-dd HH:mm")
+                        </label>
+                    </li>
+                }
+            </ul>
 
-        <button type="submit">@Localizer["Reserve_Selected"]</button>
-        @Html.ValidationSummary()
-    </form>
+            <button type="button" class="submit-btn" data-form-id="@room.RoomNumber">
+                <i class="fa fa-calendar-plus"></i> @Localizer["Reserve_Selected"]
+            </button>
+            <div asp-validation-summary="All" class="text-danger" id="validationSummary_@room.RoomNumber"></div>
+        </form>
+    </div>
 }
+
+<style>
+    .room-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .time-slots {
+        list-style: none;
+        padding: 0;
+    }
+
+        .time-slots li {
+            margin-bottom: 10px;
+        }
+
+    .submit-btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        .submit-btn i {
+            margin-right: 5px;
+        }
+</style>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -45,4 +83,28 @@
             });
         </script>
     }
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.submit-btn').click(function () {
+                var formId = '#form_' + $(this).data('form-id');
+                var validationSummaryId = '#validationSummary_' + $(this).data('form-id');
+
+                $.ajax({
+                    url: $(formId).attr('action'),
+                    type: $(formId).attr('method'),
+                    data: $(formId).serialize(),
+                    success: function (data) {
+                        $(validationSummaryId).html($(data).find(validationSummaryId).html());
+
+                        // Check if the form is valid
+                        if ($(data).find(validationSummaryId + ' ul').length === 0) {
+                            // Form is valid, proceed with the redirection
+                            window.location.href = "/RoomReservation/ReservationPayment";
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 }

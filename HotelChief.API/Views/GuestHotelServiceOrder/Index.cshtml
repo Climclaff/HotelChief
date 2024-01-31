@@ -7,22 +7,28 @@
 <h2>@Localizer["Available_Hotel_Services"]</h2>
 @TempData["Orders_Amount_Exceeded"]
 @TempData["Discount_Status"]
-@foreach (var service in Model.HotelServices)
-{
-    <div>
-        <strong>@service.ServiceName</strong>
-        <p>@service.Description</p>
-        <p>@Localizer["Price"]: $@service.Price</p>
-        <form method="post" asp-action="PlaceOrder">
-            <input type="hidden" name="serviceId" value="@service.ServiceId" />
-            <label for="quantity">@Localizer["Quantity"]:</label>
-            <input type="number" name="quantity" value="1" min="1" />
-            <input type="hidden" name="orderStatus" id="orderStatus-@service.ServiceId" value="In queue" />
-            <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Order"]</button>
-        </form>
-        <hr />
-    </div>
-}
+<div class="service-carousel">
+    @foreach (var service in Model.HotelServices)
+    {
+        <div class="service-card">
+            <strong>@service.ServiceName</strong>
+            <p>@service.Description</p>
+            <p>@Localizer["Price"]: $@service.Price</p>
+            <form method="post" asp-action="PlaceOrder">
+                <input type="hidden" name="serviceId" value="@service.ServiceId" />
+                <label for="quantity">@Localizer["Quantity"]:</label>
+                <input type="number" name="quantity" value="1" min="1" />
+                <input type="hidden" name="orderStatus" id="orderStatus-@service.ServiceId" value="In queue" />
+                <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Order"]</button>
+            </form>
+            <hr />
+        </div>
+    }
+</div>
+
+<button class="arrow-btn" id="prev-btn"><i class="fa fa-chevron-left"></i></button>
+<button class="arrow-btn" id="next-btn"><i class="fa fa-chevron-right"></i></button>
+
 
 <h2>@Localizer["Your_Orders"]</h2>
 
@@ -81,7 +87,18 @@ else
     <p>@Localizer["No_Orders"]</p>
 }
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    .service-card {
+        display: none;
+    }
+
+        .service-card.active {
+            display: block;
+        }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
 <script>
 
@@ -102,3 +119,23 @@ else
     });
 </script>
 
+<script>
+    $(document).ready(function () {
+        var currentIndex = 0;
+        var totalServices = $(".service-card").length;
+
+        $(".service-card:first").addClass("active");
+
+        $("#next-btn").on("click", function () {
+            $(".service-card").removeClass("active");
+            currentIndex = (currentIndex + 1) % totalServices;
+            $(".service-card").eq(currentIndex).addClass("active");
+        });
+
+        $("#prev-btn").on("click", function () {
+            $(".service-card").removeClass("active");
+            currentIndex = (currentIndex - 1 + totalServices) % totalServices;
+            $(".service-card").eq(currentIndex).addClass("active");
+        });
+    });
+</script>
