@@ -2,9 +2,11 @@
 namespace HotelChief.Controllers
 {
     using System.Diagnostics;
+    using System.Security.Claims;
     using HotelChief.Core.Entities;
     using HotelChief.Core.Interfaces.IServices;
     using HotelChief.ViewModels;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,13 @@ namespace HotelChief.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = HttpContext.User;
+            var res = await HttpContext.AuthenticateAsync("Cookies");
+            if (res.Succeeded == true)
+            {
+                var identity = new ClaimsIdentity(res.Principal.Claims, "Identity.Application", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                HttpContext.User = new ClaimsPrincipal(identity);
+            }
+
             return View();
         }
 

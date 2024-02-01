@@ -14,7 +14,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Localization;
 
-    [Authorize(AuthenticationSchemes = "oidc")]
+    [Authorize(AuthenticationSchemes = "Cookies, oidc")]
     public class ReviewController : Controller
     {
         private readonly UserManager<Infrastructure.EFEntities.Guest> _userManager;
