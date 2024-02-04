@@ -16,3 +16,5 @@ In this project we consider the feasibility of implementation of the next functi
 - Loyalty program for guests.  ✓
 - Management of stocks and warehouse logistics.  ✗
 - Maintaining guest reviews and ratings.  ✓
+
+![Screenshot](hotelchiefdb.png)
