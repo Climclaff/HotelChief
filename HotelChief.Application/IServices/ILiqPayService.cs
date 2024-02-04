@@ -2,10 +2,10 @@
 {
     public interface ILiqPayService
     {
-        Task ChangePaidOrderStatus(string orderId);
+        Task ChangePaidOrderStatusAsync(string orderId);
 
-        Task ChangePaidReservationStatus(string orderId);
+        Task ChangePaidReservationStatusAsync(string orderId);
 
-        Task CancelUnpaidReservation(string orderId);
+        Task CancelUnpaidReservationAsync(string orderId);
     }
 }

@@ -26,9 +26,9 @@ namespace HotelChief.Application.Services
             await _unitOfWork.GetRepository<T>().DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "")
+        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "")
         {
-            return await _unitOfWork.GetRepository<T>().Get(filter, orderBy, includeProperties);
+            return await _unitOfWork.GetRepository<T>().GetAsync(filter, orderBy, includeProperties);
         }
 
         public void Update(T entity)
@@ -36,9 +36,9 @@ namespace HotelChief.Application.Services
              _unitOfWork.GetRepository<T>().Update(entity);
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
     }
 }

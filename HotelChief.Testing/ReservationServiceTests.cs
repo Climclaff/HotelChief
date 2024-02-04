@@ -33,7 +33,7 @@ namespace HotelChief.Testing
             var reservationService = new ReservationService(unitOfWorkMock.Object);
 
             // Act
-            var result = await reservationService.GetReservationsByGuestId(guestId);
+            var result = await reservationService.GetReservationsByGuestIdAsync(guestId);
 
             // Assert
             Assert.NotNull(result);
@@ -52,12 +52,12 @@ namespace HotelChief.Testing
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(uow => uow.GetRepository<Reservation>().AddAsync(reservation)).Verifiable();
-            unitOfWorkMock.Setup(uow => uow.Commit()).Returns(Task.CompletedTask).Verifiable();
+            unitOfWorkMock.Setup(uow => uow.CommitAsync()).Returns(Task.CompletedTask).Verifiable();
 
             var reservationService = new ReservationService(unitOfWorkMock.Object);
 
             // Act
-            var result = await reservationService.ReserveRoom(reservation);
+            var result = await reservationService.ReserveRoomAsync(reservation);
 
             // Assert
             Assert.NotNull(result);
@@ -65,7 +65,7 @@ namespace HotelChief.Testing
 
             // Verify that AddAsync and Commit were called
             unitOfWorkMock.Verify(uow => uow.GetRepository<Reservation>().AddAsync(reservation), Times.Once);
-            unitOfWorkMock.Verify(uow => uow.Commit(), Times.Once);
+            unitOfWorkMock.Verify(uow => uow.CommitAsync(), Times.Once);
         }
 
         [Fact]
@@ -81,13 +81,13 @@ namespace HotelChief.Testing
             var availableRooms = fixture.CreateMany<Room>().ToList();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(uow => uow.ReservationRepository.GetAvailableRooms(checkInDate, checkOutDate))
+            unitOfWorkMock.Setup(uow => uow.ReservationRepository.GetAvailableRoomsAsync(checkInDate, checkOutDate))
                 .ReturnsAsync(availableRooms);
 
             var reservationService = new ReservationService(unitOfWorkMock.Object);
 
             // Act
-            var result = await reservationService.GetAvailableRooms(checkInDate, checkOutDate);
+            var result = await reservationService.GetAvailableRoomsAsync(checkInDate, checkOutDate);
 
             // Assert
             Assert.NotNull(result);
@@ -120,7 +120,7 @@ namespace HotelChief.Testing
             var reservationService = new ReservationService(unitOfWorkMock.Object);
 
             // Act
-            var result = await reservationService.GetAvailableTimeSlots(roomNumber, startDate, endDate);
+            var result = await reservationService.GetAvailableTimeSlotsAsync(roomNumber, startDate, endDate);
 
             // Assert
             Assert.NotNull(result);
@@ -151,7 +151,7 @@ namespace HotelChief.Testing
             var reservationService = new ReservationService(unitOfWorkMock.Object);
 
             // Act
-            var result = await reservationService.CalculateReservationPrice(roomNumber, startDate, endDate);
+            var result = await reservationService.CalculateReservationPriceAsync(roomNumber, startDate, endDate);
 
             // Assert
             var expectedPrice = room.PricePerDay * (endDate.Date - startDate.Date).TotalDays +

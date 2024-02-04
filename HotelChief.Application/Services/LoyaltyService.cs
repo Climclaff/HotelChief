@@ -16,7 +16,7 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AssignLoyaltyPoints(T paymentActivity, int userId)
+        public async Task AssignLoyaltyPointsAsync(T paymentActivity, int userId)
         {
             double loyaltyPointsEarned = paymentActivity.Amount * 0.1;
             var user = await GetBusinessUser(userId);
@@ -31,7 +31,7 @@
             _unitOfWork.GetRepository<Guest>().Update(user);
         }
 
-        public async Task<T?> ApplyDiscount(T paymentActivity, int userId)
+        public async Task<T?> ApplyDiscountAsync(T paymentActivity, int userId)
         {
             if (paymentActivity.IsDiscounted)
             {
@@ -66,14 +66,14 @@
             return null;
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
         private async Task<Guest?> GetBusinessUser(int userId)
         {
-            var user = (await _unitOfWork.GetRepository<Guest>().Get(x => x.Id == userId)).FirstOrDefault();
+            var user = (await _unitOfWork.GetRepository<Guest>().GetAsync(x => x.Id == userId)).FirstOrDefault();
             if (user == null)
             {
                 return null;

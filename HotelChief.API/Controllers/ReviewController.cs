@@ -106,7 +106,7 @@
                 if (ModelState.IsValid)
                 {
                     await _reviewService.AddReviewAsync(_mapper.Map<ReviewViewModel, Review>(review));
-                    await _reviewService.Commit();
+                    await _reviewService.CommitAsync();
                     TempData["SuccessMessage"] = _localizer["Review shared"].ToString();
                     return RedirectToAction(nameof(Index));
                 }
@@ -143,7 +143,7 @@
                         if (isCommentOwner || isAdmin)
                         {
                             await _reviewService.DeleteReviewAsync(review);
-                            await _reviewService.Commit();
+                            await _reviewService.CommitAsync();
                             TempData["SuccessMessage"] = _localizer["Review deleted"].ToString();
                             return RedirectToAction(nameof(Index));
                         }

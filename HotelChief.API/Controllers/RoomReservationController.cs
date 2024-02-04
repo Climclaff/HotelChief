@@ -77,7 +77,7 @@ namespace HotelChief.API.Controllers
                 return RedirectToAction("Index");
             }
 
-            var userReservations = (await _reservationService.GetUserReservations(businessUser.Id)).ToList();
+            var userReservations = (await _reservationService.GetUserReservationsAsync(businessUser.Id)).ToList();
 
             return View(userReservations);
         }
@@ -108,7 +108,7 @@ namespace HotelChief.API.Controllers
                 return View("Index", await GetGuestReservationViewModel());
             }
 
-            var price = await _reservationService.CalculateReservationPrice(roomNumber, minStartDate, maxEndDate);
+            var price = await _reservationService.CalculateReservationPriceAsync(roomNumber, minStartDate, maxEndDate);
             var reservation = new Reservation
             {
                 RoomNumber = roomNumber,
@@ -118,25 +118,25 @@ namespace HotelChief.API.Controllers
                 GuestId = businessUser.Id,
             };
 
-            bool duplicateFound = await _reservationService.ContainsDuplicateReservation(reservation);
+            bool duplicateFound = await _reservationService.ContainsDuplicateReservationAsync(reservation);
             if (duplicateFound == true)
             {
                 return BadRequest();
             }
 
-            await _reservationService.ReserveRoom(reservation);
+            await _reservationService.ReserveRoomAsync(reservation);
             var connId = RoomReservationHub.ConnectedUsers.TryGetValue(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value, out var conn);
             if (conn != null)
             {
                 await _hubContext.Clients.AllExcept(conn).SendAsync("UpdateAvailableRooms");
             }
 
-            var dbReservation = (await _baseCRUDService.Get((x => x.GuestId == businessUser.Id && x.RoomNumber == roomNumber && x.CheckInDate == minStartDate && x.CheckOutDate == maxEndDate && x.Amount == price))).FirstOrDefault();
+            var dbReservation = (await _baseCRUDService.GetAsync((x => x.GuestId == businessUser.Id && x.RoomNumber == roomNumber && x.CheckInDate == minStartDate && x.CheckOutDate == maxEndDate && x.Amount == price))).FirstOrDefault();
             var jsonSettings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            BackgroundJob.Schedule(() => _payService.CancelUnpaidReservation(reservation.ReservationId.ToString()), DateTime.UtcNow + TimeSpan.FromMinutes(10));
+            BackgroundJob.Schedule(() => _payService.CancelUnpaidReservationAsync(reservation.ReservationId.ToString()), DateTime.UtcNow + TimeSpan.FromMinutes(10));
             var reservationJson = JsonConvert.SerializeObject(dbReservation, jsonSettings);
             TempData["ReservationInfo"] = reservationJson;
 
@@ -184,14 +184,14 @@ namespace HotelChief.API.Controllers
                 return RedirectToAction("Index");
             }
 
-            var reservation = (await _baseCRUDService.Get(x => x.ReservationId == reservationId)).FirstOrDefault();
+            var reservation = (await _baseCRUDService.GetAsync(x => x.ReservationId == reservationId)).FirstOrDefault();
             if (reservation == null)
             {
                 TempData["Discount_Status"] = _localizer["Reservation_Not_Found"].ToString();
                 return RedirectToAction("Index");
             }
 
-            var discountedOrder = await _loyaltyService.ApplyDiscount(reservation, businessUser.Id);
+            var discountedOrder = await _loyaltyService.ApplyDiscountAsync(reservation, businessUser.Id);
             if (discountedOrder == null)
             {
                 TempData["Discount_Status"] = _localizer["Unable_To_Apply_Discount"].ToString();
@@ -199,7 +199,7 @@ namespace HotelChief.API.Controllers
             }
 
             _baseCRUDService.Update(discountedOrder);
-            await _baseCRUDService.Commit();
+            await _baseCRUDService.CommitAsync();
             TempData["Discount_Status"] = _localizer["Discount_Success"].ToString();
             var jsonSettings = new JsonSerializerSettings
             {
@@ -212,14 +212,14 @@ namespace HotelChief.API.Controllers
 
         private async Task<GuestReservationViewModel> GetGuestReservationViewModel()
         {
-            var availableRooms = await _reservationService.GetAvailableRooms(DateTime.UtcNow, DateTime.UtcNow.AddDays(7));
+            var availableRooms = await _reservationService.GetAvailableRoomsAsync(DateTime.UtcNow, DateTime.UtcNow.AddDays(7));
             if (availableRooms.Any())
             {
                 var availableTimeSlots = new Dictionary<int, IEnumerable<Tuple<DateTime, DateTime>>>();
 
                 foreach (var room in availableRooms)
                 {
-                    var timeSlots = await _reservationService.GetAvailableTimeSlots(room.RoomNumber, DateTime.UtcNow, DateTime.UtcNow.AddDays(7));
+                    var timeSlots = await _reservationService.GetAvailableTimeSlotsAsync(room.RoomNumber, DateTime.UtcNow, DateTime.UtcNow.AddDays(7));
                     availableTimeSlots.TryAdd(room.RoomNumber, timeSlots);
                 }
 

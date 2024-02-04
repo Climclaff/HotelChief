@@ -4,6 +4,6 @@ namespace HotelChief.Core.Interfaces.IRepositories
 {
     public interface IReservationRepository
     {
-        Task<IEnumerable<Room>> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate);
+        Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime checkInDate, DateTime checkOutDate);
     }
 }

@@ -33,7 +33,7 @@
         [HttpPost]
         public async Task<IActionResult> GenerateEmployeeProductivityReport(DateTime startDate, DateTime endDate)
         {
-            var report = await _reportService.GenerateEmployeeProductivityReport(startDate, endDate);
+            var report = await _reportService.GenerateEmployeeProductivityReportAsync(startDate, endDate);
             if (report == null)
             {
                 TempData["Error_Message"] = _localizer["Error_Message"];
@@ -51,7 +51,7 @@
         [HttpPost]
         public async Task<IActionResult> GeneratePopularRoomsReport(int topN, DateTime startDate, DateTime endDate)
         {
-            var report = await _reportService.GeneratePopularRoomsReport(topN, startDate, endDate);
+            var report = await _reportService.GeneratePopularRoomsReportAsync(topN, startDate, endDate);
             if (report == null)
             {
                 TempData["Error_Message"] = _localizer["Error_Message"];
@@ -69,7 +69,7 @@
         [HttpPost]
         public async Task<IActionResult> GenerateRevenueReport(DateTime startDate, DateTime endDate)
         {
-            var report = await _reportService.GenerateRevenueReport(startDate, endDate);
+            var report = await _reportService.GenerateRevenueReportAsync(startDate, endDate);
             if (report == null)
             {
                 TempData["Error_Message"] = _localizer["Error_Message"];
@@ -87,7 +87,7 @@
         [HttpPost]
         public async Task<IActionResult> GenerateTopHotelServiceRevenueReport(int topN, DateTime startDate, DateTime endDate)
         {
-            var report = await _reportService.GenerateTopHotelServiceRevenueReport(topN, startDate, endDate);
+            var report = await _reportService.GenerateTopHotelServiceRevenueReportAsync(topN, startDate, endDate);
             if (report == null)
             {
                 TempData["Error_Message"] = _localizer["Error_Message"];
@@ -105,7 +105,7 @@
         [HttpPost]
         public async Task<IActionResult> GenerateTopRoomRevenueReport(int topN, DateTime startDate, DateTime endDate)
         {
-            var report = await _reportService.GenerateTopRoomRevenueReport(topN, startDate, endDate);
+            var report = await _reportService.GenerateTopRoomRevenueReportAsync(topN, startDate, endDate);
             if (report == null)
             {
                 TempData["Error_Message"] = _localizer["Error_Message"];

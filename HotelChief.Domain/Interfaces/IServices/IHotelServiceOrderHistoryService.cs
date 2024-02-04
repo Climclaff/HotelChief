@@ -2,6 +2,6 @@
 {
     public interface IHotelServiceOrderHistoryService
     {
-        Task MoveToFulfilledHistory(int orderId);
+        Task MoveToFulfilledHistoryAsync(int orderId);
     }
 }

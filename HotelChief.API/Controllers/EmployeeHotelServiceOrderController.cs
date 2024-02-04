@@ -44,7 +44,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var pendingOrders = await _orderCrudService.Get(
+            var pendingOrders = await _orderCrudService.GetAsync(
                 o => o.EmployeeId == null,
                 includeProperties: "HotelService");
 
@@ -60,7 +60,7 @@
                 return RedirectToAction("Index");
             }
 
-            var employeeOrders = await _serviceOrderService.GetEmployeeOrders(businessUser.Id);
+            var employeeOrders = await _serviceOrderService.GetEmployeeOrdersAsync(businessUser.Id);
 
             return View(employeeOrders);
         }
@@ -68,7 +68,7 @@
         [HttpPost]
         public async Task<IActionResult> AcceptOrder(int orderId)
         {
-            var order = (await _orderCrudService.Get(o => o.HotelServiceOrderId == orderId, includeProperties: "HotelService")).FirstOrDefault();
+            var order = (await _orderCrudService.GetAsync(o => o.HotelServiceOrderId == orderId, includeProperties: "HotelService")).FirstOrDefault();
 
             if (order == null)
             {
@@ -88,7 +88,7 @@
                 return RedirectToAction("Index");
             }
 
-            var employee = (await _employeeCrudService.Get(e => e.GuestId == businessUser.Id)).FirstOrDefault();
+            var employee = (await _employeeCrudService.GetAsync(e => e.GuestId == businessUser.Id)).FirstOrDefault();
             if (employee == null)
             {
                 return NotFound();
@@ -97,7 +97,7 @@
             order.EmployeeId = employee.EmployeeId;
             order.OrderStatus = "Accepted";
             _orderCrudService.Update(order);
-            await _orderCrudService.Commit();
+            await _orderCrudService.CommitAsync();
 
             var targetUser = await _userManager.FindByIdAsync(order.GuestId.ToString());
 
@@ -117,7 +117,7 @@
         [HttpPost]
         public async Task<IActionResult> FulfillOrder(int orderId)
         {
-            var order = (await _orderCrudService.Get(o => o.HotelServiceOrderId == orderId)).FirstOrDefault();
+            var order = (await _orderCrudService.GetAsync(o => o.HotelServiceOrderId == orderId)).FirstOrDefault();
 
             if (order == null)
             {
@@ -126,9 +126,9 @@
 
             order.OrderStatus = "Fulfilled";
             _orderCrudService.Update(order);
-            await _orderCrudService.Commit();
+            await _orderCrudService.CommitAsync();
 
-            await _hotelHistoryService.MoveToFulfilledHistory(orderId);
+            await _hotelHistoryService.MoveToFulfilledHistoryAsync(orderId);
 
             return RedirectToAction("EmployeeOrders");
         }

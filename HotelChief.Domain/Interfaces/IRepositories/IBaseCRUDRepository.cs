@@ -1,11 +1,10 @@
 ﻿namespace HotelChief.Core.Interfaces.IRepositories
 {
-    using HotelChief.Core.Entities;
     using System.Linq.Expressions;
 
     public interface IBaseCRUDRepository<T>
     {
-        Task<IReadOnlyList<T>> Get(
+        Task<IReadOnlyList<T>> GetAsync(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "");

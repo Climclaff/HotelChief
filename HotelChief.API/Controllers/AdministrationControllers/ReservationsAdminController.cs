@@ -31,7 +31,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var result = await _crudService.Get();
+            var result = await _crudService.GetAsync();
             if (result != null)
             {
                 return View(_mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationViewModel>>(result));
@@ -42,7 +42,7 @@
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -72,7 +72,7 @@
             {
                 var mappedEntity = _mapper.Map<ReservationViewModel, Reservation>(entity);
                 await _crudService.AddAsync(mappedEntity);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -82,7 +82,7 @@
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@
             {
                 var mappedEntity = _mapper.Map<ReservationViewModel, Reservation>(entity);
                 _crudService.Update(mappedEntity);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 if (await FindReservation(id) == null)
                 {
                     return NotFound();
@@ -126,7 +126,7 @@
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -145,7 +145,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _crudService.Get() == null)
+            if (await _crudService.GetAsync() == null)
             {
                 return Problem("There are no reservations");
             }
@@ -154,7 +154,7 @@
             if (entity != null)
             {
                 await _crudService.DeleteAsync(entity.ReservationId);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
             }
 
             return RedirectToAction(nameof(Index));
@@ -162,17 +162,17 @@
 
         private async Task<Reservation?> FindReservation(int? id)
         {
-            return (await _crudService.Get(m => m.ReservationId == id)).FirstOrDefault();
+            return (await _crudService.GetAsync(m => m.ReservationId == id)).FirstOrDefault();
         }
 
         private async Task<ReservationViewModel> FillTheLists(ReservationViewModel viewModel)
         {
-            viewModel.Guests = (await _guestService.Get()).Select(e => new SelectListItem
+            viewModel.Guests = (await _guestService.GetAsync()).Select(e => new SelectListItem
             {
                 Value = e.Id.ToString(),
                 Text = e.Id.ToString() + " " + e.FullName,
             });
-            viewModel.Rooms = (await _roomService.Get()).Select(s => new SelectListItem
+            viewModel.Rooms = (await _roomService.GetAsync()).Select(s => new SelectListItem
             {
                 Value = s.RoomNumber.ToString(),
                 Text = s.RoomNumber.ToString() + " " + s.RoomType,

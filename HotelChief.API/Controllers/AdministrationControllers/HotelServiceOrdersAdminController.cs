@@ -36,7 +36,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var result = await _crudService.Get();
+            var result = await _crudService.GetAsync();
             if (result != null)
             {
                 return View(_mapper.Map<IEnumerable<HotelServiceOrder>, IEnumerable<HotelServiceOrderViewModel>>(result));
@@ -47,7 +47,7 @@
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -77,7 +77,7 @@
             {
                 var mappedEntity = _mapper.Map<HotelServiceOrderViewModel, HotelServiceOrder>(entity);
                 await _crudService.AddAsync(mappedEntity);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -87,7 +87,7 @@
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -116,7 +116,7 @@
             {
                 var mappedEntity = _mapper.Map<HotelServiceOrderViewModel, HotelServiceOrder>(entity);
                 _crudService.Update(mappedEntity);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 if (await FindHotelServiceOrder(id) == null)
                 {
                     return NotFound();
@@ -131,7 +131,7 @@
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -150,7 +150,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _crudService.Get() == null)
+            if (await _crudService.GetAsync() == null)
             {
                 return Problem("There are no hotel service orders");
             }
@@ -159,7 +159,7 @@
             if (entity != null)
             {
                 await _crudService.DeleteAsync(entity.HotelServiceOrderId);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
             }
 
             return RedirectToAction(nameof(Index));
@@ -167,22 +167,22 @@
 
         private async Task<HotelServiceOrder?> FindHotelServiceOrder(int? id)
         {
-            return (await _crudService.Get(m => m.HotelServiceOrderId == id)).FirstOrDefault();
+            return (await _crudService.GetAsync(m => m.HotelServiceOrderId == id)).FirstOrDefault();
         }
 
         private async Task<HotelServiceOrderViewModel> FillTheLists(HotelServiceOrderViewModel viewModel)
         {
-            viewModel.Guests = (await _guestService.Get()).Select(e => new SelectListItem
+            viewModel.Guests = (await _guestService.GetAsync()).Select(e => new SelectListItem
             {
                 Value = e.Id.ToString(),
                 Text = e.Id.ToString() + " " + e.FullName,
             });
-            viewModel.Employees = (await _employeeService.Get()).Select(s => new SelectListItem
+            viewModel.Employees = (await _employeeService.GetAsync()).Select(s => new SelectListItem
             {
                 Value = s.EmployeeId.ToString(),
                 Text = s.EmployeeId.ToString() + " " + s.FullName,
             });
-            viewModel.Services = (await _hotelServiceService.Get()).Select(s => new SelectListItem
+            viewModel.Services = (await _hotelServiceService.GetAsync()).Select(s => new SelectListItem
             {
                 Value = s.ServiceId.ToString(),
                 Text = s.ServiceId.ToString() + " " + s.ServiceName,

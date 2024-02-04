@@ -49,7 +49,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var hotelServices = await _hotelServicesService.Get();
+            var hotelServices = await _hotelServicesService.GetAsync();
             var userEmail = HttpContext.User.FindFirst("email")?.Value;
             var businessUser = await _userManager.FindByEmailAsync(userEmail);
             if (businessUser == null)
@@ -57,7 +57,7 @@
                 return RedirectToAction("Index");
             }
 
-            var userOrders = await _orderService.GetUserOrders(Convert.ToInt32(businessUser.Id));
+            var userOrders = await _orderService.GetUserOrdersAsync(Convert.ToInt32(businessUser.Id));
 
             var totalCost = userOrders.Where(x => x.PaymentStatus == false).Sum(s => s.Amount);
             if (totalCost <= 0)
@@ -93,13 +93,13 @@
                 return RedirectToAction("Index");
             }
 
-            var userOrders = await _orderService.GetUserOrders(Convert.ToInt32(businessUser.Id));
+            var userOrders = await _orderService.GetUserOrdersAsync(Convert.ToInt32(businessUser.Id));
             if (userOrders.Where(x => x.PaymentStatus == false).Count() >= 20)
             {
                 TempData["Orders_Amount_Exceeded"] = _localizer["Orders_Amount_Exceeded"].ToString();
             }
 
-            var hotelService = (await _hotelServicesService.Get(s => s.ServiceId == serviceId)).FirstOrDefault();
+            var hotelService = (await _hotelServicesService.GetAsync(s => s.ServiceId == serviceId)).FirstOrDefault();
 
             if (hotelService == null)
             {
@@ -119,7 +119,7 @@
             };
 
             await _orderCrudService.AddAsync(order);
-            await _orderCrudService.Commit();
+            await _orderCrudService.CommitAsync();
             await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
             return RedirectToAction("Index");
         }
@@ -127,7 +127,7 @@
         [HttpPost]
         public async Task<IActionResult> CancelUnpaidOrder(int hotelServiceOrderId)
         {
-            var order = (await _orderCrudService.Get(x => x.HotelServiceOrderId == hotelServiceOrderId)).FirstOrDefault();
+            var order = (await _orderCrudService.GetAsync(x => x.HotelServiceOrderId == hotelServiceOrderId)).FirstOrDefault();
 
             if (order == null || order.PaymentStatus == true)
             {
@@ -141,8 +141,8 @@
                 return RedirectToAction("Index");
             }
 
-            await _orderService.CancelUnpaidOrder(order.HotelServiceOrderId);
-            await _orderService.Commit();
+            await _orderService.CancelUnpaidOrderAsync(order.HotelServiceOrderId);
+            await _orderService.CommitAsync();
 
             await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
             return RedirectToAction("Index");
@@ -158,14 +158,14 @@
                 return RedirectToAction("Index");
             }
 
-            var order = (await _orderCrudService.Get(x => x.HotelServiceOrderId == orderId)).FirstOrDefault();
+            var order = (await _orderCrudService.GetAsync(x => x.HotelServiceOrderId == orderId)).FirstOrDefault();
             if (order == null)
             {
                 TempData["Discount_Status"] = _localizer["Order_Not_Found"].ToString();
                 return RedirectToAction("Index");
             }
 
-            var discountedOrder = await _loyaltyService.ApplyDiscount(order, businessUser.Id);
+            var discountedOrder = await _loyaltyService.ApplyDiscountAsync(order, businessUser.Id);
             if (discountedOrder == null)
             {
                 TempData["Discount_Status"] = _localizer["Unable_To_Apply_Discount"].ToString();
@@ -173,7 +173,7 @@
             }
 
             _orderCrudService.Update(discountedOrder);
-            await _orderCrudService.Commit();
+            await _orderCrudService.CommitAsync();
             TempData["Discount_Status"] = _localizer["Discount_Success"].ToString();
             return RedirectToAction("Index");
         }

@@ -4,10 +4,10 @@
 
     public interface IRoomCleaningService
     {
-        Task<IEnumerable<RoomCleaning>> GetSchedule();
+        Task<IEnumerable<RoomCleaning>> GetScheduleAsync();
 
-        Task ScheduleRoomCleaning();
+        Task ScheduleRoomCleaningAsync();
 
-        Task CleanRoom(int roomNumber, int employeeId, DateTime startDate, DateTime endDate);
+        Task CleanRoomAsync(int roomNumber, int employeeId, DateTime startDate, DateTime endDate);
     }
 }

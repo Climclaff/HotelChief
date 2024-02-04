@@ -14,9 +14,9 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task MoveToFulfilledHistory(int orderId)
+        public async Task MoveToFulfilledHistoryAsync(int orderId)
         {
-            var order = (await _unitOfWork.GetRepository<HotelServiceOrder>().Get(o => o.HotelServiceOrderId == orderId)).FirstOrDefault();
+            var order = (await _unitOfWork.GetRepository<HotelServiceOrder>().GetAsync(o => o.HotelServiceOrderId == orderId)).FirstOrDefault();
 
             if (order != null && order.OrderStatus == "Fulfilled")
             {
@@ -38,7 +38,7 @@
 
                 await _unitOfWork.GetRepository<HotelServiceOrder>().DeleteAsync(order.HotelServiceOrderId);
 
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
             }
         }
     }

@@ -21,7 +21,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var result = await _crudService.Get();
+            var result = await _crudService.GetAsync();
             if (result != null)
             {
                 return View(_mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(result));
@@ -32,7 +32,7 @@
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -58,7 +58,7 @@
             if (ModelState.IsValid)
             {
                 await _crudService.AddAsync(entity);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -67,7 +67,7 @@
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -93,7 +93,7 @@
             if (ModelState.IsValid)
             {
                 _crudService.Update(entity);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 if (await FindEmployee(id) == null)
                 {
                     return NotFound();
@@ -107,7 +107,7 @@
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -126,7 +126,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _crudService.Get() == null)
+            if (await _crudService.GetAsync() == null)
             {
                 return Problem("There are no employees");
             }
@@ -135,7 +135,7 @@
             if (entity != null)
             {
                await _crudService.DeleteAsync(entity.EmployeeId);
-               await _crudService.Commit();
+               await _crudService.CommitAsync();
             }
 
             return RedirectToAction(nameof(Index));
@@ -143,7 +143,7 @@
 
         private async Task<Employee?> FindEmployee(int? id)
         {
-          return (await _crudService.Get(m => m.EmployeeId == id)).FirstOrDefault();
+          return (await _crudService.GetAsync(m => m.EmployeeId == id)).FirstOrDefault();
         }
     }
 }

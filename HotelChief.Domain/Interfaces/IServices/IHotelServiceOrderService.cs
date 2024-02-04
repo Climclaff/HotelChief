@@ -4,12 +4,12 @@
 
     public interface IHotelServiceOrderService
     {
-        Task<IEnumerable<HotelServiceOrder>> GetUserOrders(int guestId);
+        Task<IEnumerable<HotelServiceOrder>> GetUserOrdersAsync(int guestId);
 
-        Task<IEnumerable<HotelServiceOrder>> GetEmployeeOrders(int employeeId);
+        Task<IEnumerable<HotelServiceOrder>> GetEmployeeOrdersAsync(int employeeId);
 
-        Task CancelUnpaidOrder(int hotelServiceOrderId);
+        Task CancelUnpaidOrderAsync(int hotelServiceOrderId);
 
-        Task Commit();
+        Task CommitAsync();
     }
 }

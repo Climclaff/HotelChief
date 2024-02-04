@@ -5,10 +5,10 @@
     public interface ILoyaltyService<T>
         where T : Booking
     {
-        Task AssignLoyaltyPoints(T paymentActivity, int userId);
+        Task AssignLoyaltyPointsAsync(T paymentActivity, int userId);
 
-        Task<T?> ApplyDiscount(T paymentActivity, int userId);
+        Task<T?> ApplyDiscountAsync(T paymentActivity, int userId);
 
-        Task Commit();
+        Task CommitAsync();
     }
 }

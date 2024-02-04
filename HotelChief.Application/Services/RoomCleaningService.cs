@@ -23,21 +23,21 @@
             _botService = botService;
         }
 
-        public async Task<IEnumerable<RoomCleaning>> GetSchedule()
+        public async Task<IEnumerable<RoomCleaning>> GetScheduleAsync()
         {
-            return (await _unitOfWork.GetRepository<RoomCleaning>().Get(includeProperties: "Employee")).ToImmutableList();
+            return (await _unitOfWork.GetRepository<RoomCleaning>().GetAsync(includeProperties: "Employee")).ToImmutableList();
         }
 
-        public async Task ScheduleRoomCleaning()
+        public async Task ScheduleRoomCleaningAsync()
         {
             _unitOfWork.GetRepository<RoomCleaning>().DeleteAll(); // Clear the previous schedule before generating a new one
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
 
-            var janitors = (await _unitOfWork.GetRepository<Employee>().Get(e => e.Role == "Janitor" && e.OnVacation == false, includeProperties: "RoomCleanings"))
+            var janitors = (await _unitOfWork.GetRepository<Employee>().GetAsync(e => e.Role == "Janitor" && e.OnVacation == false, includeProperties: "RoomCleanings"))
                 .OrderBy(e => e.RoomCleanings.Count)
                 .ToList();
 
-            var roomsToClean = (await _unitOfWork.GetRepository<Room>().Get()).ToList();
+            var roomsToClean = (await _unitOfWork.GetRepository<Room>().GetAsync()).ToList();
 
             if (janitors.Count == 0)
             {
@@ -92,17 +92,17 @@
                     janitor.EmployeeId,
                     startDate,
                     endDate));
-                await CleanRoom(room.RoomNumber, janitor.EmployeeId, startDate, endDate);
+                await CleanRoomAsync(room.RoomNumber, janitor.EmployeeId, startDate, endDate);
             }
 
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
             foreach (var jobParameter in jobParametersList)
             {
                 BackgroundJob.Schedule(() => SendCleaningNotification(jobParameter), jobParameter.StartDate.Subtract(TimeSpan.FromMinutes(5)));
             }
         }
 
-        public async Task CleanRoom(int roomNumber, int employeeId, DateTime startDate, DateTime endDate)
+        public async Task CleanRoomAsync(int roomNumber, int employeeId, DateTime startDate, DateTime endDate)
         {
             RoomCleaning roomCleaning = new RoomCleaning() { EmployeeId = employeeId, RoomNumber = roomNumber, StartDate = startDate, EndDate = endDate };
             await _unitOfWork.GetRepository<RoomCleaning>().AddAsync(roomCleaning);

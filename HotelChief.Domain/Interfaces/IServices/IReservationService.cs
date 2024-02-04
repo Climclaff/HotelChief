@@ -4,18 +4,18 @@
 
     public interface IReservationService
     {
-        Task<double> CalculateReservationPrice(int roomNumber, DateTime startDate, DateTime endDate);
+        Task<double> CalculateReservationPriceAsync(int roomNumber, DateTime startDate, DateTime endDate);
 
-        Task<Reservation> ReserveRoom(Reservation reservation);
+        Task<Reservation> ReserveRoomAsync(Reservation reservation);
 
-        Task<IEnumerable<Room>> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate);
+        Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime checkInDate, DateTime checkOutDate);
 
-        Task<IEnumerable<Tuple<DateTime, DateTime>>> GetAvailableTimeSlots(int roomNumber, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<Tuple<DateTime, DateTime>>> GetAvailableTimeSlotsAsync(int roomNumber, DateTime startDate, DateTime endDate);
 
-        Task<bool> ContainsDuplicateReservation(Reservation reservation);
+        Task<bool> ContainsDuplicateReservationAsync(Reservation reservation);
 
-        Task<IEnumerable<Reservation>> GetUserReservations(int userId);
+        Task<IEnumerable<Reservation>> GetUserReservationsAsync(int userId);
 
-        Task Commit();
+        Task CommitAsync();
     }
 }

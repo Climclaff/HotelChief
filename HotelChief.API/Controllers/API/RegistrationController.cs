@@ -74,14 +74,14 @@
         [Route("RemoveAccount")]
         public async Task<IActionResult> RemoveAccount([FromBody] string email)
         {
-            var entity = (await _crudService.Get(m => m.Email == email)).FirstOrDefault();
+            var entity = (await _crudService.GetAsync(m => m.Email == email)).FirstOrDefault();
             if (entity != null)
             {
-                await _guestRepository.RemoveGuestReviewVotes(entity.Id);
-                await _guestRepository.RemoveEmployeeInfo(entity.Id);
+                await _guestRepository.RemoveGuestReviewVotesAsync(entity.Id);
+                await _guestRepository.RemoveEmployeeInfoAsync(entity.Id);
 
                 await _crudService.DeleteAsync(entity.Id);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 return Ok();
             }
 

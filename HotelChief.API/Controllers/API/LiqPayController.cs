@@ -69,10 +69,10 @@ namespace HotelChief.API.Controllers.API
             if (request_data_dictionary["status"] == "sandbox" || request_data_dictionary["status"] == "success")
             {
                 var orderId = request_data_dictionary["order_id"];
-                await _iLiqPayService.ChangePaidOrderStatus(orderId);
+                await _iLiqPayService.ChangePaidOrderStatusAsync(orderId);
                 await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
 
-                var order = (await _orderCRUDService.Get(x => x.HotelServiceOrderId == Convert.ToInt32(orderId))).FirstOrDefault();
+                var order = (await _orderCRUDService.GetAsync(x => x.HotelServiceOrderId == Convert.ToInt32(orderId))).FirstOrDefault();
                 if (order != null)
                 {
                     var guest = (await _userManager.FindByIdAsync(order.GuestId.ToString()));
@@ -85,8 +85,8 @@ namespace HotelChief.API.Controllers.API
                         }
                     }
 
-                    await _hotelServiceOrderLoyaltyService.AssignLoyaltyPoints(order, guest.Id);
-                    await _hotelServiceOrderLoyaltyService.Commit();
+                    await _hotelServiceOrderLoyaltyService.AssignLoyaltyPointsAsync(order, guest.Id);
+                    await _hotelServiceOrderLoyaltyService.CommitAsync();
                     await _employeeHubContext.Clients.All.SendAsync("RefreshOrders");
                     return Ok();
                 }
@@ -117,19 +117,19 @@ namespace HotelChief.API.Controllers.API
 
             if (request_data_dictionary["status"] == "success")
             {
-                var reservation = (await _reservationCRUDService.Get(x => x.ReservationId == Convert.ToInt32(orderId))).FirstOrDefault();
+                var reservation = (await _reservationCRUDService.GetAsync(x => x.ReservationId == Convert.ToInt32(orderId))).FirstOrDefault();
                 if (reservation != null)
                 {
-                    await _iLiqPayService.ChangePaidReservationStatus(orderId);
+                    await _iLiqPayService.ChangePaidReservationStatusAsync(orderId);
                     var guest = (await _userManager.FindByIdAsync(reservation.GuestId.ToString()));
-                    await _reservationLoyaltyService.AssignLoyaltyPoints(reservation, guest.Id);
-                    await _reservationLoyaltyService.Commit();
+                    await _reservationLoyaltyService.AssignLoyaltyPointsAsync(reservation, guest.Id);
+                    await _reservationLoyaltyService.CommitAsync();
                     return Ok();
                 }
             }
             else
             {
-                await _iLiqPayService.CancelUnpaidReservation(orderId);
+                await _iLiqPayService.CancelUnpaidReservationAsync(orderId);
                 return Ok();
             }
 

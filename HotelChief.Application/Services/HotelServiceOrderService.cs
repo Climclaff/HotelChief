@@ -15,27 +15,27 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<HotelServiceOrder>> GetUserOrders(int guestId)
+        public async Task<IEnumerable<HotelServiceOrder>> GetUserOrdersAsync(int guestId)
         {
-            return await _unitOfWork.GetRepository<HotelServiceOrder>().Get(
+            return await _unitOfWork.GetRepository<HotelServiceOrder>().GetAsync(
                 order => order.GuestId == guestId, includeProperties: "HotelService");
         }
 
-        public async Task<IEnumerable<HotelServiceOrder>> GetEmployeeOrders(int guestId)
+        public async Task<IEnumerable<HotelServiceOrder>> GetEmployeeOrdersAsync(int guestId)
         {
-            return await _unitOfWork.GetRepository<HotelServiceOrder>().Get(
+            return await _unitOfWork.GetRepository<HotelServiceOrder>().GetAsync(
                     order => order.Employee.GuestId == guestId && order.OrderStatus != "Fulfilled",
                     includeProperties: "HotelService");
         }
 
-        public async Task CancelUnpaidOrder(int hotelServiceOrderId)
+        public async Task CancelUnpaidOrderAsync(int hotelServiceOrderId)
         {
             await _unitOfWork.GetRepository<HotelServiceOrder>().DeleteAsync(hotelServiceOrderId);
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
     }
 }

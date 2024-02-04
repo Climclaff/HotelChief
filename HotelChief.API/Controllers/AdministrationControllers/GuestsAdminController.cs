@@ -31,7 +31,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var result = await _crudService.Get();
+            var result = await _crudService.GetAsync();
             if (result != null)
             {
                 var viewModel = _mapper.Map<IEnumerable<Guest>, IEnumerable<GuestViewModel>>(result);
@@ -43,7 +43,7 @@
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -60,7 +60,7 @@
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -96,7 +96,7 @@
                 guest.PhoneNumber = entity.PhoneNumber;
                 guest.LoyaltyPoints = entity.LoyaltyPoints;
                 _crudService.Update(guest);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
                 if (await FindGuest(id) == null)
                 {
                     return NotFound();
@@ -111,7 +111,7 @@
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || await _crudService.Get() == null)
+            if (id == null || await _crudService.GetAsync() == null)
             {
                 return NotFound();
             }
@@ -131,18 +131,18 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _crudService.Get() == null)
+            if (await _crudService.GetAsync() == null)
             {
                 return Problem("There are no guests");
             }
 
             var entity = await FindGuest(id);
-            await _guestRepository.RemoveGuestReviewVotes(id);
-            await _guestRepository.RemoveEmployeeInfo(id);
+            await _guestRepository.RemoveGuestReviewVotesAsync(id);
+            await _guestRepository.RemoveEmployeeInfoAsync(id);
             if (entity != null)
             {
                 await _crudService.DeleteAsync(entity.Id);
-                await _crudService.Commit();
+                await _crudService.CommitAsync();
             }
 
             return RedirectToAction(nameof(Index));
@@ -150,7 +150,7 @@
 
         private async Task<Guest?> FindGuest(int? id)
         {
-            return (await _crudService.Get(m => m.Id == id)).FirstOrDefault();
+            return (await _crudService.GetAsync(m => m.Id == id)).FirstOrDefault();
         }
     }
 }

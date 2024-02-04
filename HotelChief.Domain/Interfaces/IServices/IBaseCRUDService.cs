@@ -4,7 +4,7 @@
 
     public interface IBaseCRUDService<T>
     {
-        Task<IEnumerable<T>> Get(
+        Task<IEnumerable<T>> GetAsync(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "");
@@ -15,6 +15,6 @@
 
         Task DeleteAsync(int id);
 
-        Task Commit();
+        Task CommitAsync();
     }
 }

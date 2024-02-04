@@ -10,7 +10,7 @@
 
         IReservationRepository ReservationRepository { get; }
 
-        Task Commit();
+        Task CommitAsync();
 
         IBaseCRUDRepository<T> GetRepository<T>()
             where T : class;

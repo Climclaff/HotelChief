@@ -44,7 +44,7 @@ namespace HotelChief.Infrastructure.UoW
              _context.Dispose();
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
             await _context.SaveChangesAsync();
         }

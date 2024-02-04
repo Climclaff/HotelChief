@@ -17,7 +17,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var schedule = await _roomCleaningService.GetSchedule();
+            var schedule = await _roomCleaningService.GetScheduleAsync();
             RoomCleaningViewModel model = new RoomCleaningViewModel();
             model.RoomCleanings = schedule;
             return View(model);

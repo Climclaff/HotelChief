@@ -171,7 +171,7 @@ namespace HotelChief
                 endpoints.MapHub<EmployeeHotelServiceOrderHub>("/employeeHotelServiceOrderHub");
             });
             app.MapRazorPages();
-            RecurringJob.AddOrUpdate<IRoomCleaningService>(x => x.ScheduleRoomCleaning(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IRoomCleaningService>(x => x.ScheduleRoomCleaningAsync(), Cron.Daily);
             app.Run();
         }
     }

@@ -2,8 +2,8 @@
 {
     public interface IGuestRepository
     {
-        Task RemoveGuestReviewVotes(int guestId);
+        Task RemoveGuestReviewVotesAsync(int guestId);
 
-        Task RemoveEmployeeInfo(int guestId);
+        Task RemoveEmployeeInfoAsync(int guestId);
     }
 }

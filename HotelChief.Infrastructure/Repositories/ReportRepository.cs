@@ -15,7 +15,7 @@
             _context = context;
         }
 
-        public async Task<IEnumerable<EmployeeProductivityReportDto>?> GenerateEmployeeProductivityReport(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<EmployeeProductivityReportDto>?> GenerateEmployeeProductivityReportAsync(DateTime startDate, DateTime endDate)
         {
             if (!await _context.Employees!.AnyAsync())
             {
@@ -35,7 +35,7 @@
             return employeeProductivity;
         }
 
-        public async Task<IEnumerable<PopularRoomReportDto>?> GeneratePopularRoomsReport(int topN, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<PopularRoomReportDto>?> GeneratePopularRoomsReportAsync(int topN, DateTime startDate, DateTime endDate)
         {
             if (!await _context.Reservations!.AnyAsync())
             {
@@ -57,7 +57,7 @@
             return popularRooms;
         }
 
-        public async Task<RevenueReportDto?> GenerateRevenueReport(DateTime startDate, DateTime endDate)
+        public async Task<RevenueReportDto?> GenerateRevenueReportAsync(DateTime startDate, DateTime endDate)
         {
             if (!await _context.Reservations!.AnyAsync() && !await _context.HotelServiceOrders!.AnyAsync())
             {
@@ -90,7 +90,7 @@
             };
         }
 
-        public async Task<IEnumerable<ProfitableHotelServiceReportDto>?> GenerateTopHotelServiceRevenueReport(int topN, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<ProfitableHotelServiceReportDto>?> GenerateTopHotelServiceRevenueReportAsync(int topN, DateTime startDate, DateTime endDate)
         {
             if (!await _context.HotelServiceOrders!.AnyAsync())
             {
@@ -113,7 +113,7 @@
             return topHotelServiceRevenue;
         }
 
-        public async Task<IEnumerable<ProfitableRoomReportDto>?> GenerateTopRoomRevenueReport(int topN, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<ProfitableRoomReportDto>?> GenerateTopRoomRevenueReportAsync(int topN, DateTime startDate, DateTime endDate)
         {
             if (!await _context.Reservations!.AnyAsync())
             {

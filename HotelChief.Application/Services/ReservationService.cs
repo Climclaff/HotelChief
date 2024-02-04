@@ -14,31 +14,26 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
         }
 
-        public async Task<IEnumerable<Reservation>> GetReservationsByGuestId(int guestId)
-        {
-            return await _unitOfWork.GetRepository<Reservation>().Get(r => r.GuestId == guestId);
-        }
-
-        public async Task<Reservation> ReserveRoom(Reservation reservation)
+        public async Task<Reservation> ReserveRoomAsync(Reservation reservation)
         {
             await _unitOfWork.GetRepository<Reservation>().AddAsync(reservation);
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
             return reservation;
         }
 
-        public async Task<IEnumerable<Room>> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate)
+        public async Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime checkInDate, DateTime checkOutDate)
         {
-            return await _unitOfWork.ReservationRepository.GetAvailableRooms(checkInDate, checkOutDate);
+            return await _unitOfWork.ReservationRepository.GetAvailableRoomsAsync(checkInDate, checkOutDate);
         }
 
-        public async Task<IEnumerable<Tuple<DateTime, DateTime>>> GetAvailableTimeSlots(int roomNumber, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<Tuple<DateTime, DateTime>>> GetAvailableTimeSlotsAsync(int roomNumber, DateTime startDate, DateTime endDate)
         {
-            var existingReservations = await _unitOfWork.GetRepository<Reservation>().Get(
+            var existingReservations = await _unitOfWork.GetRepository<Reservation>().GetAsync(
                 res => res.RoomNumber == roomNumber &&
                        (res.CheckInDate < endDate && res.CheckOutDate > startDate));
 
@@ -66,9 +61,9 @@
             return availableTimeSlots;
         }
 
-        public async Task<double> CalculateReservationPrice(int roomNumber, DateTime startDate, DateTime endDate)
+        public async Task<double> CalculateReservationPriceAsync(int roomNumber, DateTime startDate, DateTime endDate)
         {
-            var room = (await _unitOfWork.GetRepository<Room>().Get(r => r.RoomNumber == roomNumber)).FirstOrDefault();
+            var room = (await _unitOfWork.GetRepository<Room>().GetAsync(r => r.RoomNumber == roomNumber)).FirstOrDefault();
             double totalPrice = 0;
             if (endDate.Date != startDate.Date)
             {
@@ -81,9 +76,9 @@
             return totalPrice + firstDayPrice;
         }
 
-        public async Task<bool> ContainsDuplicateReservation(Reservation reservation)
+        public async Task<bool> ContainsDuplicateReservationAsync(Reservation reservation)
         {
-            var duplicate = (await _unitOfWork.GetRepository<Reservation>().Get(res => res.CheckInDate == reservation.CheckInDate ||
+            var duplicate = (await _unitOfWork.GetRepository<Reservation>().GetAsync(res => res.CheckInDate == reservation.CheckInDate ||
             res.CheckOutDate == reservation.CheckOutDate)).FirstOrDefault();
 
             if (duplicate != null)
@@ -94,9 +89,9 @@
             return false;
         }
 
-        public async Task<IEnumerable<Reservation>> GetUserReservations(int guestId)
+        public async Task<IEnumerable<Reservation>> GetUserReservationsAsync(int guestId)
         {
-            return await _unitOfWork.GetRepository<Reservation>().Get(
+            return await _unitOfWork.GetRepository<Reservation>().GetAsync(
                 res => res.GuestId == guestId, includeProperties: "Room");
         }
     }

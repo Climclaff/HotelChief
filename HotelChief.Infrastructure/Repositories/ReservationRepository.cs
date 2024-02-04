@@ -16,7 +16,7 @@
             _context = context;
         }
 
-        public async Task<IEnumerable<Room>> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate)
+        public async Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime checkInDate, DateTime checkOutDate)
         {
             var allRooms = await _context.Rooms.ToListAsync();
             var reservedRoomNumbers = await _context.Reservations

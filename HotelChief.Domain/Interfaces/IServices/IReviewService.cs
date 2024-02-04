@@ -10,7 +10,7 @@
 
         Task DeleteReviewAsync(Review review);
 
-        Task Commit();
+        Task CommitAsync();
 
         Task<Review> GetReviewByIdAsync(int id);
 

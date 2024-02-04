@@ -15,7 +15,7 @@
             _context = context;
         }
 
-        public async Task RemoveGuestReviewVotes(int guestId)
+        public async Task RemoveGuestReviewVotesAsync(int guestId)
         {
             var downvotesToRemove = await _context.ReviewDownvotes.Where(x => x.GuestId == guestId).ToListAsync();
             var upvotesToRemove = await _context.ReviewUpvotes.Where(x => x.GuestId == guestId).ToListAsync();
@@ -56,7 +56,7 @@
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveEmployeeInfo(int guestId)
+        public async Task RemoveEmployeeInfoAsync(int guestId)
         {
             var employee = await _context.Employees.Where(x => x.GuestId == guestId).FirstOrDefaultAsync();
             if (employee != null)

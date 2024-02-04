@@ -32,7 +32,7 @@ namespace HotelChief.Infrastructure.Repositories
             }
         }
 
-        public async virtual Task<IReadOnlyList<T>> Get(
+        public async virtual Task<IReadOnlyList<T>> GetAsync(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "")
