@@ -1,21 +1,30 @@
 ﻿@model IEnumerable<HotelChief.Core.Entities.HotelServiceOrder>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<h2>@Localizer["Employee_Orders"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Localizer["Order_ID"]</th>
-            <th>@Localizer["Service"]</th>
-            <th>@Localizer["Quantity"]</th>
-            <th>@Localizer["Amount"]</th>
-            <th>@Localizer["Action"]</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
+<div class="container mt-4">
+    <h2>@Localizer["Employee_Orders"]</h2>
+
+@if (!string.IsNullOrEmpty(TempData["Order_Fulfilled"] as string))
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Order_Fulfilled"]
+        </div>
+    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Localizer["Order_ID"]</th>
+                <th>@Localizer["Service"]</th>
+                <th>@Localizer["Quantity"]</th>
+                <th>@Localizer["Amount"]</th>
+                <th>@Localizer["Action"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
                 <tr>
                     <td>@order.HotelServiceOrderId</td>
                     <td>@order.HotelService.ServiceName</td>
@@ -24,10 +33,31 @@
                     <td>
                         <form method="post" asp-action="FulfillOrder">
                             <input type="hidden" name="orderId" value="@order.HotelServiceOrderId" />
-                        <button type="submit">@Localizer["Order_Fulfilled"]</button>
+                            <button type="submit" class="btn btn-success">@Localizer["Order_Fulfilled"]</button>
                         </form>
                     </td>
                 </tr>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    /* Style for the action button */
+    .btn-success {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>

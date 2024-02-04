@@ -19,16 +19,15 @@
                 <label for="quantity">@Localizer["Quantity"]:</label>
                 <input type="number" name="quantity" value="1" min="1" />
                 <input type="hidden" name="orderStatus" id="orderStatus-@service.ServiceId" value="In queue" />
-                <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Order"]</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> @Localizer["Order"]</button>
             </form>
             <hr />
         </div>
     }
 </div>
 
-<button class="arrow-btn" id="prev-btn"><i class="fa fa-chevron-left"></i></button>
-<button class="arrow-btn" id="next-btn"><i class="fa fa-chevron-right"></i></button>
-
+<button class="arrow-btn btn btn-secondary" id="prev-btn"><i class="fa fa-chevron-left"></i></button>
+<button class="arrow-btn btn btn-secondary" id="next-btn"><i class="fa fa-chevron-right"></i></button>
 
 <h2>@Localizer["Your_Orders"]</h2>
 
@@ -37,20 +36,20 @@
     <p>@Localizer["Unpaid_Orders"]: @Model.OrdersCount / 20</p>
     foreach (var order in Model.UserOrders)
     {
-
         <div>
             @if (order.PaymentStatus == false)
             {
                 <form method="post" asp-action="CancelUnpaidOrder">
                     <input type="hidden" name="hotelServiceOrderId" value="@order.HotelServiceOrderId" />
-                    <button type="submit"><i class="fa fa-shopping-cart"></i> @Localizer["Cancel_Order"]</button>
+                    <button type="submit" class="btn btn-danger"><i class="fa fa-shopping-cart"></i> @Localizer["Cancel_Order"]</button>
                 </form>
+                <p> </p>
                 @if (!order.IsDiscounted && Model.LoyaltyPoints > 0)
                 {
                     <form method="post" asp-action="ApplyDiscount">
                         <input type="hidden" name="orderId" value="@order.HotelServiceOrderId" />
-                    <button type="submit"><i class="fa fa-tag fa-lg"></i> @Localizer["Apply_Discount"]</button>
-                </form>
+                        <button type="submit" class="btn btn-success" style="margin-right: 10px; background-color: orange; border-color: orange;"><i class="fa fa-tag fa-lg"></i> @Localizer["Apply_Discount"]</button>
+                    </form>
                 }
             }
 
@@ -61,8 +60,8 @@
             <p>@Localizer["Payment_Status"]: @order.PaymentStatus</p>
             Order Status: <span id="orderStatus-@order.HotelServiceOrderId" style="color: @(order.EmployeeId.HasValue ? "green" : "gold"); display: inline-block; text-align: left; width: 100%;">
                 @(
-            order.EmployeeId.HasValue ? Localizer["Order_Status_Accepted"] : Localizer["Order_Status_Enqueued"]
-            )
+                    order.EmployeeId.HasValue ? Localizer["Order_Status_Accepted"] : Localizer["Order_Status_Enqueued"]
+                    )
             </span>
             <hr />
         </div>
@@ -89,6 +88,13 @@ else
 
 
 <style>
+    .arrow-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .arrow-btn:not(:hover) {
+        background-color: #007bff;
+    }
     .service-card {
         display: none;
     }

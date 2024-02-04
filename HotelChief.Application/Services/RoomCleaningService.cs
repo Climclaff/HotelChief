@@ -25,12 +25,11 @@
 
         public async Task<IEnumerable<RoomCleaning>> GetScheduleAsync()
         {
-            return (await _unitOfWork.GetRepository<RoomCleaning>().GetAsync(includeProperties: "Employee")).ToImmutableList();
+            return (await _unitOfWork.GetRepository<RoomCleaning>().GetAsync(x => x.StartDate.Day == DateTime.UtcNow.Day, includeProperties: "Employee")).ToImmutableList();
         }
 
         public async Task ScheduleRoomCleaningAsync()
         {
-            _unitOfWork.GetRepository<RoomCleaning>().DeleteAll(); // Clear the previous schedule before generating a new one
             await _unitOfWork.CommitAsync();
 
             var janitors = (await _unitOfWork.GetRepository<Employee>().GetAsync(e => e.Role == "Janitor" && e.OnVacation == false, includeProperties: "RoomCleanings"))

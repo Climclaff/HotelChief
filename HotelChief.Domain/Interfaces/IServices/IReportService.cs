@@ -10,8 +10,6 @@
 
         Task<RevenueReportDto?> GenerateRevenueReportAsync(DateTime startDate, DateTime endDate);
 
-        Task<IEnumerable<PopularRoomReportDto>?> GeneratePopularRoomsReportAsync(int topN, DateTime startDate, DateTime endDate);
-
         Task<IEnumerable<EmployeeProductivityReportDto>?> GenerateEmployeeProductivityReportAsync(DateTime startDate, DateTime endDate);
     }
 }

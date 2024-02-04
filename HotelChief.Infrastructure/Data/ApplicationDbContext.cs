@@ -23,6 +23,8 @@
 
         public DbSet<HotelServiceOrder>? HotelServiceOrders { get; set; }
 
+        public DbSet<HotelServiceOrderHistory>? HotelServiceOrderHistory { get; set; }
+
         public DbSet<Employee>? Employees { get; set; }
 
         public DbSet<Room>? Rooms { get; set; }

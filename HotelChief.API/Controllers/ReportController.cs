@@ -43,24 +43,6 @@
         }
 
         [HttpGet]
-        public IActionResult GeneratePopularRoomsReport()
-        {
-            return View("PopularRooms");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GeneratePopularRoomsReport(int topN, DateTime startDate, DateTime endDate)
-        {
-            var report = await _reportService.GeneratePopularRoomsReportAsync(topN, startDate, endDate);
-            if (report == null)
-            {
-                TempData["Error_Message"] = _localizer["Error_Message"];
-            }
-
-            return View("PopularRooms", report);
-        }
-
-        [HttpGet]
         public IActionResult GenerateRevenueReport()
         {
             return View("Revenue");

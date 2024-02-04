@@ -27,34 +27,13 @@
             {
                 EmployeeId = employee.EmployeeId,
                 FullName = employee.FullName,
-                HotelServiceOrdersCompleted = employee.HotelServiceOrders.Count(hso => hso.ServiceOrderDate >= startDate && hso.ServiceOrderDate <= endDate),
+                HotelServiceOrdersCompleted = _context.HotelServiceOrderHistory!
+                .Count(hso => hso.EmployeeId == employee.EmployeeId && hso.ServiceOrderDate >= startDate && hso.ServiceOrderDate <= endDate),
                 RoomCleaningsCompleted = employee.RoomCleanings.Count(rc => rc.StartDate >= startDate && rc.EndDate <= endDate),
             })
             .ToListAsync();
 
             return employeeProductivity;
-        }
-
-        public async Task<IEnumerable<PopularRoomReportDto>?> GeneratePopularRoomsReportAsync(int topN, DateTime startDate, DateTime endDate)
-        {
-            if (!await _context.Reservations!.AnyAsync())
-            {
-                return null;
-            }
-
-            var popularRooms = await _context.Reservations!
-            .Where(r => r.CheckInDate >= startDate && r.CheckOutDate <= endDate)
-            .GroupBy(r => r.RoomNumber)
-            .OrderByDescending(group => group.Count())
-            .Take(topN)
-            .Select(group => new PopularRoomReportDto
-            {
-                RoomNumber = group.Key,
-                ReservationsCount = group.Count(),
-            })
-            .ToListAsync();
-
-            return popularRooms;
         }
 
         public async Task<RevenueReportDto?> GenerateRevenueReportAsync(DateTime startDate, DateTime endDate)
@@ -68,7 +47,7 @@
             .Where(r => r.CheckInDate >= startDate && r.CheckOutDate <= endDate)
             .SumAsync(r => r.Amount);
 
-            var hotelServiceOrdersRevenue = await _context.HotelServiceOrders!
+            var hotelServiceOrdersRevenue = await _context.HotelServiceOrderHistory!
                 .Where(hso => hso.ServiceOrderDate >= startDate && hso.ServiceOrderDate <= endDate)
                 .SumAsync(hso => hso.Amount);
 
@@ -78,7 +57,7 @@
                 .Where(r => r.CheckInDate >= startDate && r.CheckOutDate <= endDate)
                 .CountAsync();
 
-            var hotelServiceOrdersCount = await _context.HotelServiceOrders!
+            var hotelServiceOrdersCount = await _context.HotelServiceOrderHistory!
                 .Where(hso => hso.ServiceOrderDate >= startDate && hso.ServiceOrderDate <= endDate)
                 .CountAsync();
 
@@ -97,7 +76,7 @@
                 return null;
             }
 
-            var topHotelServiceRevenue = await _context.HotelServiceOrders!
+            var topHotelServiceRevenue = await _context.HotelServiceOrderHistory!
             .Where(hso => hso.ServiceOrderDate >= startDate && hso.ServiceOrderDate <= endDate)
             .GroupBy(hso => hso.HotelServiceId)
             .OrderByDescending(group => group.Sum(hso => hso.Amount))

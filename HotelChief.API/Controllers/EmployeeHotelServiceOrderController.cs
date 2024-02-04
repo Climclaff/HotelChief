@@ -129,7 +129,7 @@
             await _orderCrudService.CommitAsync();
 
             await _hotelHistoryService.MoveToFulfilledHistoryAsync(orderId);
-
+            TempData["Order_Fulfilled"] = _localizer["Order_Fulfilled"].ToString();
             return RedirectToAction("EmployeeOrders");
         }
     }

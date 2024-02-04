@@ -1,16 +1,59 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<HotelChief.API.SharedResource> SharedLocalizer
-<h2>@SharedLocalizer["Employee_Productivity_Report"]</h2>
-<a asp-action="GenerateEmployeeProductivityReport">@SharedLocalizer["Employee_Productivity_Report"]</a>
 
-<h2>@SharedLocalizer["Popular_Rooms_Report"]</h2>
-<a asp-action="GeneratePopularRoomsReport">@SharedLocalizer["Popular_Rooms_Report"]t</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Reports</title>
+</head>
+<body>
 
-<h2>@SharedLocalizer["Revenue_Report"]</h2>
-<a asp-action="GenerateRevenueReport">@SharedLocalizer["Revenue_Report"]</a>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">@SharedLocalizer["Employee_Productivity_Report"]</h2>
+                        <a asp-action="GenerateEmployeeProductivityReport" class="btn btn-primary">@SharedLocalizer["Generate_Report"]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<h2>@SharedLocalizer["Top_Hotel_Service_Report"]</h2>
-<a asp-action="GenerateTopHotelServiceRevenueReport">@SharedLocalizer["Top_Hotel_Service_Report"]</a>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">@SharedLocalizer["Revenue_Report"]</h2>
+                        <a asp-action="GenerateRevenueReport" class="btn btn-primary">@SharedLocalizer["Generate_Report"]</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">@SharedLocalizer["Top_Hotel_Service_Report"]</h2>
+                        <a asp-action="GenerateTopHotelServiceRevenueReport" class="btn btn-primary">@SharedLocalizer["Generate_Report"]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<h2>@SharedLocalizer["Top_Room_Revenue_Report"]</h2>
-<a asp-action="GenerateTopRoomRevenueReport">@SharedLocalizer["Top_Room_Revenue_Report"]</a>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">@SharedLocalizer["Top_Room_Revenue_Report"]</h2>
+                        <a asp-action="GenerateTopRoomRevenueReport" class="btn btn-primary">@SharedLocalizer["Generate_Report"]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

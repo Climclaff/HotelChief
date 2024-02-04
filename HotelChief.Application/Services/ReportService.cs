@@ -21,11 +21,6 @@
             return await _reportRepository.GenerateEmployeeProductivityReportAsync(startDate, endDate);
         }
 
-        public async Task<IEnumerable<PopularRoomReportDto>?> GeneratePopularRoomsReportAsync(int topN, DateTime startDate, DateTime endDate)
-        {
-            return await _reportRepository.GeneratePopularRoomsReportAsync(topN, startDate, endDate);
-        }
-
         public async Task<RevenueReportDto?> GenerateRevenueReportAsync(DateTime startDate, DateTime endDate)
         {
             return await _reportRepository.GenerateRevenueReportAsync(startDate, endDate);
