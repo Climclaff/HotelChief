@@ -78,8 +78,10 @@
 
         public async Task<bool> ContainsDuplicateReservationAsync(Reservation reservation)
         {
-            var duplicate = (await _unitOfWork.GetRepository<Reservation>().GetAsync(res => res.CheckInDate == reservation.CheckInDate ||
-            res.CheckOutDate == reservation.CheckOutDate)).FirstOrDefault();
+            var duplicate = (await _unitOfWork.GetRepository<Reservation>().GetAsync(res =>
+            (res.CheckInDate == reservation.CheckInDate && res.RoomNumber == reservation.RoomNumber)
+            ||
+            (res.CheckOutDate == reservation.CheckOutDate && res.RoomNumber == reservation.RoomNumber))).FirstOrDefault();
 
             if (duplicate != null)
             {

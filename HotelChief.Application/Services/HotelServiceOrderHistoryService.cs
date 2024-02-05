@@ -27,11 +27,12 @@
                     Amount = order.Amount,
                     GuestId = order.GuestId,
                     EmployeeId = order.EmployeeId,
-                    HotelServiceId = order.HotelServiceOrderId,
+                    HotelServiceId = order.HotelServiceId,
                     Quantity = order.Quantity,
                     ServiceOrderDate = order.ServiceOrderDate,
                     PaymentStatus = order.PaymentStatus,
                     Timestamp = order.Timestamp,
+                    IsDiscounted = order.IsDiscounted,
                 };
 
                 await _unitOfWork.GetRepository<HotelServiceOrderHistory>().AddAsync(orderHistory);
