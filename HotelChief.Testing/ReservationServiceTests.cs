@@ -24,7 +24,7 @@ namespace HotelChief.Testing
             var reservations = fixture.CreateMany<Reservation>().ToList();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(uow => uow.GetRepository<Reservation>().Get(
+            unitOfWorkMock.Setup(uow => uow.GetRepository<Reservation>().GetAsync(
                 It.IsAny<Expression<Func<Reservation, bool>>>(),
                 It.IsAny<Func<IQueryable<Reservation>, IOrderedQueryable<Reservation>>>(),
                 It.IsAny<string>()))
@@ -33,7 +33,7 @@ namespace HotelChief.Testing
             var reservationService = new ReservationService(unitOfWorkMock.Object);
 
             // Act
-            var result = await reservationService.GetReservationsByGuestIdAsync(guestId);
+            var result = await reservationService.GetUserReservationsAsync(guestId);
 
             // Assert
             Assert.NotNull(result);
@@ -111,7 +111,7 @@ namespace HotelChief.Testing
             var availableTimeSlots = fixture.CreateMany<Tuple<DateTime, DateTime>>(8).ToList();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(uow => uow.GetRepository<Reservation>().Get(
+            unitOfWorkMock.Setup(uow => uow.GetRepository<Reservation>().GetAsync(
                 It.IsAny<Expression<Func<Reservation, bool>>>(),
                 It.IsAny<Func<IQueryable<Reservation>, IOrderedQueryable<Reservation>>>(),
                 It.IsAny<string>()))
@@ -142,7 +142,7 @@ namespace HotelChief.Testing
             double remainingHours = (startDate.Date.AddDays(1) - startDate).TotalHours;
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(uow => uow.GetRepository<Room>().Get(
+            unitOfWorkMock.Setup(uow => uow.GetRepository<Room>().GetAsync(
                 It.IsAny<Expression<Func<Room, bool>>>(),
                 It.IsAny<Func<IQueryable<Room>, IOrderedQueryable<Room>>>(),
                 It.IsAny<string>()))
