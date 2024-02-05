@@ -66,7 +66,7 @@
                 janitorIndex = (janitorIndex + 1) % janitors.Count;
 
                 // Calculate start and end dates based on cleaning time and break time
-                var lastCleaning = janitor.RoomCleanings.MaxBy(r => r.EndDate);
+                var lastCleaning = janitor.RoomCleanings.Where(x => x.StartDate.Day == DateTime.UtcNow.Day).MaxBy(r => r.EndDate);
 
                 DateTime startDate = DateTime.MinValue;
                 DateTime endDate = DateTime.MinValue;

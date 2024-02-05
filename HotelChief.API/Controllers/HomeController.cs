@@ -10,6 +10,7 @@ namespace HotelChief.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
+    using Serilog;
 
     public class HomeController : Controller
     {
@@ -36,6 +37,8 @@ namespace HotelChief.Controllers
 
         public IActionResult Privacy()
         {
+            Log.Information("testInfo");
+            Log.Warning("testWarn");
             return View();
         }
 

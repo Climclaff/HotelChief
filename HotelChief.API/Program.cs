@@ -27,6 +27,8 @@ namespace HotelChief
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using Serilog;
+    using Serilog.Events;
     using Telegram.Bot;
 
     public class Program
@@ -34,6 +36,10 @@ namespace HotelChief
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
+                .WriteTo.File("logs/ServerLog-.txt", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel: LogEventLevel.Warning)
+                .CreateLogger();
 
             var connectionString = builder.Configuration.GetConnectionString("HotelChiefdb");
             builder.Services.AddDbContext<Infrastructure.Data.ApplicationDbContext>(x => x.UseSqlServer(connectionString));
@@ -135,8 +141,10 @@ namespace HotelChief
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
             });
-            var app = builder.Build();
 
+            builder.Host.UseSerilog();
+            var app = builder.Build();
+            app.UseSerilogRequestLogging();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
