@@ -6,6 +6,7 @@ namespace HotelChief
     using HotelChief.API;
     using HotelChief.API.Helpers;
     using HotelChief.API.Hubs;
+    using HotelChief.API.Middleware.Exceptions;
     using HotelChief.Application.IServices;
     using HotelChief.Application.Services;
     using HotelChief.Core.Interfaces;
@@ -145,6 +146,8 @@ namespace HotelChief
             builder.Host.UseSerilog();
             var app = builder.Build();
             app.UseSerilogRequestLogging();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

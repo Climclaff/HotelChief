@@ -14,13 +14,8 @@ namespace HotelChief.Controllers
 
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IBaseCRUDService<Room> _roomService;
-
-        public HomeController(ILogger<HomeController> logger, IBaseCRUDService<Room> roomService)
+        public HomeController(IBaseCRUDService<Room> roomService)
         {
-            _logger = logger;
-            _roomService = roomService;
         }
 
         public async Task<IActionResult> Index()
@@ -37,8 +32,6 @@ namespace HotelChief.Controllers
 
         public IActionResult Privacy()
         {
-            Log.Information("testInfo");
-            Log.Warning("testWarn");
             return View();
         }
 
@@ -61,9 +54,10 @@ namespace HotelChief.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error([FromQuery] string? message)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+            return View(new ErrorViewModel { Message = message });
         }
     }
 }
