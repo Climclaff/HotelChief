@@ -11,15 +11,15 @@
             <form class="form-inline" asp-area="" asp-controller="Home" asp-action="SignOut" )">
                 <button type="submit" class="nav-link btn btn-link text-dark">@SharedLocalizer["Logout"]</button>
         </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" href=@_config["IdentityServerOrigin:RegisterAddress"]>@SharedLocalizer["Register"]</a>
     </li>
-}
-else
-{
     <li class="nav-item">
-            <a class="nav-link text-dark" href=@_config["IdentityServerOrigin:BaseAddress"] + "Account/Register">@SharedLocalizer["Register"]</a>
-    </li>
-    <li class="nav-item">
-            <a class="nav-link text-dark" href=@_config["IdentityServerOrigin:BaseAddress"] + "/Account/Login">@SharedLocalizer["Login"]</a>
+            <a class="nav-link text-dark" href=@_config["IdentityServerOrigin:LoginAddress"]>@SharedLocalizer["Login"]</a>
     </li>
 }
 </ul>

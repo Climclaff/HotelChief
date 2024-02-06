@@ -172,7 +172,7 @@ namespace IdentityServerHost.Quickstart.UI
                     }
                     else if (string.IsNullOrEmpty(model.ReturnUrl))
                     {
-                        return Redirect("~/");
+                        return Redirect("https://localhost:7049");
                     }
                     else
                     {
@@ -286,7 +286,14 @@ namespace IdentityServerHost.Quickstart.UI
                     httpResponseMessage.EnsureSuccessStatusCode();
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    if (returnUrl != "/")
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        return Redirect("https://localhost:7049");
+                    }
                 }
 
                 foreach (var error in result.Errors)
