@@ -26,6 +26,7 @@ using System.Text.Json;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Duende.IdentityServer.Test;
+using Microsoft.Extensions.Configuration;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -46,6 +47,7 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -55,7 +57,8 @@ namespace IdentityServerHost.Quickstart.UI
             IEventService events,
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            IConfiguration configuration)
         {
             _interaction = interaction;
             _clientStore = clientStore;
@@ -65,6 +68,7 @@ namespace IdentityServerHost.Quickstart.UI
             _signInManager = signInManager;
             _userManager = userManager;
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -172,7 +176,7 @@ namespace IdentityServerHost.Quickstart.UI
                     }
                     else if (string.IsNullOrEmpty(model.ReturnUrl))
                     {
-                        return Redirect("https://localhost:7049");
+                        return Redirect(_configuration["ClientBaseAddress"]);
                     }
                     else
                     {
@@ -240,7 +244,7 @@ namespace IdentityServerHost.Quickstart.UI
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
             }
             vm.AutomaticRedirectAfterSignOut= true;
-            vm.PostLogoutRedirectUri = "https://localhost:7049";
+            vm.PostLogoutRedirectUri = _configuration["ClientBaseAddress"];
             return View("LoggedOut", vm);
         }
 
@@ -291,7 +295,7 @@ namespace IdentityServerHost.Quickstart.UI
                     }
                     else
                     {
-                        return Redirect("https://localhost:7049");
+                        return Redirect(_configuration["ClientBaseAddress"]);
                     }
                 }
 

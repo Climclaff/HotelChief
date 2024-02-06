@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using Duende.IdentityServer;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using Duende.IdentityServer.Services;
+using HotelChief.IdentityProvider.Helpers;
 using HotelChief.IdentityProvider.Mapping;
 using IdentityModel;
 using IdentityProvider.Services;
@@ -36,11 +38,11 @@ namespace IdentityProvider
         {
             services.AddControllersWithViews();
 
-            const string connectionString = "Data Source=CLIMCLAFF\\SQLEXPRESS;Initial Catalog=IdentityTestDb;Integrated Security=True;MultipleActiveResultSets=true;TrustServerCertificate=True;";
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            ConfigurationHelper.Initialize(Configuration);
             services.AddDbContext<ApplicationDbContext>(builder =>
-                builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+                builder.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"], sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
             services.AddIdentity<IdentityUser, IdentityRole>(options => {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -50,7 +52,7 @@ namespace IdentityProvider
                 .AddDefaultTokenProviders();
             services.AddHttpClient("RegistrationClient", httpClient =>
             {
-                httpClient.BaseAddress = new Uri("https://localhost:7049/");
+                httpClient.BaseAddress = new Uri(Configuration["ClientBaseAddress"]);
             }
             );
             services.AddRazorPages();
@@ -82,10 +84,10 @@ namespace IdentityProvider
 
             identityServerBuilder.AddOperationalStore(options =>
                     options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"], sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                 .AddConfigurationStore(options =>
                     options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+                        builder.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"], sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
 
             identityServerBuilder.AddAspNetIdentity<IdentityUser>();
             identityServerBuilder.AddProfileService<ProfileService>();

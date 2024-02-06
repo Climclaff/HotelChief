@@ -3,7 +3,9 @@ using System.Security.Claims;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Test;
+using HotelChief.IdentityProvider.Helpers;
 using IdentityModel;
+using Microsoft.Extensions.Configuration;
 
 namespace IdentityProvider
 {
@@ -21,14 +23,15 @@ namespace IdentityProvider
                     ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
                     AllowedScopes = new List<string> {"api1.read"}
                 },*/
-                new Client
+
+            new Client
                 {
                     ClientId = "oidcClient",
                     ClientName = "Example Client Application",
                     ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
-                    RedirectUris = new List<string> {"https://localhost:7049/signin-oidc"},
+                    RedirectUris = new List<string> {ConfigurationHelper.config["ClientBaseAddress"]+"/signin-oidc"},
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -36,8 +39,8 @@ namespace IdentityProvider
                         IdentityServerConstants.StandardScopes.Email,
                         "api1.read",
                     },
-                    PostLogoutRedirectUris = { "https://localhost:7049/signout-callback-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:7049/signout-oidc",
+                    PostLogoutRedirectUris = { ConfigurationHelper.config["ClientBaseAddress"]+"/signout-callback-oidc" },
+                    FrontChannelLogoutUri = ConfigurationHelper.config["ClientBaseAddress"]+"/signout-oidc",
                     RequirePkce = true,
                     AllowPlainTextPkce = false,
 
