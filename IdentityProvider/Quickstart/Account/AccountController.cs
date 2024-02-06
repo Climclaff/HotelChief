@@ -264,7 +264,7 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };https://localhost:5000/Account/Login
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -285,7 +285,6 @@ namespace IdentityServerHost.Quickstart.UI
                     using var httpResponseMessage = await httpClient.PostAsync("api/Registration/CreateAccount", serializedRegisterData);
                     httpResponseMessage.EnsureSuccessStatusCode();
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     if (returnUrl != "/")
                     {
                         return LocalRedirect(returnUrl);
