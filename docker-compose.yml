@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  hotelchief.api:
+    image: ${DOCKER_REGISTRY-}hotelchiefapi
+    build:
+      context: .
+      dockerfile: HotelChief.API\Dockerfile
+
+  hotelchief.identityprovider:
+    image: ${DOCKER_REGISTRY-}hotelchiefidentityprovider
+    build:
+      context: .
+      dockerfile: HotelChief.IdentityProvider\Dockerfile
+

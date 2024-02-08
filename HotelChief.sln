@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.Testing", "Hotel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelChief.IdentityProvider", "IdentityProvider\HotelChief.IdentityProvider.csproj", "{BC138C76-62F8-4BE1-B2D7-CCAB5100ADB5}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F4B14B42-A68D-4F54-AD51-A042881F49DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{BC138C76-62F8-4BE1-B2D7-CCAB5100ADB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC138C76-62F8-4BE1-B2D7-CCAB5100ADB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC138C76-62F8-4BE1-B2D7-CCAB5100ADB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4B14B42-A68D-4F54-AD51-A042881F49DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4B14B42-A68D-4F54-AD51-A042881F49DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4B14B42-A68D-4F54-AD51-A042881F49DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4B14B42-A68D-4F54-AD51-A042881F49DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
