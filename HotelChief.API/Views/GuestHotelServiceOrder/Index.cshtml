@@ -33,6 +33,7 @@
 
 @if (Model.UserOrders.Any())
 {
+    <p>@Localizer["Loyalty_Points_Available"] @Model.LoyaltyPoints.Value.ToString("F2")</p>
     <p>@Localizer["Unpaid_Orders"]: @Model.OrdersCount / 20</p>
     foreach (var order in Model.UserOrders)
     {
@@ -58,7 +59,7 @@
             <p>@Localizer["Sum"]: $@order.Amount</p>
             <p>@Localizer["Order_Date"]: @order.ServiceOrderDate</p>
             <p>@Localizer["Payment_Status"]: @order.PaymentStatus</p>
-            Order Status: <span id="orderStatus-@order.HotelServiceOrderId" style="color: @(order.EmployeeId.HasValue ? "green" : "gold"); display: inline-block; text-align: left; width: 100%;">
+            @Localizer["Order_Status"] <span id="orderStatus-@order.HotelServiceOrderId" style="color: @(order.EmployeeId.HasValue ? "green" : "gold"); display: inline-block; text-align: left; width: 100%;">
                 @(
                     order.EmployeeId.HasValue ? Localizer["Order_Status_Accepted"] : Localizer["Order_Status_Enqueued"]
                     )

@@ -3,21 +3,24 @@
 @inject IViewLocalizer Localizer
 <h2>@Localizer["Reservation_Confirmation"]</h2>
 @TempData["Discount_Status"]
-
+<link rel="stylesheet" href="~/font-awesome-4.7.0/css/font-awesome.min.css" />
 <div class="text-center">
     <h2>@Localizer["Reservation_Details"]</h2>
     <p>@Localizer["Room_Number"] @Model.RoomNumber</p>
     <p>@Localizer["Check_In_Date"] @Model.CheckInDate</p>
     <p>@Localizer["Check_Out_Date"] @Model.CheckOutDate</p>
-    <p>@Localizer["Amount"] @Model.Amount</p>
+    <p>@Localizer["Amount"] @Model.Amount.ToString("F2")</p>
 
     @if (@Model.LoyaltyPoints > 0)
     {
-        @if(!@Model.IsDiscounted){
+        @if (!@Model.IsDiscounted)
+        {         
+            <p>@Localizer["Loyalty_Points_Available"] @Model.LoyaltyPoints.Value.ToString("F2")</p>
             <form method="post" asp-controller="RoomReservation" asp-action="ApplyDiscount">
                 <input type="hidden" name="reservationId" value="@Model.ReservationId" />
-                <button type="submit"><i class="fa fa-tag fa-lg"></i> @Localizer["Apply_Discount"]</button>
+                <button type="submit" class="btn btn-success" style="margin-right: 10px; background-color: orange; border-color: orange;"><i class="fa fa-tag fa-lg"></i> @Localizer["Apply_Discount"]</button>
             </form>
+            <p></p>
         }
     }
 

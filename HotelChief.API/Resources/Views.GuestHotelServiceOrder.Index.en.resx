@@ -126,6 +126,9 @@
   <data name="Cancel_Order" xml:space="preserve">
     <value>Cancel order</value>
   </data>
+  <data name="Loyalty_Points_Available" xml:space="preserve">
+    <value>The amount of loyalty points available to you is:</value>
+  </data>
   <data name="No_Orders" xml:space="preserve">
     <value>No orders yet.</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="Order_Date" xml:space="preserve">
     <value>Order date</value>
+  </data>
+  <data name="Order_Status" xml:space="preserve">
+    <value>Order status</value>
   </data>
   <data name="Order_Status_Accepted" xml:space="preserve">
     <value>Accepted</value>

@@ -126,6 +126,9 @@
   <data name="Cancel_Order" xml:space="preserve">
     <value>Відмінити замовлення</value>
   </data>
+  <data name="Loyalty_Points_Available" xml:space="preserve">
+    <value>Вам доступна така кількість очок для отримання знижки:</value>
+  </data>
   <data name="No_Orders" xml:space="preserve">
     <value>Поки немає замовлень.</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="Order_Date" xml:space="preserve">
     <value>Дата замовлення</value>
+  </data>
+  <data name="Order_Status" xml:space="preserve">
+    <value>Стан замовлення</value>
   </data>
   <data name="Order_Status_Accepted" xml:space="preserve">
     <value>Прийняте</value>

@@ -129,6 +129,9 @@
   <data name="Check_Out_Date" xml:space="preserve">
     <value>Дата закінчення бронювання:</value>
   </data>
+  <data name="Loyalty_Points_Available" xml:space="preserve">
+    <value>Вам доступна така кількість очок для отримання знижки:</value>
+  </data>
   <data name="Pay" xml:space="preserve">
     <value>Сплатити</value>
   </data>

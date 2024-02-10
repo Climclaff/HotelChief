@@ -129,6 +129,9 @@
   <data name="Check_Out_Date" xml:space="preserve">
     <value>Check-Out Date:</value>
   </data>
+  <data name="Loyalty_Points_Available" xml:space="preserve">
+    <value>The amount of loyalty points available to you is:</value>
+  </data>
   <data name="Pay" xml:space="preserve">
     <value>Pay</value>
   </data>
