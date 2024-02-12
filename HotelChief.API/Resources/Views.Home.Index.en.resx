@@ -118,6 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MainText" xml:space="preserve">
-    <value>Program system for hotel business management</value>
+    <value>Welcome to our state-of-the-art Hotel Management System! We take pride in offering a seamless and intuitive platform designed to enhance every aspect of your hotel experience.
+Our online room reservation system allows you to effortlessly book your stay with just a few clicks. Explore our available rooms, check their features, and secure your reservation with confidence. We prioritize the ease and convenience of our guests, ensuring a smooth booking process.
+Efficient personnel management is at the core of our system. From staff scheduling to task assignments, our platform streamlines hotel operations, providing an efficient way to manage personnel resources. Accompanying this, our accounting module ensures accurate and transparent financial transactions, providing you with a clear overview of your expenses and revenue.
+Guest authentication and registration are handled seamlessly, providing a secure and hassle-free check-in process. With real-time room availability tracking, you can easily view and choose the room that suits your preferences.
+Our room cleaning schedule is meticulously managed to ensure that your accommodation is always at its best.
+For our valued guests, we offer a loyalty program that rewards your continued patronage. Earn points with each stay and enjoy exclusive perks, making your experience with us even more delightful.
+As part of our commitment to excellence, we encourage guest feedback through our reviews and ratings system. Your opinions matter, and we continuously strive to exceed your expectations.
+Experience the next level of hospitality with our Hotel Management System. Book your stay today and enjoy the perfect blend of convenience, efficiency, and luxury.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
   </data>
 </root>

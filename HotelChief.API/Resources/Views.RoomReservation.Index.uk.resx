@@ -132,6 +132,9 @@
   <data name="Payment_Warning" xml:space="preserve">
     <value>Увага: оплата має бути проведена протягом десяти хвилин після бронювання інакше воно буде автоматично видалено.</value>
   </data>
+  <data name="Pricing" xml:space="preserve">
+    <value>Ціна за добу</value>
+  </data>
   <data name="Reserve_Selected" xml:space="preserve">
     <value>Бронювати</value>
   </data>
