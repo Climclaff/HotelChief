@@ -64,16 +64,20 @@
         public async Task<double> CalculateReservationPriceAsync(int roomNumber, DateTime startDate, DateTime endDate)
         {
             var room = (await _unitOfWork.GetRepository<Room>().GetAsync(r => r.RoomNumber == roomNumber)).FirstOrDefault();
+            if (room == null)
+            {
+                return 0;
+            }
+
             double totalPrice = 0;
             totalPrice = (room.PricePerDay / 24) * (endDate - startDate).TotalHours;
-
-            double remainingHours = (startDate.Date.AddDays(1) - DateTime.UtcNow).TotalHours;
-            double firstDayPrice = remainingHours / 24 * room.PricePerDay;
             if (startDate.Day != DateTime.UtcNow.Day)
             {
                 return totalPrice;
             }
 
+            double remainingHours = (startDate.Date.AddDays(1) - DateTime.UtcNow).TotalHours;
+            double firstDayPrice = remainingHours / 24 * room.PricePerDay;
             return totalPrice + firstDayPrice;
         }
 
