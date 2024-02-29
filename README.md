@@ -18,4 +18,14 @@ In this project we consider the feasibility of implementation of the next functi
 - Maintaining guest reviews and ratings.  ✓
 
 ![Screenshot](hotelchiefdb.png)
-![image](screenshots/CleaningSchedule.png)
+![image](Screenshots/CleaningSchedule.png)
+![image](Screenshots/ReviewPage.png)
+![image](Screenshots/ReportsPage.png)
+![image](Screenshots/ReportExample.png)
+![image](Screenshots/DuendeServer.png)
+![image](Screenshots/RoomReservation.png)
+![image](Screenshots/ReservationConfirmation.png)
+![image](Screenshots/LiqPayIntegration.png)
+![image](Screenshots/HotelServiceOrders(User).png)
+![image](Screenshots/HotelServiceOrders(Employee).png)
+![image](Screenshots/AcceptedHotelServiceOrders(Employee).png)
