@@ -18,3 +18,4 @@ In this project we consider the feasibility of implementation of the next functi
 - Maintaining guest reviews and ratings.  ✓
 
 ![Screenshot](hotelchiefdb.png)
+![image](screenshots/CleaningSchedule.png)
